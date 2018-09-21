@@ -2,9 +2,21 @@ TEMPLATE = app
 TARGET = BiliPlayer
 INCLUDEPATH += . src src/Common src/Danmaku src/Player src/Widget
 
-QT += widgets
+QT += widgets network
 
 macx:LIBS += -L/usr/local/lib -lmpv
+
+mac {
+    # Only include / compile these files on OS X
+    OBJECTIVE_SOURCES += \
+        src/Common/OSXHideTitleBar.mm
+    HEADERS  +=\
+        src/Common/OSXHideTitleBar.h
+
+    # Additionally include Cocoa for OS X code
+    LIBS += -framework Foundation -framework Cocoa
+    INCLUDEPATH += /System/Library/Frameworks/Foundation.framework/Versions/C/Headers
+}
 
 # Input
 HEADERS += mpv/client.h \
@@ -20,14 +32,12 @@ HEADERS += mpv/client.h \
            src/Common/Utils.h \
            src/Danmaku/Attribute.h \
            src/Danmaku/Danmaku.h \
-           src/Danmaku/ElapsedTimer.h \
            src/Danmaku/Graphic.h \
            src/Danmaku/Parse.h \
            src/Danmaku/Sprite.h \
            src/Player/MpvTypes.h \
            src/Player/MpvWidget.h \
            src/Widget/ARender.h \
-           src/Widget/CustomSlider.h \
            src/Widget/Player.h \
            src/Widget/Prefer.h \
            src/Widget/SeekBar.h \
@@ -35,10 +45,18 @@ HEADERS += mpv/client.h \
            src/Widget/VolumeMenu.h \
            src/Widget/Window.h \
     src/Widget/DanmakuMenu.h \
-    src/Widget/RecentWidget.h
+    src/Widget/RecentWidget.h \
+    src/Widget/RecentWidgetItem.h \
+    src/Widget/AdvertInfoWidget.h \
+    src/Widget/AdvertWidget.h \
+    src/Common/FramelessHelper.h \
+    src/Common/Network.h
 FORMS += src/Widget/Player.ui src/Widget/SpeedMenu.ui src/Widget/VolumeMenu.ui \
     src/Widget/DanmakuMenu.ui \
-    src/Widget/RecentWidget.ui
+    src/Widget/RecentWidget.ui \
+    src/Widget/RecentWidgetItem.ui \
+    src/Widget/AdvertInfoWidget.ui \
+    src/Widget/AdvertWidget.ui
 SOURCES += main.cpp \
            src/Application.cpp \
            src/Common/Setting.cpp \
@@ -51,7 +69,6 @@ SOURCES += main.cpp \
            src/Danmaku/Sprite.cpp \
            src/Player/MpvWidget.cpp \
            src/Widget/ARender.cpp \
-           src/Widget/CustomSlider.cpp \
            src/Widget/Player.cpp \
            src/Widget/Prefer.cpp \
            src/Widget/SeekBar.cpp \
@@ -59,6 +76,11 @@ SOURCES += main.cpp \
            src/Widget/VolumeMenu.cpp \
            src/Widget/Window.cpp \
     src/Widget/DanmakuMenu.cpp \
-    src/Widget/RecentWidget.cpp
+    src/Widget/RecentWidget.cpp \
+    src/Widget/RecentWidgetItem.cpp \
+    src/Widget/AdvertInfoWidget.cpp \
+    src/Widget/AdvertWidget.cpp \
+    src/Common/FramelessHelper.cpp \
+    src/Common/Network.cpp
 RESOURCES += src/Resource/player.qrc
 TRANSLATIONS += src/Resource/lang/biliplayer_zh.ts

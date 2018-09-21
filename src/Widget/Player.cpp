@@ -14,6 +14,10 @@
 #include <QtPlatformHeaders/QWindowsWindowFunctions>
 #endif
 
+#ifdef __APPLE__
+#include "OSXHideTitleBar.h"
+#endif
+
 Player::Player(QWidget *parent):
 	QDialog(parent)
 {
@@ -21,12 +25,25 @@ Player::Player(QWidget *parent):
 	//
 	originTitle = ui.titleLabel->text();
 	//
-	setWindowFlag(Qt::FramelessWindowHint, true);
+    setWindowFlag(Qt::FramelessWindowHint, true);
 	//
 	setupWindow();
 	//
 	setupConnect();
 	//
+#if 0
+#ifdef __APPLE__
+    ui.maxButton->setVisible(false);
+    ui.minButton->setVisible(false);
+    ui.closeButton->setVisible(false);
+    //
+    setWindowFlag(Qt::CustomizeWindowHint,true);
+    setWindowFlag(Qt::WindowMinimizeButtonHint,true);
+    setWindowFlag(Qt::WindowMaximizeButtonHint,true);
+    //Then, hide the OS X title bar
+    OSXHideTitleBar::HideTitleBar(winId());
+#endif
+#endif
 }
 
 Player::~Player()
@@ -512,7 +529,21 @@ void Player::loadAdvert(QString path)
 	ui.stackedWidget->setCurrentIndex(1);
 	ui.mpvAdFrame->LoadFile(path);
 	//
-	ui.mpvAdFrame->setKeepAspect(false);
+    ui.mpvAdFrame->setKeepAspect(false);
+}
+
+void Player::checkState()
+{
+    bool isMax = windowState().testFlag(Qt::WindowMaximized);
+    bool isFull = windowState().testFlag(Qt::WindowFullScreen);
+    //
+    ui.maxButton->blockSignals(true);
+    ui.maxButton->setChecked(isMax);
+    ui.maxButton->blockSignals(false);
+    //
+    ui.fullscreenButton->blockSignals(true);
+    ui.fullscreenButton->setChecked(isFull);
+    ui.fullscreenButton->blockSignals(false);
 }
 
 bool Player::isPlaying()
@@ -920,7 +951,15 @@ void Player::on_sendButton_clicked()
 
 void Player::on_fullscreenButton_clicked(bool isChecked)
 {
-	FullScreen(isChecked);
+    if(isChecked)
+    {
+        showFullScreen();
+    }
+    else
+    {
+        showNormal();
+    }
+    checkState();
 }
 
 void Player::on_danmakuCheckBox_clicked(bool isChecked)
@@ -937,13 +976,22 @@ void Player::on_localCheckBox_clicked(bool isChecked)
 
 void Player::on_minButton_clicked()
 {
-	setWindowState(windowState() ^ Qt::WindowMinimized);
+    showMinimized();
+    checkState();
 }
 
 void Player::on_maxButton_clicked(bool isChecked)
 {
 	Q_UNUSED(isChecked);
-	setWindowState(windowState() ^ Qt::WindowMaximized);
+    if(isChecked)
+    {
+        showMaximized();
+    }
+    else
+    {
+        showNormal();
+    }
+    checkState();
 }
 
 void Player::on_closeButton_clicked()

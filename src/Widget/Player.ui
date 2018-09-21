@@ -72,18 +72,18 @@ font-size:14px;</string>
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>20</height>
+          <height>16</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>20</height>
+          <height>16</height>
          </size>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <property name="spacing">
-          <number>12</number>
+          <number>24</number>
          </property>
          <property name="leftMargin">
           <number>0</number>
@@ -844,8 +844,6 @@ font-size:14px;</string>
    <header>mpvwidget.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../Resource/player.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -45,6 +45,8 @@ public:
 	void setVideoTitle(QString title);
 	//
 	void loadAdvert(QString path);
+    //
+    void checkState();
 	//
 	bool isPlaying();
 	bool isPause();

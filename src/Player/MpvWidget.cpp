@@ -12,8 +12,8 @@
 #include <clocale>
 #include <stdexcept>
 
-#include "mpvwidget.h"
-#include "utils.h"
+#include "MpvWidget.h"
+#include "Utils.h"
 
 static void wakeup(void *ctx)
 {
