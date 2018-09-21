@@ -273,15 +273,6 @@ QPushButton#closeButton:hover {
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
      <property name="maximum">
       <number>1000000</number>
      </property>
@@ -396,6 +387,9 @@ QPushButton:checked:hover {
         </item>
         <item>
          <widget class="QPushButton" name="nextButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>

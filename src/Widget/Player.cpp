@@ -165,12 +165,15 @@ void Player::setupConnect()
 		{
 			ui.stackedWidget->setCurrentIndex(0);
 			emit advertPlayEnd();
+			//
 		}
 	});
 
 	// ui.mpvFrame
 	connect(this, &Player::advertPlayEnd, [=]()
 	{
+		ui.playButton->setEnabled(true);
+		ui.nextButton->setEnabled(true);
 		ui.mpvFrame->LoadFile(m_file);
 	});
 	//
@@ -304,6 +307,7 @@ void Player::setupConnect()
 			if (!init) // will only happen the first time a file is loaded.
 			{
 				ui.playButton->setEnabled(true);
+				ui.nextButton->setEnabled(true);
 				init = true;
 			}
 			SetPlaybackControls(true);
@@ -526,6 +530,11 @@ void Player::setVideoTitle(QString title)
 void Player::loadAdvert(QString path)
 {
 	//
+	ui.mpvFrame->Stop();
+	//
+	ui.playButton->setDisabled(true);
+	ui.nextButton->setDisabled(true);
+	//
 	ui.stackedWidget->setCurrentIndex(1);
 	ui.mpvAdFrame->LoadFile(path);
 	//
@@ -568,6 +577,8 @@ void Player::Load(QString file)
 				qDebug() << adVideo;
 				if (adVideo.isEmpty())
 				{
+					ui.playButton->setDisabled(false);
+					ui.nextButton->setDisabled(false);
 					ui.mpvFrame->LoadFile(file);
 				}
 				else
@@ -585,6 +596,8 @@ void Player::Load(QString file)
 	{
 
 		m_file = file;
+		ui.playButton->setDisabled(false);
+		ui.nextButton->setDisabled(false);
 		ui.mpvFrame->LoadFile(file);
 	}
 #else

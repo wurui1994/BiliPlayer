@@ -1,21 +1,21 @@
-QSlider {
-	height: 9px;
+QSlider{
+    height:12px;
 }
-QSlider::handle:horizontal:disabled,
-QSlider::sub-page:horizontal:disabled {
-	background: #383838;
+QSlider::groove {
+    background: #383838;
+    height: 4px; /* groove_width */
+    border-radius: 2px;
 }
-QSlider::handle:horizontal {
-	/* handle color */
-	background: #008098;
-	width: 9px;
-	border-radius: 4px;
+
+QSlider::sub-page {
+    background: #00B1EA;
+    border-radius: 2px;
 }
-QSlider::groove:horizontal {
-	/* the non-progressed color */
-	background: #383838;
-}
-QSlider::sub-page:horizontal {
-	/* the progress color */
-	background: #008098;
+
+QSlider::handle {
+    background: white;
+    width: 12px;
+    border-radius: 6px;
+    margin: -4px 0 -4px 0;
+    /*top right bottom left*/
 }

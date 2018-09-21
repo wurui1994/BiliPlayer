@@ -52,14 +52,23 @@ int SeekBar::positionValue(int pos)
 
 void SeekBar::mouseMoveEvent(QMouseEvent* event)
 {
-    if(totalTime != 0)
-    {
-		int time = positionValue(event->pos().x());
-		QString timeString = Utils::FormatTime(time);
+	if (event->buttons() & Qt::LeftButton)
+	{
+		int value = positionValue(event->pos().x());
+		emit tryToSeek(value);
+		event->accept();
+	}
+	else
+	{
+		if (totalTime != 0)
+		{
+			int time = positionValue(event->pos().x());
+			QString timeString = Utils::FormatTime(time);
 
-		QToolTip::showText(QPoint(event->globalPos().x() - 25, mapToGlobal(rect().topLeft()).y() - 40),
-			timeString, this, rect());
-    }
+			QToolTip::showText(QPoint(event->globalPos().x() - 25, mapToGlobal(rect().topLeft()).y() - 40),
+				timeString, this, rect());
+		}
+	}
     QSlider::mouseMoveEvent(event);
 }
 
