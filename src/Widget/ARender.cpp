@@ -1,4 +1,4 @@
-﻿#include "Common.h"
+#include "Common.h"
 #include "ARender.h"
 #include "Setting.h"
 #include "Application.h"

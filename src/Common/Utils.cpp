@@ -1,4 +1,4 @@
-﻿#include "Common.h"
+#include "Common.h"
 
 #include <algorithm>
 #include <exception>
@@ -283,34 +283,6 @@ void Utils::MessageShow(QWidget * parent, const QString & text, const QSize & si
 	if (lastWidget) lastWidget->hide();
 	lastWidget = box;
 	box->show();
-}
-
-QString Utils::defaultFont(bool monospace)
-{
-	if (monospace)
-	{
-#ifdef Q_OS_LINUX
-		return QStringLiteral("文泉驿等宽正黑");
-#endif
-#ifdef Q_OS_WIN32
-		return QStringLiteral("黑体");
-#endif
-#ifdef Q_OS_MAC
-		return QStringLiteral("华文黑体");
-#endif
-	}
-	else
-	{
-#ifdef Q_OS_LINUX
-		return QStringLiteral("文泉驿正黑");
-#endif
-#ifdef Q_OS_WIN32
-		return QStringLiteral("微软雅黑");
-#endif
-#ifdef Q_OS_MAC
-		return QStringLiteral("华文黑体");
-#endif
-	}
 }
 
 QString Utils::customUrl(Site site)

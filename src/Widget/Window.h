@@ -24,8 +24,6 @@ public:
 	void loadDanmaku(QString filePath);
 	void setupConnect();
 	//
-	void setSpeed(double speed);
-	//
 	void showPreferDialog();
 private:
 	qint64 m_lastTime = 0;

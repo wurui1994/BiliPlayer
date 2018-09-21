@@ -31,6 +31,7 @@ void AdvertWidget::setPixmap(QPixmap const & pixmap)
 
 void AdvertWidget::mousePressEvent(QMouseEvent * event)
 {
+	Q_UNUSED(event);
 	QDesktopServices::openUrl(QUrl("http://www.yyets.com/"));
 }
 

@@ -58,11 +58,11 @@ void Network::parseInit(QString json)
 	}
 	//
 	QJsonObject rootOld = docOld.object();
-	int adUpdateTimeOld = rootOld["adUpdateTime"].toInt();
+	//int adUpdateTimeOld = rootOld["adUpdateTime"].toInt();
 	QString barrageIpOld = rootOld["barrageIp"].toString();
 	//
 	QJsonObject rootNew = docNew.object();
-	int adUpdateTimeNew = rootNew["adUpdateTime"].toInt();
+	//int adUpdateTimeNew = rootNew["adUpdateTime"].toInt();
 	QString barrageIpNew = rootOld["barrageIp"].toString();
 	//
 	m_barrageIp = barrageIpNew;
@@ -112,7 +112,7 @@ void Network::playerAds()
 	}
 	//
 	QJsonObject rootOld = docOld.object();
-	int adUpdateTimeOld = rootOld["adUpdateTime"].toInt();
+	//int adUpdateTimeOld = rootOld["adUpdateTime"].toInt();
 	//
 	QJsonArray adsArray = rootOld["ads"].toArray();
 	for (auto const& ele : adsArray)
@@ -156,9 +156,8 @@ void Network::parseAds(QString json)
 	}
 	//
 	QJsonObject rootNew = docNew.object();
-	int adUpdateTimeNew = rootNew["adUpdateTime"].toInt();
+	//int adUpdateTimeNew = rootNew["adUpdateTime"].toInt();
 	//
-
 	QJsonArray adsArray = rootNew["ads"].toArray();
 	for (auto const& ele : adsArray)
 	{

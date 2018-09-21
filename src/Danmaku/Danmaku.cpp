@@ -1,4 +1,4 @@
-﻿#include "Common.h"
+#include "Common.h"
 #include "Danmaku.h"
 #include "Setting.h"
 #include "Application.h"
@@ -360,7 +360,7 @@ qint64 Danmaku::getDuration() const
 void Danmaku::process(DanmakuData &danm, const Comment& comment)
 {
 	qint64 createTime = QDateTime::currentMSecsSinceEpoch();
-	//跳过500毫秒以上未处理的弹幕
+	//
 	if (comment.isEmpty() || createTime < QDateTime::currentMSecsSinceEpoch() - 500)
 	{
 		return;
@@ -370,16 +370,16 @@ void Danmaku::process(DanmakuData &danm, const Comment& comment)
 	const QList<QRectF> &locate = graphic.locate();
 	if (locate.size() == 1)
 	{
-		//图元指定位置
+		//
 		QRectF rect = locate.first();
 		//
 		graphic.setRect(rect);
 	}
 	else
 	{
-		//弹幕自动定位
+		//
 		QVector<int> result = calculate(locate.size(), danm.draw, graphic);
-		//挑选最空闲的位置
+		//
 		int thin = result.first();
 		QRectF rect = locate.first();
 		for (int i = 1;  i < result.size(); ++i)
@@ -393,8 +393,7 @@ void Danmaku::process(DanmakuData &danm, const Comment& comment)
 		//
 		graphic.setRect(rect);
 	}
-	//相同内容的弹幕需要同时启动，先将其冻结
-	//graphic.setEnabled(false);
+	//
 	graphic.setIndex();
 	danm.draw.append(graphic);
 
@@ -407,8 +406,7 @@ QVector<int> Danmaku::calculate(int size,
 	QVector<int> result(size, 0);
 
 	const QList<QRectF> &locate = graphic.locate();
-	//弹幕自动定位
-
+	//
 	for (Graphic const& iter : data)
 	{
 		if (iter.getMode() != graphic.source().mode)

@@ -84,7 +84,6 @@ protected:
     void dropEvent(QDropEvent *event);              // drop file into
 
     void mousePressEvent(QMouseEvent *event);       // pressed mouse down
-
     void mouseReleaseEvent(QMouseEvent *event);     // released mouse up
     void mouseMoveEvent(QMouseEvent *event);        // moved mouse on the form
     //void leaveEvent(QEvent *event);                 // mouse left the form

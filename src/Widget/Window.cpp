@@ -1,4 +1,4 @@
-﻿#include "Common.h"
+#include "Common.h"
 #include "Window.h"
 #include "Setting.h"
 #include "Application.h"
@@ -174,11 +174,6 @@ void Window::setupConnect()
 	{
 		emit modelReset();
 	});
-}
-
-void Window::setSpeed(double speed)
-{
-	//Danmaku::instance()->setSpeed(speed);
 }
 
 void Window::showPreferDialog()

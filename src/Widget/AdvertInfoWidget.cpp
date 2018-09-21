@@ -28,6 +28,7 @@ void AdvertInfoWidget::setRemainTime(qint64 time)
 
 void AdvertInfoWidget::mousePressEvent(QMouseEvent * event)
 {
+	Q_UNUSED(event);
 	QDesktopServices::openUrl(QUrl("http://www.yyets.com/"));
 }
 

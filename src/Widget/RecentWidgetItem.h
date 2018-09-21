@@ -21,7 +21,7 @@ public:
 	bool isSelect();
 	void setTime(int time, int totalTime);
 Q_SIGNALS:
-	void watchFinished(RecentWidgetItem*);
+	void watchFinished();
 protected:
 	void enterEvent(QEvent *event);
 	void leaveEvent(QEvent *event);

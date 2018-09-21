@@ -48,14 +48,16 @@ void Player::setupWindow()
 	ui.seekBar->setStyleSheet(Utils::readFile(":/qss/seekbar.qss"));
 	ui.widget->setStyleSheet(Utils::readFile(":/qss/input.qss"));
 	ui.danmakuCheckBox->setStyleSheet(Utils::readFile(":/qss/danmaku.qss"));
-	//设置窗口样式
+	//
+#if 1
 	m_FramelessHelper = new FramelessHelper(this);
-	m_FramelessHelper->activateOn(this);  //激活当前窗体
-	m_FramelessHelper->setTitleHeight(ui.titleLabel->height());  //设置窗体的标题栏高度
-	m_FramelessHelper->setWidgetMovable(true);  //设置窗体可移动
-	m_FramelessHelper->setWidgetResizable(true);  //设置窗体可缩放
-	m_FramelessHelper->setRubberBandOnMove(false);  //设置橡皮筋效果-可移动
-	m_FramelessHelper->setRubberBandOnResize(false);  //设置橡皮筋效果-可缩放
+	m_FramelessHelper->activateOn(this);  
+	m_FramelessHelper->setTitleHeight(ui.titleLabel->height());  
+	m_FramelessHelper->setWidgetMovable(true);  
+	m_FramelessHelper->setWidgetResizable(true);  
+	m_FramelessHelper->setRubberBandOnMove(false); 
+	m_FramelessHelper->setRubberBandOnResize(false); 
+#endif
 	//
 	click_timer = new QTimer(this);
 	//
@@ -133,8 +135,9 @@ void Player::setupConnect()
 		emit advertPlayEnd();
 	});
 	//
-	connect(ui.mpvAdFrame, &MpvWidget::timeChanged, [=](int i)
+	connect(ui.mpvAdFrame, &MpvWidget::timeChanged, [=](int t)
 	{
+		Q_UNUSED(t);
 		m_advertInfo->setRemainTime(ui.mpvAdFrame->getRemainTime());
 	});
 	//
@@ -183,9 +186,6 @@ void Player::setupConnect()
 	{
 		ui.speedButton->setText(text);
 		double speed = text.replace("x","").toDouble();
-#if USE_DANMAKU
-		m_window->setSpeed(speed);
-#endif
 		qDebug() << "speed:" << speed;
 		ui.mpvFrame->Speed(speed);
 	});
@@ -230,7 +230,6 @@ void Player::setupConnect()
 	{
 		SetRemainingLabels(ui.mpvFrame->getTime());
 	});
-
 
 	connect(this, &Player::hideAllControlsChanged, [=](bool b)
 	{
@@ -545,7 +544,7 @@ void Player::Load(QString file)
 		QString adVideo = Network::instance().videoPath();
 		if (adVideo.isEmpty())
 		{
-			// 等待json响应1000
+			// 绛夊緟json鍝嶅簲1000
 			QTimer::singleShot(1000, [=]()
 			{
 				QString adVideo = Network::instance().videoPath();
@@ -943,6 +942,7 @@ void Player::on_minButton_clicked()
 
 void Player::on_maxButton_clicked(bool isChecked)
 {
+	Q_UNUSED(isChecked);
 	setWindowState(windowState() ^ Qt::WindowMaximized);
 }
 

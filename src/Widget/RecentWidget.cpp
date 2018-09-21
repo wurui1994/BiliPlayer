@@ -51,7 +51,7 @@ RecentWidgetItem* RecentWidget::addRecent(Recent const & recent)
 	//
 	ui.listWidget->setCurrentItem(item);
 	//
-	connect(itemWidget, &RecentWidgetItem::watchFinished, [=](RecentWidgetItem* itemWidget)
+	connect(itemWidget, &RecentWidgetItem::watchFinished, [=]()
 	{
 		if (ui.filterCheckBox->isChecked())
 		{
@@ -217,6 +217,7 @@ void RecentWidget::dropEvent(QDropEvent * e)
 
 void RecentWidget::on_clearCheckBox_clicked(bool isChecked)
 {
+	Q_UNUSED(isChecked);
 	emit tryClearList();
 }
 

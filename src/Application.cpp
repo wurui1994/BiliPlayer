@@ -1,4 +1,4 @@
-﻿#include "Common.h"
+#include "Common.h"
 #include "Application.h"
 #include "Setting.h"
 #include "Utils.h"
@@ -16,6 +16,8 @@ QApplication(argc, argv)
 {
 	QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 	//
+	loadTranslator(":/lang/biliplayer_zh");
+	//
 	LoggerInstance.setLogPath(path);
 	//
 	qDebug() << "Program" 
@@ -24,12 +26,6 @@ QApplication(argc, argv)
 		<< QDateTime::currentDateTime().toString();
 	//
 	Setting::load();
-	//
-	loadTranslator();
-	setDefaultFont();
-	setToolTipBase();
-	//
-	loadTranslator(":/lang/biliplayer_zh");
 	//
 	Network::instance().initAll();
 	//

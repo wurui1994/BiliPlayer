@@ -162,7 +162,6 @@ namespace Utils
 	Site parseSite(QString url);
 	void setCenter(QWidget *widget);
 	void setGround(QWidget *widget, QColor color);
-	QString defaultFont(bool monospace = false);
 	QString customUrl(Site site);
 	QString decodeTxt(const QByteArray &data);
 	QString decodeXml(QString string, bool fast = false);

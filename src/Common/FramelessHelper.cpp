@@ -381,9 +381,16 @@ bool FramelessHelper::eventFilter(QObject *obj, QEvent *event)
 {
     switch (event->type())
     {
+	case QEvent::MouseButtonPress:
+	{
+		QMouseEvent* ev = static_cast<QMouseEvent*>(event);
+		if (ev->button() != Qt::LeftButton)
+		{
+			return QObject::eventFilter(obj, event);
+		}
+	}
     case QEvent::MouseMove:
     case QEvent::HoverMove:
-    case QEvent::MouseButtonPress:
     case QEvent::MouseButtonRelease:
     case QEvent::Leave:
     {

@@ -77,7 +77,7 @@ void RecentWidgetItem::setTime(int time, int totalTime)
 	double percent = 100.0*m_recent.time / m_recent.totalTime;
 	if (qAbs(percent - 100) < 1e-3)
 	{
-		emit watchFinished(this);
+		emit watchFinished();
 	}
 }
 
