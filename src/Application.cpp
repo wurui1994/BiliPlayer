@@ -18,6 +18,12 @@ QApplication(argc, argv)
 	//
 	loadTranslator(":/lang/biliplayer_zh");
 	//
+#ifdef Q_OS_WIN
+	setStyleSheet("QWidget{font-family:Microsoft YaHei;}");
+#else
+	setStyleSheet("QWidget{font-family:PingFang SC;}");
+#endif
+	//
 	LoggerInstance.setLogPath(path);
 	//
 	qDebug() << "Program" 

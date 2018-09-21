@@ -844,6 +844,8 @@ font-size:14px;</string>
    <header>mpvwidget.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../Resource/player.qrc"/>
+ </resources>
  <connections/>
 </ui>

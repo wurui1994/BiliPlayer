@@ -532,20 +532,6 @@ void Player::loadAdvert(QString path)
     ui.mpvAdFrame->setKeepAspect(false);
 }
 
-void Player::checkState()
-{
-    bool isMax = windowState().testFlag(Qt::WindowMaximized);
-    bool isFull = windowState().testFlag(Qt::WindowFullScreen);
-    //
-    ui.maxButton->blockSignals(true);
-    ui.maxButton->setChecked(isMax);
-    ui.maxButton->blockSignals(false);
-    //
-    ui.fullscreenButton->blockSignals(true);
-    ui.fullscreenButton->setChecked(isFull);
-    ui.fullscreenButton->blockSignals(false);
-}
-
 bool Player::isPlaying()
 {
 	return playState == Mpv::Playing;
@@ -951,15 +937,7 @@ void Player::on_sendButton_clicked()
 
 void Player::on_fullscreenButton_clicked(bool isChecked)
 {
-    if(isChecked)
-    {
-        showFullScreen();
-    }
-    else
-    {
-        showNormal();
-    }
-    checkState();
+	setWindowState(windowState() ^ Qt::WindowFullScreen);
 }
 
 void Player::on_danmakuCheckBox_clicked(bool isChecked)
@@ -976,22 +954,17 @@ void Player::on_localCheckBox_clicked(bool isChecked)
 
 void Player::on_minButton_clicked()
 {
-    showMinimized();
-    checkState();
+	setWindowState(windowState() ^ Qt::WindowMinimized);
 }
 
 void Player::on_maxButton_clicked(bool isChecked)
 {
 	Q_UNUSED(isChecked);
-    if(isChecked)
-    {
-        showMaximized();
-    }
-    else
-    {
-        showNormal();
-    }
-    checkState();
+	setWindowState(windowState() ^ Qt::WindowMaximized);
+	if (windowState().testFlag(Qt::WindowFullScreen))
+	{
+		setWindowState(windowState() & ~Qt::WindowFullScreen);
+	}
 }
 
 void Player::on_closeButton_clicked()
