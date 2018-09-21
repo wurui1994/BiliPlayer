@@ -1,0 +1,371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts;xlf</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts;xlf</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files\Menu">
+      <UniqueIdentifier>{0be6f8d4-aec2-4aeb-95ae-df3228be8103}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Item">
+      <UniqueIdentifier>{8bcd7512-748e-46c7-8ce4-75710096ffcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Layer">
+      <UniqueIdentifier>{50f7c464-117d-4bf0-b4e6-c2a9d31b64b2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Widget\ARender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Danmaku\Attribute.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Danmaku\Danmaku.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Danmaku\Graphic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\MpvWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Danmaku\Parse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\Prefer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\SeekBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Danmaku\Sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\Setting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\SpeedMenu.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\VolumeMenu.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\DanmakuMenu.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\RecentWidgetItem.cpp">
+      <Filter>Source Files\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\Network.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\FramelessHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\RecentWidget.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\AdvertInfoWidget.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Widget\AdvertWidget.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\Widget\ARender.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Application.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="src\Danmaku\Attribute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Common\Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="src\Danmaku\Danmaku.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="src\Danmaku\Graphic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="src\Common\Logger.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="src\Player\MpvTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="src\Player\MpvWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="src\Danmaku\Parse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="src\Widget\Player.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Widget\Prefer.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Widget\SeekBar.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Widget\SpeedMenu.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="src\Danmaku\Sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Common\Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="src\Widget\VolumeMenu.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Widget\Window.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="mpv\client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mpv\opengl_cb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mpv\qthelper.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mpv\render.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mpv\render_gl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mpv\stream_cb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="src\Common\Setting.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Widget\DanmakuMenu.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Widget\RecentWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Widget\RecentWidgetItem.h">
+      <Filter>Source Files\Item</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Widget\AdvertInfoWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Widget\AdvertWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Common\Network.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Common\FramelessHelper.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="ui_Player.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_SpeedMenu.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_VolumeMenu.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Resource\lang\biliplayer_zh.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="src\Widget\Player.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\Widget\SpeedMenu.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\Widget\VolumeMenu.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\Widget\DanmakuMenu.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\Widget\RecentWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\Widget\RecentWidgetItem.ui">
+      <Filter>Source Files\Item</Filter>
+    </QtUic>
+    <QtUic Include="src\Widget\AdvertInfoWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\Widget\AdvertWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Resource\lang\biliplayer_zh.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\qss\danmaku.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\danmaku_checked.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\danmaku_unchecked.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\danmaku_unchecked_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\escFullScreen.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\escFullScreen_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\fullScreen.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\fullScreen_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\qss\input.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\mute.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\mute_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\next.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\next_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\pause.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\pause_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\play.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\play_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <QtRcc Include="src\Resource\player.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+    <None Include="src\Resource\qss\playerbaka.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\qss\seekbar.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\settings.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\settings_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\volume.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\icon\volume_hover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="src\Resource\qss\volumeslider.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

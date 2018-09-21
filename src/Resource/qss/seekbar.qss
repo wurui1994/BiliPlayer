@@ -1,0 +1,21 @@
+QSlider {
+	height: 9px;
+}
+QSlider::handle:horizontal:disabled,
+QSlider::sub-page:horizontal:disabled {
+	background: #383838;
+}
+QSlider::handle:horizontal {
+	/* handle color */
+	background: #008098;
+	width: 9px;
+	border-radius: 4px;
+}
+QSlider::groove:horizontal {
+	/* the non-progressed color */
+	background: #383838;
+}
+QSlider::sub-page:horizontal {
+	/* the progress color */
+	background: #008098;
+}

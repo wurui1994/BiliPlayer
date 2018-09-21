@@ -1,0 +1,47 @@
+<RCC>
+    <qresource prefix="/">
+        <file>lang/biliplayer_zh.qm</file>
+        <file>qss/playerbaka.qss</file>
+        <file>qss/seekbar.qss</file>
+        <file>qss/volumeslider.qss</file>
+        <file>icon/play_hover.png</file>
+        <file>icon/play.png</file>
+        <file>icon/pause.png</file>
+        <file>icon/pause_hover.png</file>
+        <file>icon/next.png</file>
+        <file>icon/next_hover.png</file>
+        <file>icon/mute.png</file>
+        <file>icon/mute_hover.png</file>
+        <file>icon/volume.png</file>
+        <file>icon/volume_hover.png</file>
+        <file>qss/input.qss</file>
+        <file>qss/danmaku.qss</file>
+        <file>icon/danmaku_checked.png</file>
+        <file>icon/danmaku_unchecked.png</file>
+        <file>icon/danmaku_unchecked_hover.png</file>
+        <file>icon/settings.png</file>
+        <file>icon/settings_hover.png</file>
+        <file>icon/escFullScreen.png</file>
+        <file>icon/escFullScreen_hover.png</file>
+        <file>icon/fullScreen.png</file>
+        <file>icon/fullScreen_hover.png</file>
+        <file>icon/big.png</file>
+        <file>icon/big_select.png</file>
+        <file>icon/small.png</file>
+        <file>icon/small_select.png</file>
+        <file>icon/filter.png</file>
+        <file>icon/filter_checked.png</file>
+        <file>icon/filter_checked_hover.png</file>
+        <file>icon/filter_hover.png</file>
+        <file>icon/clear.png</file>
+        <file>icon/clear_hover.png</file>
+        <file>icon/max_checked.png</file>
+        <file>icon/max_checked_hover.png</file>
+        <file>icon/min.png</file>
+        <file>icon/min_hover.png</file>
+        <file>icon/max.png</file>
+        <file>icon/max_hover.png</file>
+        <file>icon/close.png</file>
+        <file>icon/close_hover.png</file>
+    </qresource>
+</RCC>

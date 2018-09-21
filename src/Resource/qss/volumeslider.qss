@@ -1,0 +1,17 @@
+
+QSlider::groove {
+    background: #00B1EA;
+    width: 4px;
+    border-radius: 2px;
+}
+QSlider::sub-page {
+    background: #FF7F9CA5;
+    border-radius: 2px;
+}
+QSlider::handle {
+    background: #D1F1FB;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    margin: 0 -2px;
+}

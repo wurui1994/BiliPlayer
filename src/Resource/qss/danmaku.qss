@@ -1,0 +1,17 @@
+QCheckBox::indicator {
+    width: 68px;
+    height: 30px;
+}
+
+QCheckBox::indicator:unchecked {
+    image: url(:/icon/danmaku_unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/icon/danmaku_unchecked_hover.png);
+}
+
+
+QCheckBox::indicator:checked {
+    image: url(:/icon/danmaku_checked.png);
+}

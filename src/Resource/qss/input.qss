@@ -1,0 +1,37 @@
+QWidget{
+    background-color: #FF27292D;
+    color: #FFA7A7A7;
+}
+
+QWidget#widget {
+    background-color: #FF27292D;
+    color: #FFA7A7A7;
+    border-radius: 15px;
+}
+
+QLineEdit#inputEdit {
+    border: none;
+    border-radius: 15px;
+}
+
+QPushButton#sendButton:disabled {
+    width: 30px;
+    background-color: #FF454950;
+    border-radius: 15px;
+}
+
+QPushButton#sendButton:enabled {
+    width: 30px;
+    background-color: #FF00B1EA;
+    border-radius: 15px;
+    color:white;
+}
+
+QPushButton#settingButton {
+    width: 30px;
+    border-radius: 15px;
+}
+
+QPushButton#settingButton:hover {
+    color:cyan;
+}

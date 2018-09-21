@@ -1,0 +1,194 @@
+QWidget {
+    background: #181A1C;
+    color: whitesmoke;
+}
+
+/* QMenuBar and stuff */
+
+QMenuBar,
+QMenuBar::item {
+	background: #1A1A1A;
+}
+QMenuBar::item:selected {
+	background: #383838;
+}
+
+QMenu {
+	background: #1A1A1A;
+    border: 1px solid #383838;
+}
+QMenu::item:selected {
+	background: #383838;
+ }
+QMenu::item:checked {
+	/* distinguish check state for menu item's with images here */
+}
+QMenu::item::disabled {
+	color: #6F6F6F;
+}
+/* QMenu::item::disabled:selected { } */
+QMenu::separator {
+	background: #383838;
+	height: 1px;
+	margin: 2px 0;
+}
+
+/* QSplitter */
+
+QSplitter::handle,
+#mpvFrame,
+#outputTextEdit,
+#inputLineEdit {
+	background: black;
+}
+
+#outputTextEdit {
+	border-top: 1px solid #383838;
+}
+
+#inputLineEdit {
+	border-top: 1px solid #383838;
+	padding: 2px;
+}
+#inputLineEdit:focus {
+	border-color: #008098;
+}
+
+/* Playlist group */
+
+#searchBox {
+	background: #383838;
+	border: 1px solid #383838;
+	padding: 4px 2px;
+}
+#searchBox:focus {
+	border-color: #008098;
+}
+
+/* time labels */
+#durationLabel {
+}
+#seperatorLabel{
+	color: gray;
+}
+
+/* playlistWidget */
+
+QListView {
+	outline: none;
+}
+#playlistWidget::item {
+	background: #1A1A1A;
+	padding: 4px 2px;
+}
+#playlistWidget::item:selected {
+	background: #383838;
+}
+#playlistWidget:item:selected:active,
+#playlistWidget:item:selected:!active {
+	color: whitesmoke;
+}
+
+/* QScrollBar */
+
+QScrollBar:vertical {
+	padding-left: 1px;
+	width: 6px;
+}
+QScrollBar::handle:vertical {
+	background: #008098;
+	border-radius: 2px;
+	min-height: 10px;
+}
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+	border: none;
+}
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical  {
+	background: #383838;
+	margin: 0 2px;
+}
+QScrollBar::up-arrow:vertical,
+QScrollBar::down-arrow:vertical {
+	background: transparent;
+}
+
+QScrollBar:horizontal {
+	height: 6px;
+	padding-top: 1px;
+}
+QScrollBar::handle:horizontal {
+	background: #008098;
+	border-radius: 2px;
+	min-width: 10px;
+}
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+	border: none;
+}
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal {
+	background: #383838;
+	margin: 2px 0;
+}
+QScrollBar::left-arrow:horizontal,
+QScrollBar::right-arrow:horizontal {
+	background: transparent;
+}
+
+QPushButton#settingsButton {
+    image: url(:/icon/settings.png);
+}
+
+QPushButton#settingsButton:hover {
+    image: url(:/icon/settings_hover.png);
+}
+
+QPushButton#speedButton:hover {
+    color: #FF00B1EA;
+}
+
+QPushButton#settingButton::menu-indicator {
+    image: none;
+    background-color: none;
+}
+
+QPushButton#speedButton::menu-indicator {
+    image: none;
+    background-color: none;
+}
+
+QPushButton#soundButton {
+    image: url(:/icon/volume.png);
+}
+
+QPushButton#soundButton:hover {
+    image: url(:/icon/volume_hover.png);
+}
+
+QPushButton#soundButton::menu-indicator {
+    image: none;
+    background-color: none;
+}
+
+QCheckBox#fullscreenButton::indicator {
+    width: 16px;
+    height: 16px;
+}
+
+QCheckBox#fullscreenButton::indicator:unchecked {
+    image: url(:/icon/fullScreen.png);
+}
+
+QCheckBox#fullscreenButton::indicator:unchecked:hover {
+    image: url(:/icon/fullScreen_hover.png);
+}
+
+QCheckBox#fullscreenButton::indicator:checked {
+    image: url(:/icon/escFullScreen.png);
+}
+
+QCheckBox#fullscreenButton::indicator:checked:hover {
+    image: url(:/icon/escFullScreen_hover.png);
+}
