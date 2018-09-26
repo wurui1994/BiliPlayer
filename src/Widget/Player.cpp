@@ -642,6 +642,10 @@ void Player::restartOnStop(bool isRestartOnStop)
 
 void Player::Load(QString file)
 {
+	if (file.isEmpty())
+	{
+		return;
+	}
 #if 1
 	if (m_file != file)
 	{

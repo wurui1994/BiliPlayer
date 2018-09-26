@@ -160,39 +160,44 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="514"/>
+        <location filename="../../Player/MpvWidget.cpp" line="493"/>
+        <source>File is invalid or not exist.</source>
+        <translation type="unfinished">文件不存在或已经失效.</translation>
+    </message>
+    <message>
+        <location filename="../../Player/MpvWidget.cpp" line="518"/>
         <source>File does not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="553"/>
+        <location filename="../../Player/MpvWidget.cpp" line="557"/>
         <source>File no longer exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="719"/>
+        <location filename="../../Player/MpvWidget.cpp" line="723"/>
         <source>Volume: %0%</source>
         <translation type="unfinished">音量: %0%</translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="843"/>
+        <location filename="../../Player/MpvWidget.cpp" line="847"/>
         <source>Deinterlacing: %0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="843"/>
-        <location filename="../../Player/MpvWidget.cpp" line="861"/>
+        <location filename="../../Player/MpvWidget.cpp" line="847"/>
+        <location filename="../../Player/MpvWidget.cpp" line="865"/>
         <source>enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="843"/>
-        <location filename="../../Player/MpvWidget.cpp" line="861"/>
+        <location filename="../../Player/MpvWidget.cpp" line="847"/>
+        <location filename="../../Player/MpvWidget.cpp" line="865"/>
         <source>disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="861"/>
+        <location filename="../../Player/MpvWidget.cpp" line="865"/>
         <source>Motion Interpolation: %0</source>
         <translation type="unfinished"></translation>
     </message>
@@ -285,14 +290,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="851"/>
+        <location filename="../../Widget/Player.cpp" line="852"/>
         <source>Open Online Video.</source>
         <translation>打开在线视频</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="851"/>
+        <location filename="../../Widget/Player.cpp" line="852"/>
         <source>Video Url</source>
         <translation>视频URL:</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="864"/>
+        <source>Url is invalid.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../Widget/Player.ui" line="48"/>
@@ -300,48 +310,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="460"/>
-        <location filename="../../Widget/Player.ui" line="500"/>
+        <location filename="../../Widget/Player.ui" line="466"/>
+        <location filename="../../Widget/Player.ui" line="506"/>
         <source>00:00:00</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="474"/>
+        <location filename="../../Widget/Player.ui" line="480"/>
         <source>/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="493"/>
+        <location filename="../../Widget/Player.ui" line="499"/>
         <source>Click to change between total and remaining time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="577"/>
+        <location filename="../../Widget/Player.ui" line="595"/>
         <source>damaku setting</source>
         <translation type="unfinished">设置</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="599"/>
+        <location filename="../../Widget/Player.ui" line="617"/>
         <source>danmaku input</source>
         <translation type="unfinished">在此输入弹幕</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="609"/>
+        <location filename="../../Widget/Player.ui" line="627"/>
         <source>0/30</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="634"/>
+        <location filename="../../Widget/Player.ui" line="652"/>
         <source>send danmaku</source>
         <translation type="unfinished">发送</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="673"/>
+        <location filename="../../Widget/Player.ui" line="692"/>
         <source>Local</source>
         <translation type="unfinished">本地</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="718"/>
+        <location filename="../../Widget/Player.ui" line="737"/>
         <source>1.0x</source>
         <translation type="unfinished"></translation>
     </message>

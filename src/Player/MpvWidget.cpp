@@ -488,6 +488,10 @@ void MpvWidget::LoadFile(QString file)
 			qDebug() << "Load file:" << filePath;
 			PlayFile(filePath);
 		}
+		else
+		{
+			Utils::MessageShow(0, tr("File is invalid or not exist."));
+		}
 	}
 }
 
