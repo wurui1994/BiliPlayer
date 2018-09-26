@@ -175,11 +175,7 @@ void Window::tryLocal(QString file)
 {
 	QFileInfo info(file);
 	QString suffix = info.suffix().toLower();
-	if (!info.exists()) 
-	{
-		return;
-	}
-	else if (Utils::getSuffix(Utils::Danmaku).contains(suffix))
+	if (Utils::getSuffix(Utils::Danmaku).contains(suffix))
 	{
 		loadDanmaku(file);
 	}

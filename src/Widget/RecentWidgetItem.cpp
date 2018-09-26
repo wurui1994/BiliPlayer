@@ -26,6 +26,8 @@ void RecentWidgetItem::setRecent(Recent const & recent)
 {
 	m_recent = recent;
 	//
+	setToolTip("<nobr>" + m_recent.path);
+	//
 	QString fileName = QFileInfo(m_recent.path).fileName();
 	QString elidedText = QFontMetrics(ui.fileNameLabel->font())
 		.elidedText(fileName, Qt::ElideMiddle,480);

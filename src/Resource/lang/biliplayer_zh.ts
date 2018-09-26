@@ -215,54 +215,84 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="547"/>
+        <location filename="../../Widget/Player.cpp" line="550"/>
         <source>Setting</source>
         <translation type="unfinished">设置</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="551"/>
+        <location filename="../../Widget/Player.cpp" line="554"/>
+        <source>Open</source>
+        <translation type="unfinished">打开</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="558"/>
+        <source>OpenFile</source>
+        <translation type="unfinished">打开文件</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="559"/>
+        <source>OpenUrl</source>
+        <translation type="unfinished">打开链接</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="563"/>
         <source>Play</source>
         <translation type="unfinished">播放</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="553"/>
+        <location filename="../../Widget/Player.cpp" line="567"/>
         <source>PlayPause</source>
         <translation type="unfinished">播放/暂停</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="554"/>
+        <location filename="../../Widget/Player.cpp" line="568"/>
         <source>Restart</source>
         <translation type="unfinished">重新开始</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="556"/>
+        <location filename="../../Widget/Player.cpp" line="570"/>
         <source>BackwardOneSecond</source>
         <translation type="unfinished">后退1秒</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="557"/>
+        <location filename="../../Widget/Player.cpp" line="571"/>
         <source>ForwardOneSecond</source>
         <translation type="unfinished">前进1秒</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="559"/>
+        <location filename="../../Widget/Player.cpp" line="573"/>
         <source>BackwardFiveSecond</source>
         <translation type="unfinished">后退5秒</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="560"/>
+        <location filename="../../Widget/Player.cpp" line="574"/>
         <source>ForwardFiveSecond</source>
         <translation type="unfinished">前进1秒</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="562"/>
+        <location filename="../../Widget/Player.cpp" line="576"/>
         <source>FrameStep</source>
         <translation type="unfinished">前进一帧</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="563"/>
+        <location filename="../../Widget/Player.cpp" line="577"/>
         <source>FrameBackStep</source>
         <translation type="unfinished">后退一帧</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="841"/>
+        <source>video file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="851"/>
+        <source>Open Online Video.</source>
+        <translation>打开在线视频</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="851"/>
+        <source>Video Url</source>
+        <translation>视频URL:</translation>
     </message>
     <message>
         <location filename="../../Widget/Player.ui" line="48"/>

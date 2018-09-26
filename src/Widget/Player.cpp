@@ -534,6 +534,9 @@ void Player::setupShortcut()
 	m_keyFuncMap = {
 		{ "Setting" ,[=]() { m_window->showPreferDialog(); } },
 		// 视频前进和后退
+		{ "OpenFile" ,[=]() { openFile(); } },
+		{ "OpenUrl" ,[=]() { openUrl(); } },
+		// 视频前进和后退
 		{ "PlayPause" ,[=]() { ui.mpvFrame->PlayPause(); } },
 		{ "Restart" ,[=]() { ui.mpvFrame->Restart(); } },
 		{ "ForwardOneSecond" ,[=]() { ui.mpvFrame->seekRelativeTime(1); } },
@@ -545,6 +548,15 @@ void Player::setupShortcut()
 	};
 	//
 	genAction("Setting", tr("Setting"), QString("Ctrl+I"), m_menu);
+	//
+	m_menu->addSeparator();
+	//
+	QMenu* openMenu = m_menu->addMenu(tr("Open"));
+	openMenu->setWindowFlag(Qt::FramelessWindowHint, true);
+	openMenu->setAttribute(Qt::WA_TranslucentBackground);
+	//
+	genAction("OpenFile", tr("OpenFile"), QString("Ctrl+O"), openMenu);
+	genAction("OpenUrl", tr("OpenUrl"), QString("Ctrl+U"), openMenu);
 	//
 	m_menu->addSeparator();
 	//
@@ -822,6 +834,35 @@ void Player::onAdFileInfoChange(const Mpv::FileInfo & fileInfo)
 		});
 	}
 	//
+}
+
+void Player::openFile()
+{
+	QString filename = QFileDialog::getOpenFileName(this, tr("video file"));
+	if (filename.isEmpty())
+	{
+		return;
+	}
+	Load(filename);
+}
+
+void Player::openUrl()
+{
+	bool ok = false;
+	QString url = QInputDialog::getText(0, tr("Open Online Video."),tr("Video Url"), QLineEdit::Normal,"",&ok);
+	if (!ok)
+	{
+		return;
+	}
+	//
+	if (QUrl(url).isValid())
+	{
+		Load(url);
+	}
+	else
+	{
+		Utils::MessageShow(0, tr("Url is invalid."));
+	}
 }
 
 void Player::contextMenuEvent(QContextMenuEvent * event)

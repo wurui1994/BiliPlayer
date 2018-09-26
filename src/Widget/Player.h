@@ -80,6 +80,8 @@ public slots:
 	void Pause();
 	void onFileInfoChange(const Mpv::FileInfo &fileInfo);
 	void onAdFileInfoChange(const Mpv::FileInfo &fileInfo);
+	void openFile();
+	void openUrl();
 protected:
 	//
 	void contextMenuEvent(QContextMenuEvent *event);
