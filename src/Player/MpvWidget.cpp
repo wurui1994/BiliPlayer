@@ -54,7 +54,7 @@ MpvWidget::MpvWidget(QWidget *parent)
 	mpv_set_option_string(mpv, "input-cursor", "no");   // no mouse handling
 	mpv_set_option_string(mpv, "cursor-autohide", "no");// no cursor-autohide, we handle that
 	mpv_set_option_string(mpv, "ytdl", "yes"); // youtube-dl support
-	mpv_set_option_string(mpv, "sub-auto", "no"); // youtube-dl support
+	//mpv_set_option_string(mpv, "sub-auto", "no"); // youtube-dl support
 
 #if USE_MPV_OPENGL
 	m_isUseOpenGL_CB = true;
@@ -793,16 +793,22 @@ void MpvWidget::AddSubtitleTrack(QString f)
 	if (f == QString())
 		return;
 	const QByteArray tmp = f.toUtf8();
+#if 0
 	const char *args_remove[] = { "sub-remove", "1" , NULL};
 	Command(args_remove);
+#endif
 	const char *args[] = { "sub-add", tmp.constData(), NULL };
 	Command(args);
 	// this could be more efficient if we saved tracks in a bst
 	auto old = fileInfo.tracks; // save the current track-list
 	LoadTracks(); // load the new track list
 	auto current = fileInfo.tracks;
-	for (auto track : old) // remove the old tracks in current
+	for (auto track : old)
+	{
+		// remove the old tracks in current
 		current.removeOne(track);
+	}
+	//
 	if(current.size() > 1 )
 	{
 		Mpv::Track &track = current.first();

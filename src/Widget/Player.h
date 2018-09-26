@@ -43,7 +43,7 @@ public:
 	void setSubtitleFile(QString f);
 	//
 	void setupShortcut();
-	void genAction(QString const& key, QString const& actionName,
+	QAction* genAction(QString const& key, QString const& actionName,
 		QKeySequence shortCut, QMenu* menu);
 	//
 	void setVideoTitle(QString title);
@@ -82,6 +82,11 @@ public slots:
 	void onAdFileInfoChange(const Mpv::FileInfo &fileInfo);
 	void openFile();
 	void openUrl();
+	void addSubtitle();
+	void addSubtitleAction(QString text,int trackId);
+	void showSubtitles();
+	void audioMute();
+	void noKeepAspect();
 protected:
 	//
 	void contextMenuEvent(QContextMenuEvent *event);
@@ -119,6 +124,11 @@ public slots:
 public:
 	//
 	QMenu* m_menu;
+	QMenu *menuSubtitle_Track;
+	//QMenu *menuAudio_Tracks;
+	QAction* action_Add_Subtitle_File;
+	QAction* action_NoAspect;
+	QAction* action_AudioMute;
 	//
 	QMap<QString, std::function<void()>> m_keyFuncMap;
 #if USE_DANMAKU

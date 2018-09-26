@@ -29,6 +29,8 @@ Player::Player(QWidget *parent):
 	//
 	setupWindow();
 	//
+	setupShortcut();
+	//
 	setupConnect();
 	//
 #if 0
@@ -44,7 +46,6 @@ Player::Player(QWidget *parent):
     OSXHideTitleBar::HideTitleBar(winId());
 #endif
 #endif
-	setupShortcut();
 }
 
 Player::~Player()
@@ -267,7 +268,118 @@ void Player::setupConnect()
 
 	connect(ui.mpvFrame, &MpvWidget::trackListChanged, [=](const QList<Mpv::Track> &trackList)
 	{
-		Q_UNUSED(trackList);
+		if (ui.mpvFrame->getPlayState() > 0)
+		{
+			QAction *action;
+			bool video = false,
+				albumArt = false;
+
+			menuSubtitle_Track->clear();
+			action_Add_Subtitle_File = genAction("AddSubtitle", tr("AddSubtitle"), QString("Shift+S"), menuSubtitle_Track);
+			menuSubtitle_Track->addAction(action_Add_Subtitle_File);
+			//menuAudio_Tracks->clear();
+			//menuAudio_Tracks->addAction(action_Add_Audio_File);
+			for (auto &track : trackList)
+			{
+				if (track.type == "sub")
+				{
+					QString text = QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang + (track.external ? "*" : "")).replace("&", "&&");
+					addSubtitleAction(text,track.id);
+				}
+#if 0
+				else if (track.type == "audio")
+				{
+					action = ui->menuAudio_Tracks->addAction(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang).replace("&", "&&"));
+					connect(action, &QAction::triggered,
+						[=]
+					{
+						if (mpv->getAid() != track.id) // don't allow selection of the same track
+						{
+							mpv->Aid(track.id);
+							mpv->ShowText(QString("%0 %1: %2 (%3)").arg(tr("Audio"), QString::number(track.id), track.title, track.lang));
+						}
+						else
+							action->setChecked(true); // recheck the track
+					});
+				}
+				else if (track.type == "video") // video track
+				{
+					if (!track.albumart) // isn't album art
+						video = true;
+					else
+						albumArt = true;
+				}
+#endif
+			}
+
+#if 0
+			if (video)
+			{
+				// if we were hiding album art, show it--we've gone to a video
+				if (ui->mpvFrame->styleSheet() != QString()) // remove filler album art
+					ui->mpvFrame->setStyleSheet("");
+				if (ui->action_Hide_Album_Art->isChecked())
+					HideAlbumArt(false);
+				ui->action_Hide_Album_Art->setEnabled(false);
+				ui->menuSubtitle_Track->setEnabled(true);
+				if (ui->menuSubtitle_Track->actions().count() > 1)
+				{
+					ui->menuFont_Si_ze->setEnabled(true);
+					ui->actionShow_Subtitles->setEnabled(true);
+					ui->actionShow_Subtitles->setChecked(mpv->getSubtitleVisibility());
+				}
+				else
+				{
+					ui->menuFont_Si_ze->setEnabled(false);
+					ui->actionShow_Subtitles->setEnabled(false);
+					ui->actionShow_Subtitles->setChecked(false);
+				}
+				ui->menuTake_Screenshot->setEnabled(true);
+				ui->menuFit_Window->setEnabled(true);
+				ui->menuAspect_Ratio->setEnabled(true);
+				ui->action_Frame_Step->setEnabled(true);
+				ui->actionFrame_Back_Step->setEnabled(true);
+				ui->action_Deinterlace->setEnabled(true);
+				ui->action_Motion_Interpolation->setEnabled(true);
+			}
+			else
+			{
+				if (!albumArt)
+				{
+					// put in filler albumArt
+					if (ui->mpvFrame->styleSheet() == QString())
+						ui->mpvFrame->setStyleSheet("background-image:url(:/img/album-art.png);background-repeat:no-repeat;background-position:center;");
+				}
+				ui->action_Hide_Album_Art->setEnabled(true);
+				ui->menuSubtitle_Track->setEnabled(false);
+				ui->menuFont_Si_ze->setEnabled(false);
+				ui->actionShow_Subtitles->setEnabled(false);
+				ui->actionShow_Subtitles->setChecked(false);
+				ui->menuTake_Screenshot->setEnabled(false);
+				ui->menuFit_Window->setEnabled(false);
+				ui->menuAspect_Ratio->setEnabled(false);
+				ui->action_Frame_Step->setEnabled(false);
+				ui->actionFrame_Back_Step->setEnabled(false);
+				ui->action_Deinterlace->setEnabled(false);
+				ui->action_Motion_Interpolation->setEnabled(false);
+
+				if (baka->sysTrayIcon->isVisible() && !hidePopup)
+				{
+					// todo: use {artist} - {title}
+					baka->sysTrayIcon->showMessage("Baka MPlayer", mpv->getFileInfo().media_title, QSystemTrayIcon::NoIcon, 4000);
+				}
+			}
+
+			if (ui->menuAudio_Tracks->actions().count() == 1)
+				ui->menuAudio_Tracks->actions().first()->setEnabled(false);
+
+			if (pathChanged && autoFit)
+			{
+				baka->FitWindow(autoFit, false);
+				pathChanged = false;
+			}
+#endif
+		}
 	});
 
 	connect(ui.mpvFrame, &MpvWidget::chaptersChanged, [=](const QList<Mpv::Chapter> &chapters)
@@ -443,7 +555,19 @@ void Player::setupConnect()
 
 	connect(ui.mpvFrame, &MpvWidget::sidChanged, [=](int sid)
 	{
-		Q_UNUSED(sid);
+		QList<QAction*> actions = menuSubtitle_Track->actions();
+		for (auto &action : actions)
+		{
+			if (action->text().startsWith(QString::number(sid)))
+			{
+				action->setCheckable(true);
+				action->setChecked(true);
+			}
+			else 
+			{
+				action->setChecked(false);
+			}
+		}
 	});
 
 	connect(ui.mpvFrame, &MpvWidget::aidChanged, [=](int aid)
@@ -457,14 +581,10 @@ void Player::setupConnect()
 			ui.mpvFrame->ShowText(b ? tr("Subtitles visible") : tr("Subtitles hidden"));
 	});
 
-	//connect(ui.mpvFrame, &MpvWidget::muteChanged, [=](bool b)
-	//{
-	//	if (b)
-	//		ui.muteButton->setIcon(QIcon(":/img/default_mute.svg"));
-	//	else
-	//		ui.muteButton->setIcon(QIcon(":/img/default_unmute.svg"));
-	//	ui.mpvFrame->ShowText(b ? tr("Muted") : tr("Unmuted"));
-	//});
+	connect(ui.mpvFrame, &MpvWidget::muteChanged, [=](bool b)
+	{
+		ui.mpvFrame->ShowText(b ? tr("Muted") : tr("Unmuted"));
+	});
 
 	connect(ui.mpvFrame, &MpvWidget::voChanged, [=](QString vo)
 	{
@@ -545,6 +665,13 @@ void Player::setupShortcut()
 		{ "BackwardFiveSecond" ,[=]() { ui.mpvFrame->seekRelativeTime(-5); } },
 		{ "FrameBackStep" ,[=]() { ui.mpvFrame->FrameBackStep(); } },
 		{ "FrameStep" ,[=]() { ui.mpvFrame->FrameStep(); } },
+		//
+		{ "AddSubtitle" ,[=]() {addSubtitle(); } },
+		{ "ShowSubtitle" ,[=]() {showSubtitles(); } },
+		// Video
+		{ "NoAspect" ,[=]() {noKeepAspect(); } },
+		// Audio
+		{ "AudioMute" ,[=]() {audioMute(); } },
 	};
 	//
 	genAction("Setting", tr("Setting"), QString("Ctrl+I"), m_menu);
@@ -558,7 +685,7 @@ void Player::setupShortcut()
 	genAction("OpenFile", tr("OpenFile"), QString("Ctrl+O"), openMenu);
 	genAction("OpenUrl", tr("OpenUrl"), QString("Ctrl+U"), openMenu);
 	//
-	m_menu->addSeparator();
+	//m_menu->addSeparator();
 	//
 	QMenu* playMenu = m_menu->addMenu(tr("Play"));
 	playMenu->setWindowFlag(Qt::FramelessWindowHint, true);
@@ -575,9 +702,43 @@ void Player::setupShortcut()
 	playMenu->addSeparator();
 	genAction("FrameBackStep", tr("FrameStep"), QString("Shift+Left"), playMenu);
 	genAction("FrameStep", tr("FrameBackStep"), QString("Shift+Right"), playMenu);
+	//
+	m_menu->addSeparator();
+	//
+	QMenu* subtitleMenu = m_menu->addMenu(tr("Subtitle"));
+	subtitleMenu->setWindowFlag(Qt::FramelessWindowHint, true);
+	subtitleMenu->setAttribute(Qt::WA_TranslucentBackground);
+	//
+	QAction* showSubtitle = genAction("ShowSubtitle", tr("ShowSubtitle"), QString("Ctrl+W"), subtitleMenu);
+	showSubtitle->setCheckable(true);
+	showSubtitle->setChecked(true);
+	//
+	menuSubtitle_Track = subtitleMenu->addMenu(tr("Subtitle Tracks"));
+	menuSubtitle_Track->setWindowFlag(Qt::FramelessWindowHint, true);
+	menuSubtitle_Track->setAttribute(Qt::WA_TranslucentBackground);
+	//
+	QMenu* videoMenu = m_menu->addMenu(tr("Video"));
+	videoMenu->setWindowFlag(Qt::FramelessWindowHint, true);
+	videoMenu->setAttribute(Qt::WA_TranslucentBackground);
+	//
+	QMenu* aspectMenu = videoMenu->addMenu(tr("Aspect"));
+	aspectMenu->setWindowFlag(Qt::FramelessWindowHint, true);
+	aspectMenu->setAttribute(Qt::WA_TranslucentBackground);
+	//
+	action_NoAspect = genAction("NoAspect", tr("NoAspect"), QString("Ctrl+K"), aspectMenu);
+	action_NoAspect->setCheckable(true);
+	action_NoAspect->setChecked(false);
+	//
+	QMenu* audioMenu = m_menu->addMenu(tr("Audio"));
+	audioMenu->setWindowFlag(Qt::FramelessWindowHint, true);
+	audioMenu->setAttribute(Qt::WA_TranslucentBackground);
+	//
+	action_AudioMute = genAction("AudioMute", tr("AudioMute"), QString("Ctrl+M"), audioMenu);
+	action_AudioMute->setCheckable(true);
+	action_AudioMute->setChecked(false);
 }
 
-void Player::genAction(QString const & key, QString const & actionName, QKeySequence shortCut, QMenu * menu)
+QAction* Player::genAction(QString const & key, QString const & actionName, QKeySequence shortCut, QMenu * menu)
 {
 	QAction* action = new QAction(actionName, menu);
 	action->setShortcut(shortCut);
@@ -585,10 +746,7 @@ void Player::genAction(QString const & key, QString const & actionName, QKeySequ
 	QShortcut* shortcut = new QShortcut(shortCut, this);
 	connect(shortcut, &QShortcut::activated, [=]()
 	{
-		if (m_keyFuncMap[key])
-		{
-			m_keyFuncMap[key]();
-		}
+		action->trigger();
 	});
 	//
 	connect(action, &QAction::triggered, this, [=]()
@@ -599,6 +757,8 @@ void Player::genAction(QString const & key, QString const & actionName, QKeySequ
 		}
 	});
 	menu->addAction(action);
+	//
+	return action;
 }
 
 void Player::setVideoTitle(QString title)
@@ -646,7 +806,7 @@ void Player::Load(QString file)
 	{
 		return;
 	}
-#if 1
+#if 0
 	if (m_file != file)
 	{
 		m_file = file;
@@ -869,6 +1029,64 @@ void Player::openUrl()
 	}
 }
 
+void Player::addSubtitle()
+{
+	QString filename = QFileDialog::getOpenFileName(this, tr("video file"));
+	if (filename.isEmpty())
+	{
+		return;
+	}
+	ui.mpvFrame->AddSubtitleTrack(filename);
+}
+
+void Player::addSubtitleAction(QString text,int trackId)
+{
+	QAction* action = menuSubtitle_Track->addAction(text);
+	connect(action, &QAction::triggered,
+		[=]
+	{
+		// basically, if you uncheck the selected subtitle id, we hide subtitles
+		// when you check a subtitle id, we make sure subtitles are showing and set it
+		if (ui.mpvFrame->getSid() == trackId)
+		{
+			if (ui.mpvFrame->getSubtitleVisibility())
+			{
+				ui.mpvFrame->ShowSubtitles(false);
+				return;
+			}
+			else 
+			{
+				ui.mpvFrame->ShowSubtitles(true);
+			}
+		}
+		else if (!ui.mpvFrame->getSubtitleVisibility())
+		{
+			ui.mpvFrame->ShowSubtitles(true);
+		}
+		//
+		ui.mpvFrame->Sid(trackId);
+		//ui.mpvFrame->ShowText(QString("%0 %1: %2 (%3)").arg(tr("Sub"), QString::number(trackId), track.title, track.lang + (track.external ? "*" : "")));
+	});
+}
+
+void Player::showSubtitles()
+{
+	bool isVis = ui.mpvFrame->getSubtitleVisibility();
+	ui.mpvFrame->ShowSubtitles(!isVis);
+}
+
+void Player::audioMute()
+{
+	bool isMute = ui.mpvFrame->getMute();
+	ui.mpvFrame->Mute(!isMute);
+}
+
+void Player::noKeepAspect()
+{
+	bool isKeep = action_NoAspect->isChecked();
+	ui.mpvFrame->setKeepAspect(!isKeep);
+}
+
 void Player::contextMenuEvent(QContextMenuEvent * event)
 {
 	Q_UNUSED(event);
@@ -1062,6 +1280,7 @@ void Player::on_sendButton_clicked()
 
 void Player::on_fullscreenButton_clicked(bool isChecked)
 {
+	Q_UNUSED(isChecked);
 	setWindowState(windowState() ^ Qt::WindowFullScreen);
 }
 
