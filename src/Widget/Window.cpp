@@ -26,11 +26,6 @@ Window::Window(QWidget *parent) :
 	Application::objects["Interface"] = arender;
 	Application::objects["Config"] = Setting::instance();
 
-	settingA = new QAction(tr("Setting"), this);
-	settingA->setObjectName("Conf");
-	settingA->setShortcut(Setting::getValue("/Shortcut/Conf", QString("Ctrl+I")));
-	addAction(settingA);
-
 	QVBoxLayout* layout = new QVBoxLayout;
 	//
 	layout->addWidget(arender);
@@ -165,11 +160,6 @@ void Window::loadDanmaku(QString filePath)
 
 void Window::setupConnect()
 {
-	connect(settingA, &QAction::triggered, [=]()
-	{
-		showPreferDialog();
-	});
-
 	connect(Danmaku::instance(), &Danmaku::modelReset, [=]()
 	{
 		emit modelReset();
@@ -209,12 +199,4 @@ void Window::tryLocal(QStringList paths)
 	{
 		tryLocal(path);
 	}
-}
-
-void Window::showContextMenu(QPoint p)
-{
-	QMenu rootMenu(this);
-
-	rootMenu.addAction(settingA);
-	rootMenu.exec(p);
 }

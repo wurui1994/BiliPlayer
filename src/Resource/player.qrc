@@ -43,5 +43,6 @@
         <file>icon/max_hover.png</file>
         <file>icon/close.png</file>
         <file>icon/close_hover.png</file>
+        <file>qss/menu.qss</file>
     </qresource>
 </RCC>

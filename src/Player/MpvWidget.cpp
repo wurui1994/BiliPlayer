@@ -587,10 +587,12 @@ void MpvWidget::StopUnload()
 	Command(args);
 }
 
-void MpvWidget::PlayPause(QString fileIfStopped)
+void MpvWidget::PlayPause()
 {
 	if (playState < 0) // not playing, play plays the selected playlist file
+	{
 		PlayFile(file);
+	}
 	else
 	{
 		const char *args[] = { "cycle", "pause", NULL };

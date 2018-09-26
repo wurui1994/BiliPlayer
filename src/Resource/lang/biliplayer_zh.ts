@@ -160,39 +160,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="506"/>
+        <location filename="../../Player/MpvWidget.cpp" line="514"/>
         <source>File does not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="545"/>
+        <location filename="../../Player/MpvWidget.cpp" line="553"/>
         <source>File no longer exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="709"/>
+        <location filename="../../Player/MpvWidget.cpp" line="719"/>
         <source>Volume: %0%</source>
         <translation type="unfinished">音量: %0%</translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="833"/>
+        <location filename="../../Player/MpvWidget.cpp" line="843"/>
         <source>Deinterlacing: %0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="833"/>
-        <location filename="../../Player/MpvWidget.cpp" line="851"/>
+        <location filename="../../Player/MpvWidget.cpp" line="843"/>
+        <location filename="../../Player/MpvWidget.cpp" line="861"/>
         <source>enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="833"/>
-        <location filename="../../Player/MpvWidget.cpp" line="851"/>
+        <location filename="../../Player/MpvWidget.cpp" line="843"/>
+        <location filename="../../Player/MpvWidget.cpp" line="861"/>
         <source>disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Player/MpvWidget.cpp" line="851"/>
+        <location filename="../../Player/MpvWidget.cpp" line="861"/>
         <source>Motion Interpolation: %0</source>
         <translation type="unfinished"></translation>
     </message>
@@ -200,68 +200,118 @@
 <context>
     <name>Player</name>
     <message>
-        <location filename="../../Widget/Player.cpp" line="400"/>
+        <location filename="../../Widget/Player.cpp" line="439"/>
         <source>Speed: %0x</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="418"/>
+        <location filename="../../Widget/Player.cpp" line="457"/>
         <source>Subtitles visible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="418"/>
+        <location filename="../../Widget/Player.cpp" line="457"/>
         <source>Subtitles hidden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="47"/>
+        <location filename="../../Widget/Player.cpp" line="547"/>
+        <source>Setting</source>
+        <translation type="unfinished">设置</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="551"/>
+        <source>Play</source>
+        <translation type="unfinished">播放</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="553"/>
+        <source>PlayPause</source>
+        <translation type="unfinished">播放/暂停</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="554"/>
+        <source>Restart</source>
+        <translation type="unfinished">重新开始</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="556"/>
+        <source>BackwardOneSecond</source>
+        <translation type="unfinished">后退1秒</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="557"/>
+        <source>ForwardOneSecond</source>
+        <translation type="unfinished">前进1秒</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="559"/>
+        <source>BackwardFiveSecond</source>
+        <translation type="unfinished">后退5秒</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="560"/>
+        <source>ForwardFiveSecond</source>
+        <translation type="unfinished">前进1秒</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="562"/>
+        <source>FrameStep</source>
+        <translation type="unfinished">前进一帧</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="563"/>
+        <source>FrameBackStep</source>
+        <translation type="unfinished">后退一帧</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.ui" line="48"/>
         <source>[未加载视频文件]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="435"/>
-        <location filename="../../Widget/Player.ui" line="473"/>
+        <location filename="../../Widget/Player.ui" line="460"/>
+        <location filename="../../Widget/Player.ui" line="500"/>
         <source>00:00:00</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="448"/>
+        <location filename="../../Widget/Player.ui" line="474"/>
         <source>/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="467"/>
+        <location filename="../../Widget/Player.ui" line="493"/>
         <source>Click to change between total and remaining time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="547"/>
+        <location filename="../../Widget/Player.ui" line="577"/>
         <source>damaku setting</source>
         <translation type="unfinished">设置</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="566"/>
+        <location filename="../../Widget/Player.ui" line="599"/>
         <source>danmaku input</source>
         <translation type="unfinished">在此输入弹幕</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="573"/>
+        <location filename="../../Widget/Player.ui" line="609"/>
         <source>0/30</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="595"/>
+        <location filename="../../Widget/Player.ui" line="634"/>
         <source>send danmaku</source>
         <translation type="unfinished">发送</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="631"/>
+        <location filename="../../Widget/Player.ui" line="673"/>
         <source>Local</source>
         <translation type="unfinished">本地</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.ui" line="675"/>
+        <location filename="../../Widget/Player.ui" line="718"/>
         <source>1.0x</source>
         <translation type="unfinished"></translation>
     </message>
@@ -284,17 +334,17 @@
 <context>
     <name>RecentWidget</name>
     <message>
-        <location filename="../../Widget/RecentWidget.ui" line="113"/>
+        <location filename="../../Widget/RecentWidget.ui" line="119"/>
         <source>Video Play List</source>
         <translation type="unfinished">播放列表</translation>
     </message>
     <message>
-        <location filename="../../Widget/RecentWidget.ui" line="165"/>
+        <location filename="../../Widget/RecentWidget.ui" line="195"/>
         <source>filter watched video</source>
         <translation type="unfinished">过滤掉已看完</translation>
     </message>
     <message>
-        <location filename="../../Widget/RecentWidget.ui" line="196"/>
+        <location filename="../../Widget/RecentWidget.ui" line="230"/>
         <source>clear video list</source>
         <translation type="unfinished">全部清除</translation>
     </message>
@@ -312,7 +362,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/RecentWidgetItem.ui" line="156"/>
+        <location filename="../../Widget/RecentWidgetItem.ui" line="186"/>
         <source>Video File Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -546,14 +596,6 @@
     <message>
         <location filename="../../Widget/Prefer.cpp" line="356"/>
         <source>Shortcut</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Window</name>
-    <message>
-        <location filename="../../Widget/Window.cpp" line="28"/>
-        <source>Setting</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

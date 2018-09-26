@@ -1,0 +1,14 @@
+QMenu {
+    background-color: rgba(0, 0, 0, 128);
+    border-radius: 2px;
+}
+
+QMenu::item {
+    padding: 2px 20px 2px 10px;
+    border: 1px solid transparent;
+}
+
+QMenu::item:selected {
+    background-color: rgba(204,232,255,32);
+    border-radius: 2px;
+}

@@ -44,6 +44,7 @@ Player::Player(QWidget *parent):
     OSXHideTitleBar::HideTitleBar(winId());
 #endif
 #endif
+	setupShortcut();
 }
 
 Player::~Player()
@@ -343,7 +344,7 @@ void Player::setupConnect()
 //				Util::SetAlwaysOnTop(winId(), false);
 			if (playState == Mpv::Stopped && m_isRestartOnStop)
 			{
-				ui.mpvFrame->PlayPause("");
+				ui.mpvFrame->PlayPause();
 				ui.mpvFrame->Pause();
 				SetPlayButtonIcon(true);
 			}
@@ -406,7 +407,7 @@ void Player::setupConnect()
 	//
 	connect(ui.mpvFrame, &MpvWidget::reachEndFile, [=](QString file)
 	{
-		if (m_lastSelect && file != m_lastSelect->recent().path)
+		if (m_lastSelect || file != m_lastSelect->recent().path)
 		{
 			return;
 		}
@@ -492,7 +493,7 @@ void Player::setupConnect()
 	// Playback: Play/pause button
 	connect(ui.playButton, &QPushButton::clicked, [=]
 	{
-		ui.mpvFrame->PlayPause("");
+		ui.mpvFrame->PlayPause();
 	});
 
 	// Playback: Next button
@@ -520,6 +521,72 @@ void Player::setupConnect()
 void Player::setSubtitleFile(QString f)
 {
 	ui.mpvFrame->setSubtitleFile(f);
+}
+
+void Player::setupShortcut()
+{
+	//
+	m_menu = new QMenu(this);
+	m_menu->setWindowFlag(Qt::FramelessWindowHint, true);
+	m_menu->setAttribute(Qt::WA_TranslucentBackground);
+	m_menu->setStyleSheet(Utils::readFile(":/qss/menu.qss"));
+	//快捷键函数映射表
+	m_keyFuncMap = {
+		{ "Setting" ,[=]() { m_window->showPreferDialog(); } },
+		// 视频前进和后退
+		{ "PlayPause" ,[=]() { ui.mpvFrame->PlayPause(); } },
+		{ "Restart" ,[=]() { ui.mpvFrame->Restart(); } },
+		{ "ForwardOneSecond" ,[=]() { ui.mpvFrame->seekRelativeTime(1); } },
+		{ "BackwardOneSecond" ,[=]() { ui.mpvFrame->seekRelativeTime(-1); } },
+		{ "ForwardFiveSecond" ,[=]() { ui.mpvFrame->seekRelativeTime(5); } },
+		{ "BackwardFiveSecond" ,[=]() { ui.mpvFrame->seekRelativeTime(-5); } },
+		{ "FrameBackStep" ,[=]() { ui.mpvFrame->FrameBackStep(); } },
+		{ "FrameStep" ,[=]() { ui.mpvFrame->FrameStep(); } },
+	};
+	//
+	genAction("Setting", tr("Setting"), QString("Ctrl+I"), m_menu);
+	//
+	m_menu->addSeparator();
+	//
+	QMenu* playMenu = m_menu->addMenu(tr("Play"));
+	playMenu->setWindowFlag(Qt::FramelessWindowHint, true);
+	playMenu->setAttribute(Qt::WA_TranslucentBackground);
+	//
+	genAction("PlayPause", tr("PlayPause"), QString("Ctrl+P"), playMenu);
+	genAction("Restart", tr("Restart"), QString("Ctrl+R"), playMenu);
+	playMenu->addSeparator();
+	genAction("BackwardOneSecond", tr("BackwardOneSecond"), QString("Left"), playMenu);
+	genAction("ForwardOneSecond", tr("ForwardOneSecond"), QString("Right"), playMenu);
+	playMenu->addSeparator();
+	genAction("BackwardFiveSecond", tr("BackwardFiveSecond"), QString("Ctrl+Left"), playMenu);
+	genAction("ForwardFiveSecond", tr("ForwardFiveSecond"), QString("Ctrl+Right"), playMenu);
+	playMenu->addSeparator();
+	genAction("FrameBackStep", tr("FrameStep"), QString("Shift+Left"), playMenu);
+	genAction("FrameStep", tr("FrameBackStep"), QString("Shift+Right"), playMenu);
+}
+
+void Player::genAction(QString const & key, QString const & actionName, QKeySequence shortCut, QMenu * menu)
+{
+	QAction* action = new QAction(actionName, menu);
+	action->setShortcut(shortCut);
+	//
+	QShortcut* shortcut = new QShortcut(shortCut, this);
+	connect(shortcut, &QShortcut::activated, [=]()
+	{
+		if (m_keyFuncMap[key])
+		{
+			m_keyFuncMap[key]();
+		}
+	});
+	//
+	connect(action, &QAction::triggered, this, [=]()
+	{
+		if (m_keyFuncMap[key])
+		{
+			m_keyFuncMap[key]();
+		}
+	});
+	menu->addAction(action);
 }
 
 void Player::setVideoTitle(QString title)
@@ -688,7 +755,7 @@ void Player::onFileInfoChange(const Mpv::FileInfo & fileInfo)
 		qDebug() << "retry play";
 		QTimer::singleShot(500, [=]()
 		{
-			ui.mpvFrame->PlayPause("");
+			ui.mpvFrame->PlayPause();
 			ui.mpvFrame->LoadFileInfo();
 			ui.mpvFrame->Play();
 			if (!m_lastRecent.path.isEmpty())
@@ -749,7 +816,7 @@ void Player::onAdFileInfoChange(const Mpv::FileInfo & fileInfo)
 		qDebug() << "retry play ad";
 		QTimer::singleShot(500, [=]()
 		{
-			ui.mpvAdFrame->PlayPause("");
+			ui.mpvAdFrame->PlayPause();
 			ui.mpvAdFrame->LoadFileInfo();
 			ui.mpvAdFrame->Play();
 		});
@@ -806,7 +873,7 @@ void Player::mousePressEvent(QMouseEvent *event)
 	else if (event->button() == Qt::RightButton)
 	{
 #if USE_DANMAKU
-		m_window->showContextMenu(event->globalPos());
+		m_menu->exec(event->globalPos());
 #endif
 	}
 

@@ -64,6 +64,15 @@
     <Filter Include="Source Files\Layer">
       <UniqueIdentifier>{50f7c464-117d-4bf0-b4e6-c2a9d31b64b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\qss">
+      <UniqueIdentifier>{07b40ade-e520-41ac-92ef-438d1f919f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\img">
+      <UniqueIdentifier>{083d2305-889c-4af4-8eda-e9c67a1d2eda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\lang">
+      <UniqueIdentifier>{e30dd590-41e2-48f2-abd8-97c03dc568e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Widget\ARender.cpp">
@@ -261,6 +270,84 @@
     <None Include="src\Resource\lang\biliplayer_zh.ts">
       <Filter>Translation Files</Filter>
     </None>
+    <None Include="src\Resource\icon\danmaku_checked.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\fullScreen_hover.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\fullScreen.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\escFullScreen_hover.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\escFullScreen.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\danmaku_unchecked_hover.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\danmaku_unchecked.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\mute.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\mute_hover.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\next.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\next_hover.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\pause.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\pause_hover.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\play.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\play_hover.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\settings.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\settings_hover.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\volume.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\icon\volume_hover.png">
+      <Filter>Resource Files\img</Filter>
+    </None>
+    <None Include="src\Resource\qss\danmaku.qss">
+      <Filter>Resource Files\qss</Filter>
+    </None>
+    <None Include="src\Resource\qss\input.qss">
+      <Filter>Resource Files\qss</Filter>
+    </None>
+    <None Include="src\Resource\qss\menu.qss">
+      <Filter>Resource Files\qss</Filter>
+    </None>
+    <None Include="src\Resource\qss\playerbaka.qss">
+      <Filter>Resource Files\qss</Filter>
+    </None>
+    <None Include="src\Resource\qss\seekbar.qss">
+      <Filter>Resource Files\qss</Filter>
+    </None>
+    <None Include="src\Resource\qss\volumeslider.qss">
+      <Filter>Resource Files\qss</Filter>
+    </None>
+    <None Include="src\Resource\lang\biliplayer_zh.qm">
+      <Filter>Resource Files\lang</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\Widget\Player.ui">
@@ -289,83 +376,8 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Resource\lang\biliplayer_zh.qm">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\qss\danmaku.qss">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\danmaku_checked.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\danmaku_unchecked.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\danmaku_unchecked_hover.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\escFullScreen.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\escFullScreen_hover.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\fullScreen.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\fullScreen_hover.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\qss\input.qss">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\mute.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\mute_hover.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\next.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\next_hover.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\pause.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\pause_hover.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\play.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\play_hover.png">
-      <Filter>Resource Files</Filter>
-    </None>
     <QtRcc Include="src\Resource\player.qrc">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\qss</Filter>
     </QtRcc>
-    <None Include="src\Resource\qss\playerbaka.qss">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\qss\seekbar.qss">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\settings.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\settings_hover.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\volume.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\icon\volume_hover.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="src\Resource\qss\volumeslider.qss">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

@@ -131,7 +131,7 @@ public slots:
 	void Pause();
 	void Stop();
 	void StopUnload();
-	void PlayPause(QString fileIfStopped);
+	void PlayPause();
 	void Restart();
 	void Rewind();
 	void Mute(bool);

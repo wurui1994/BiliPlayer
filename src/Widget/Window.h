@@ -22,6 +22,7 @@ public:
 	void setDanmakuTime(qint64 time);
 	void setDanmakuVisiable(bool isVisible);
 	void loadDanmaku(QString filePath);
+	//
 	void setupConnect();
 	//
 	void showPreferDialog();
@@ -29,7 +30,6 @@ private:
 	qint64 m_lastTime = 0;
 	qint64 m_lastDanmakuTime = 0;
 
-	QAction *settingA;
 	//
 	QPointer<QDialog> msg;
 
@@ -49,5 +49,6 @@ signals:
 public slots:
 	void tryLocal(QString path);
 	void tryLocal(QStringList paths);
-	void showContextMenu(QPoint p);
+private:
+
 };

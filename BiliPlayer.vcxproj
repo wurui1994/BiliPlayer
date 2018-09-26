@@ -424,6 +424,7 @@
     <None Include="src\Resource\icon\play_hover.png" />
     <QtRcc Include="src\Resource\player.qrc">
     </QtRcc>
+    <None Include="src\Resource\qss\menu.qss" />
     <None Include="src\Resource\qss\playerbaka.qss" />
     <None Include="src\Resource\qss\seekbar.qss" />
     <None Include="src\Resource\icon\settings.png" />

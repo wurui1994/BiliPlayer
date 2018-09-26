@@ -42,6 +42,10 @@ public:
 	void setupConnect();
 	void setSubtitleFile(QString f);
 	//
+	void setupShortcut();
+	void genAction(QString const& key, QString const& actionName,
+		QKeySequence shortCut, QMenu* menu);
+	//
 	void setVideoTitle(QString title);
 	//
 	void loadAdvert(QString path);
@@ -111,6 +115,10 @@ public slots:
 	void on_closeButton_clicked();
 	//
 public:
+	//
+	QMenu* m_menu;
+	//
+	QMap<QString, std::function<void()>> m_keyFuncMap;
 #if USE_DANMAKU
 	Window* m_window;
 #endif
