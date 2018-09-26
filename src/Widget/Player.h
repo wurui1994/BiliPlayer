@@ -87,6 +87,8 @@ public slots:
 	void showSubtitles();
 	void audioMute();
 	void noKeepAspect();
+	void hideTitle();
+	void hideControl();
 protected:
 	//
 	void contextMenuEvent(QContextMenuEvent *event);
@@ -129,6 +131,8 @@ public:
 	QAction* action_Add_Subtitle_File;
 	QAction* action_NoAspect;
 	QAction* action_AudioMute;
+	QAction* action_hideTitle;
+	QAction* action_hideControl;
 	//
 	QMap<QString, std::function<void()>> m_keyFuncMap;
 #if USE_DANMAKU

@@ -230,7 +230,7 @@
         <translation type="unfinished">取消静音</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="677"/>
+        <location filename="../../Widget/Player.cpp" line="752"/>
         <source>Setting</source>
         <translation type="unfinished">设置</translation>
     </message>
@@ -341,23 +341,33 @@
         <translation type="unfinished">静音</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="1005"/>
-        <location filename="../../Widget/Player.cpp" line="1034"/>
+        <location filename="../../Widget/Player.cpp" line="742"/>
+        <source>HideTitle</source>
+        <translation type="unfinished">隐藏标题栏</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="746"/>
+        <source>HideControl</source>
+        <translation type="unfinished">隐藏控制栏</translation>
+    </message>
+    <message>
+        <location filename="../../Widget/Player.cpp" line="1019"/>
+        <location filename="../../Widget/Player.cpp" line="1048"/>
         <source>video file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="1016"/>
+        <location filename="../../Widget/Player.cpp" line="1030"/>
         <source>Open Online Video.</source>
         <translation>打开在线视频</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="1016"/>
+        <location filename="../../Widget/Player.cpp" line="1030"/>
         <source>Video Url</source>
         <translation>视频URL:</translation>
     </message>
     <message>
-        <location filename="../../Widget/Player.cpp" line="1028"/>
+        <location filename="../../Widget/Player.cpp" line="1042"/>
         <source>Url is invalid.</source>
         <translation type="unfinished"></translation>
     </message>

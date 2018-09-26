@@ -652,7 +652,6 @@ void Player::setupShortcut()
 	m_menu->setStyleSheet(Utils::readFile(":/qss/menu.qss"));
 	//快捷键函数映射表
 	m_keyFuncMap = {
-		{ "Setting" ,[=]() { m_window->showPreferDialog(); } },
 		// 视频前进和后退
 		{ "OpenFile" ,[=]() { openFile(); } },
 		{ "OpenUrl" ,[=]() { openUrl(); } },
@@ -672,11 +671,12 @@ void Player::setupShortcut()
 		{ "NoAspect" ,[=]() {noKeepAspect(); } },
 		// Audio
 		{ "AudioMute" ,[=]() {audioMute(); } },
+		//
+		{ "HideTitle" ,[=]() {hideTitle(); } },
+		{ "HideControl" ,[=]() {hideControl(); } },
+		//
+		{ "Setting" ,[=]() { m_window->showPreferDialog(); } },
 	};
-	//
-	genAction("Setting", tr("Setting"), QString("Ctrl+I"), m_menu);
-	//
-	m_menu->addSeparator();
 	//
 	QMenu* openMenu = m_menu->addMenu(tr("Open"));
 	openMenu->setWindowFlag(Qt::FramelessWindowHint, true);
@@ -736,6 +736,20 @@ void Player::setupShortcut()
 	action_AudioMute = genAction("AudioMute", tr("AudioMute"), QString("Ctrl+M"), audioMenu);
 	action_AudioMute->setCheckable(true);
 	action_AudioMute->setChecked(false);
+	//
+	m_menu->addSeparator();
+	//
+	action_hideTitle = genAction("HideTitle", tr("HideTitle"), QString("Ctrl+T"), m_menu);
+	action_hideTitle->setCheckable(true);
+	action_hideTitle->setChecked(false);
+	//
+	action_hideControl = genAction("HideControl", tr("HideControl"), QString("Ctrl+B"), m_menu);
+	action_hideControl->setCheckable(true);
+	action_hideControl->setChecked(false);
+	//
+	m_menu->addSeparator();
+	//
+	genAction("Setting", tr("Setting"), QString("Ctrl+I"), m_menu);
 }
 
 QAction* Player::genAction(QString const & key, QString const & actionName, QKeySequence shortCut, QMenu * menu)
@@ -1087,6 +1101,19 @@ void Player::noKeepAspect()
 	ui.mpvFrame->setKeepAspect(!isKeep);
 }
 
+void Player::hideTitle()
+{
+	bool isHide = action_hideTitle->isChecked();
+	ui.titleLabel->setVisible(!isHide);
+}
+
+void Player::hideControl()
+{
+	bool isHide = action_hideControl->isChecked();
+	ui.playbackLayoutWidget->setVisible(!isHide);
+	ui.seekBar->setVisible(!isHide);
+}
+
 void Player::contextMenuEvent(QContextMenuEvent * event)
 {
 	Q_UNUSED(event);
@@ -1281,6 +1308,12 @@ void Player::on_sendButton_clicked()
 void Player::on_fullscreenButton_clicked(bool isChecked)
 {
 	Q_UNUSED(isChecked);
+	if (true)
+	{
+#ifdef Q_OS_WIN
+		QWindowsWindowFunctions::setHasBorderInFullScreen(this->windowHandle(), true);
+#endif
+	}
 	setWindowState(windowState() ^ Qt::WindowFullScreen);
 }
 
