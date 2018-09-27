@@ -1121,6 +1121,6 @@ namespace Utils
 	void openAppDataFolder()
 	{
 		QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-		QDesktopServices::openUrl(path);
+		QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 	}
 }
