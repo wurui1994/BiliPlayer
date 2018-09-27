@@ -44,5 +44,6 @@
         <file>icon/close.png</file>
         <file>icon/close_hover.png</file>
         <file>qss/menu.qss</file>
+        <file>qss/seekbar_mac.qss</file>
     </qresource>
 </RCC>

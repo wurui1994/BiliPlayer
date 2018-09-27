@@ -282,7 +282,7 @@
     <message>
         <location filename="../../Widget/Player.cpp" line="701"/>
         <source>ForwardFiveSecond</source>
-        <translation type="unfinished">前进1秒</translation>
+        <translation type="unfinished">前进5秒</translation>
     </message>
     <message>
         <location filename="../../Widget/Player.cpp" line="703"/>

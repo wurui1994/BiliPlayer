@@ -70,7 +70,7 @@ void RecentWidget::removeRecent(Recent const & recent)
 	{
 		QListWidgetItem* item = ui.listWidget->item(i);
 		RecentWidgetItem* select = qobject_cast<RecentWidgetItem*>(ui.listWidget->itemWidget(item));
-		if (select->recent().path == recent.path)
+		if (isSameFilePath(select->recent().path,recent.path))
 		{
 			ui.listWidget->takeItem(i);
 			break;
@@ -189,6 +189,29 @@ void RecentWidget::onNextVideo()
 	{
 		on_listWidget_itemClicked(ui.listWidget->item(0));
 	}
+}
+
+Recent RecentWidget::getRecent(QString path)
+{
+	if (m_lastSelect)m_lastSelect->setIsSelect(false);
+	//
+	for (int i = 0; i < ui.listWidget->count(); ++i)
+	{
+		QListWidgetItem* item = ui.listWidget->item(i);
+		RecentWidgetItem* select = qobject_cast<RecentWidgetItem*>(ui.listWidget->itemWidget(item));
+		if (isSameFilePath(select->recent().path,path))
+		{
+			select->setIsSelect(true);
+			m_lastSelect = select;
+			return m_lastSelect->recent();
+		}
+	}
+	return Recent();
+}
+
+bool RecentWidget::isSameFilePath(QString path1, QString path2)
+{
+	return QFileInfo(path1).absoluteFilePath() == QFileInfo(path2).absoluteFilePath();
 }
 
 void RecentWidget::dragEnterEvent(QDragEnterEvent *e)

@@ -251,6 +251,13 @@ background:rgba(44,44,44,32);
 
 QListWidget::item:hover{
 background:rgba(88,88,88,32);
+}
+
+QToolTip
+{
+	background-color: rgba(0, 0, 0, 128);
+	border: 1px solid green;
+    border-radius: 2px;
 }</string>
         </property>
         <property name="verticalScrollBarPolicy">

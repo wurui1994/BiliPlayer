@@ -331,10 +331,14 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
 		//
 		if (playState == Mpv::Playing)
 		{
+			//	
+			setPlayState(Mpv::Stopped);
 			emit reachEndFile(file);
 		}
-		//	
-		setPlayState(Mpv::Stopped);
+		else
+		{
+			setPlayState(Mpv::Stopped);
+		}
 		break;
 	case MPV_EVENT_SHUTDOWN:
 		//QCoreApplication::quit();
@@ -361,6 +365,87 @@ void MpvWidget::maybeUpdate()
 void MpvWidget::on_update(void *ctx)
 {
     QMetaObject::invokeMethod((MpvWidget*)ctx, "maybeUpdate");
+}
+const Mpv::FileInfo & MpvWidget::getFileInfo()
+{
+	return fileInfo;
+}
+
+Mpv::PlayState MpvWidget::getPlayState()
+{
+	return playState;
+}
+QString MpvWidget::getFile()
+{
+	return file;
+}
+QString MpvWidget::getPath()
+{
+	return path;
+}
+QString MpvWidget::getScreenshotFormat()
+{
+	return screenshotFormat;
+}
+QString MpvWidget::getScreenshotTemplate()
+{
+	return screenshotTemplate;
+}
+QString MpvWidget::getScreenshotDir()
+{
+	return screenshotDir;
+}
+QString MpvWidget::getVo()
+{
+	return vo;
+}
+QString MpvWidget::getMsgLevel()
+{
+	return msgLevel;
+}
+double MpvWidget::getSpeed()
+{
+	return speed;
+}
+int MpvWidget::getTime()
+{
+	return time;
+}
+int MpvWidget::getRemainTime()
+{
+	return fileInfo.length - time;
+}
+int MpvWidget::getVolume()
+{
+	return volume;
+}
+int MpvWidget::getVid()
+{
+	return vid;
+}
+int MpvWidget::getAid()
+{
+	return aid;
+}
+int MpvWidget::getSid()
+{
+	return sid;
+}
+bool MpvWidget::getSubtitleVisibility()
+{
+	return subtitleVisibility;
+}
+bool MpvWidget::getMute()
+{
+	return mute;
+}
+int MpvWidget::getOsdWidth()
+{
+	return osdWidth;
+}
+int MpvWidget::getOsdHeight()
+{
+	return osdHeight;
 }
 #endif
 

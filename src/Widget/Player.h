@@ -125,6 +125,8 @@ public slots:
 	//
 public:
 	//
+	bool m_isAdvertClose = false;
+	//
 	QMenu* m_menu;
 	QMenu *menuSubtitle_Track;
 	//QMenu *menuAudio_Tracks;

@@ -1,0 +1,23 @@
+QSlider {
+    height: 12px;
+    /* For MacOS */
+    padding-bottom: 5px;
+}
+QSlider::groove {
+    background: #383838;
+    height: 4px; /* groove_width */
+    border-radius: 2px;
+}
+
+QSlider::sub-page {
+    background: #00B1EA;
+    border-radius: 2px;
+}
+
+QSlider::handle {
+    background: white;
+    width: 12px;
+    border-radius: 6px;
+    margin: -4px 0 -4px 0;
+    /*top right bottom left*/
+}

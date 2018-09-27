@@ -79,30 +79,31 @@ private:
 #endif
 
 public:
-	const Mpv::FileInfo &getFileInfo() { return fileInfo; }
-	Mpv::PlayState getPlayState() { return playState; }
-	QString getFile() { return file; }
-	QString getPath() { return path; }
-	QString getScreenshotFormat() { return screenshotFormat; }
-	QString getScreenshotTemplate() { return screenshotTemplate; }
-	QString getScreenshotDir() { return screenshotDir; }
-	QString getVo() { return vo; }
-	QString getMsgLevel() { return msgLevel; }
-	double getSpeed() { return speed; }
-	int getTime() { return time; }
-	int getRemainTime() 
-	{ 
-		return fileInfo.length - time; 
-	}
-	int getVolume() { return volume; }
-	int getVid() { return vid; }
-	int getAid() { return aid; }
-	int getSid() { return sid; }
-	bool getSubtitleVisibility() { return subtitleVisibility; }
-	bool getMute() { return mute; }
+	const Mpv::FileInfo &getFileInfo();
+	Mpv::PlayState getPlayState();
+	//
+	QString getFile();
+	QString getPath();
+	//
+	QString getVo();
+	QString getMsgLevel();
+	//
+	QString getScreenshotFormat();
+	QString getScreenshotTemplate();
+	QString getScreenshotDir();
+	//
+	double getSpeed();
+	int getTime();
+	int getRemainTime();
+	int getVolume();
+	int getVid();
+	int getAid();
+	int getSid();
+	bool getSubtitleVisibility();
+	bool getMute();
 
-	int getOsdWidth() { return osdWidth; }
-	int getOsdHeight() { return osdHeight; }
+	int getOsdWidth();
+	int getOsdHeight();
 
 	QString getMediaInfo();
 
@@ -204,7 +205,7 @@ private slots:
 	void setVo(QString s) { emit voChanged(vo = s); }
 	void setMsgLevel(QString s) { emit msgLevelChanged(msgLevel = s); }
 	void setSpeed(double d) { emit speedChanged(speed = d); }
-	void setTime(int i) { emit timeChanged(time = i); }
+	void setTime(double i) { emit timeChanged(time = i); }
 	void setMsecsTime(QString s) { emit msecsTimeChanged(s); }
 	void setVolume(int i) { emit volumeChanged(volume = i); }
 	void setIndex(int i) { emit indexChanged(index = i); }
@@ -230,7 +231,7 @@ signals:
 	void voChanged(QString);
 	void msgLevelChanged(QString);
 	void speedChanged(double);
-	void timeChanged(int);
+	void timeChanged(double);
 	void msecsTimeChanged(QString);
 	void reachEndFile(QString file);
 	void fileCannotOpen();
@@ -262,7 +263,7 @@ private:
 		vo,
 		msgLevel;
 	double      speed = 1;
-	int         time = 0,
+	double         time = 0.0,
 		lastTime = 0,
 		volume = 100,
 		index = 0,

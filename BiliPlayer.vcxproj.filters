@@ -377,7 +377,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="src\Resource\player.qrc">
-      <Filter>Resource Files\qss</Filter>
+      <Filter>Resource Files</Filter>
     </QtRcc>
   </ItemGroup>
 </Project>

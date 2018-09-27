@@ -64,7 +64,11 @@ Player::~Player()
 void Player::setupWindow()
 {
 	setStyleSheet(Utils::readFile(":/qss/playerbaka.qss"));
+#ifdef Q_OS_MAC
+	ui.seekBar->setStyleSheet(Utils::readFile(":/qss/seekbar_mac.qss"));
+#else
 	ui.seekBar->setStyleSheet(Utils::readFile(":/qss/seekbar.qss"));
+#endif
 	ui.widget->setStyleSheet(Utils::readFile(":/qss/input.qss"));
 	ui.danmakuCheckBox->setStyleSheet(Utils::readFile(":/qss/danmaku.qss"));
 	//
@@ -135,6 +139,9 @@ void Player::setupConnect()
 		ui.mpvAdFrame->Stop();
 		//
 		ui.stackedWidget->setCurrentIndex(0);
+		//
+		m_isAdvertClose = true;
+		emit advertPlayEnd();
 	});
 
 	connect(m_advertInfo, &AdvertInfoWidget::tryMuteVolume, [=](bool isMute)
@@ -163,7 +170,7 @@ void Player::setupConnect()
 	connect(ui.mpvAdFrame, &MpvWidget::reachEndFile, [=](QString file)
 	{
 		int time = ui.mpvAdFrame->getTime();
-		if (time != 0)
+		if (time != 0 && !m_isAdvertClose)
 		{
 			ui.stackedWidget->setCurrentIndex(0);
 			emit advertPlayEnd();
@@ -174,6 +181,8 @@ void Player::setupConnect()
 	// ui.mpvFrame
 	connect(this, &Player::advertPlayEnd, [=]()
 	{
+		//
+		m_lastRecent = m_recent->getRecent(m_file);
 		ui.playButton->setEnabled(true);
 		ui.nextButton->setEnabled(true);
 		ui.mpvFrame->LoadFile(m_file);
@@ -519,7 +528,7 @@ void Player::setupConnect()
 	//
 	connect(ui.mpvFrame, &MpvWidget::reachEndFile, [=](QString file)
 	{
-		if (m_lastSelect || file != m_lastSelect->recent().path)
+		if (m_lastSelect && file != m_lastSelect->recent().path)
 		{
 			return;
 		}
@@ -529,8 +538,9 @@ void Player::setupConnect()
 			m_window->setDanmakuTime(m_totalTime);
 		}
 #endif
+		bool isEnd = (m_totalTime - 1000*ui.mpvFrame->getTime()) < 1000;
 		//
-		if (m_lastSelect)
+		if (m_lastSelect && isEnd)
 		{
 			m_lastSelect->setTime(m_totalTime, m_totalTime);
 		}
@@ -782,6 +792,7 @@ void Player::setVideoTitle(QString title)
 
 void Player::loadAdvert(QString path)
 {
+	m_isAdvertClose = false;
 	//
 	ui.mpvFrame->Stop();
 	//
@@ -820,7 +831,7 @@ void Player::Load(QString file)
 	{
 		return;
 	}
-#if 0
+#if 1
 	if (m_file != file)
 	{
 		m_file = file;
@@ -939,7 +950,7 @@ void Player::onFileInfoChange(const Mpv::FileInfo & fileInfo)
 
 	qint64 time = 1000 * fileInfo.length;
 	qDebug() << "video file time:" << time;
-
+	//
 	if (time <= 0)
 	{
 		qDebug() << "retry play";

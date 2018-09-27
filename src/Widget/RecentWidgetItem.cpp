@@ -16,6 +16,9 @@ RecentWidgetItem::RecentWidgetItem(QWidget *parent)
 	ui.fileNameLabel->setWordWrapMode(QTextOption::WrapAnywhere);
 	//ui.fileNameLabel->installEventFilter(this);
 	ui.fileNameLabel->viewport()->setCursor(Qt::ArrowCursor);
+	//
+	setWindowFlag(Qt::FramelessWindowHint, true);
+	setAttribute(Qt::WA_TranslucentBackground);
 }
 
 RecentWidgetItem::~RecentWidgetItem()

@@ -492,12 +492,6 @@ font-size:14px;</string>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="cursor">
-            <cursorShape>PointingHandCursor</cursorShape>
-           </property>
-           <property name="toolTip">
-            <string>Click to change between total and remaining time</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">color: #FFA7A7A7;
 font-size:14px;</string>

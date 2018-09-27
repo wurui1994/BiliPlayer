@@ -24,6 +24,8 @@ public:
 	void clearList();
 	bool nextVideo();
 	void onNextVideo();
+	Recent getRecent(QString path);
+	bool isSameFilePath(QString path1, QString path2);
 Q_SIGNALS:
 	void tryOpenFile(QString filePath);
 	void tryOpenRecent(Recent recent);
