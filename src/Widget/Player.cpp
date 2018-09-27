@@ -507,7 +507,23 @@ void Player::setupConnect()
 		ui.seekBar->setValueNoSignal(ui.seekBar->maximum()*((double)i / fi.length));
 		SetRemainingLabels(i);
 	});
-
+#if 1
+	connect(ui.mpvFrame, &MpvWidget::tryToGetTime, [=]()
+	{
+		qint64 time = ui.mpvFrame->getRealTime().toDouble() * 1000;
+#if USE_DANMAKU
+		if (m_window)
+		{
+			m_window->setDanmakuTime(time);
+		}
+#endif
+		//
+		if (m_lastSelect)
+		{
+			m_lastSelect->setTime(time, m_totalTime);
+		}
+	});
+#else
 	connect(ui.mpvFrame, &MpvWidget::msecsTimeChanged, [=](QString s)
 	{
 		emit msecsTimeChanged(s);
@@ -525,6 +541,7 @@ void Player::setupConnect()
 			m_lastSelect->setTime(time,m_totalTime);
 		}
 	});
+#endif
 	//
 	connect(ui.mpvFrame, &MpvWidget::reachEndFile, [=](QString file)
 	{

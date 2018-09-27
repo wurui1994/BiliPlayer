@@ -165,6 +165,7 @@ void MpvWidget::paintGL()
     mpv_opengl_cb_draw(mpv_gl, defaultFramebufferObject(), m_dpr*width(), -m_dpr*height());
     //
     //update();
+	emit tryToGetTime();
 }
 
 void MpvWidget::swapped()
@@ -1244,6 +1245,12 @@ void MpvWidget::HandleErrorCode(int error_code)
 	QString error = mpv_error_string(error_code);
 	if (error != QString())
 		emit messageSignal(error + "\n");
+}
+
+QString MpvWidget::getRealTime()
+{
+	QString realTime = mpv_get_property_string(mpv, "playback-time");
+	return realTime;
 }
 
 void MpvWidget::seekRelativeTime(double time)

@@ -71,7 +71,8 @@ void Window::setDanmakuTime(qint64 time)
 	{
 		Danmaku::instance()->setTime(time);
 	}
-	arender->repaint();
+	//
+	arender->update();
 	m_lastTime = time;
 }
 

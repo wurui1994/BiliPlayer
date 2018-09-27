@@ -40,9 +40,8 @@ public:
 	MpvWidget(QWidget *parent = 0);
 #endif
     ~MpvWidget();
-    void command(const QVariant& params);
-    void setProperty(const QString& name, const QVariant& value);
-    QVariant getProperty(const QString& name) const;
+	//
+	QString getRealTime();
 
 	void seekRelativeTime(double time);
 	void setSubtitleFile(QString f);
@@ -54,6 +53,7 @@ Q_SIGNALS:
     void durationChanged(int value);
     void positionChanged(int value);
     void initializeFinished();
+	void tryToGetTime();
 protected:
 #if USE_MPV_OPENGL
     void initializeGL() Q_DECL_OVERRIDE;
