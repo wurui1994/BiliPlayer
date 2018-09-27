@@ -510,6 +510,10 @@ void Player::setupConnect()
 #if 1
 	connect(ui.mpvFrame, &MpvWidget::tryToGetTime, [=]()
 	{
+		if (ui.mpvFrame->getPlayState() != Mpv::Playing)
+		{
+			return;
+		}
 		qint64 time = ui.mpvFrame->getRealTime().toDouble() * 1000;
 #if USE_DANMAKU
 		if (m_window)
