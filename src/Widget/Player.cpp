@@ -686,6 +686,8 @@ void Player::setupShortcut()
 		{ "HideControl" ,[=]() {hideControl(); } },
 		//
 		{ "Setting" ,[=]() { m_window->showPreferDialog(); } },
+		//
+		{ "OpenFolder" ,[=]() { Utils::openAppDataFolder(); } },
 	};
 	//
 	QMenu* openMenu = m_menu->addMenu(tr("Open"));
@@ -760,6 +762,9 @@ void Player::setupShortcut()
 	m_menu->addSeparator();
 	//
 	genAction("Setting", tr("Setting"), QString("Ctrl+I"), m_menu);
+	m_menu->addSeparator();
+	//
+	genAction("OpenFolder", tr("OpenFolder"), QString("Ctrl+L"), m_menu);
 }
 
 QAction* Player::genAction(QString const & key, QString const & actionName, QKeySequence shortCut, QMenu * menu)

@@ -210,4 +210,6 @@ namespace Utils
 	QString filePath(QString fileName);
 	//
 	QString fileHash(QString fileName);
+	//
+	void openAppDataFolder();
 }

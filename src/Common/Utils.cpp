@@ -1117,4 +1117,10 @@ namespace Utils
 		hash.addData(bytes);
 		return hash.result().toHex();
 	}
+	//
+	void openAppDataFolder()
+	{
+		QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+		QDesktopServices::openUrl(path);
+	}
 }
