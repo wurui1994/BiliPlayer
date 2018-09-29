@@ -6,10 +6,8 @@
 #include "Danmaku.h"
 #include "ARender.h"
 
-using namespace UI;
 
-
-void UI::Prefer::setupPlay()
+void Prefer::setupPlay()
 {
 	//Playing
 	{
@@ -128,6 +126,7 @@ void UI::Prefer::setupPlay()
 		g->addWidget(bold);
 
 		effect = new QComboBox(widgetPlaying);
+		effect->setItemDelegate(new QStyledItemDelegate());
 		effect->addItem(tr("Stroke"));
 		effect->addItem(tr("Projection"));
 		effect->addItem(tr("Shadow"));
@@ -142,6 +141,7 @@ void UI::Prefer::setupPlay()
 
 		auto f = new QHBoxLayout;
 		dmfont = new QComboBox(widgetPlaying);
+		dmfont->setItemDelegate(new QStyledItemDelegate());
 		dmfont->addItems(QFontDatabase().families());
 		dmfont->setCurrentText(Setting::getValue("/Danmaku/Font", QFont().family()));
 		connect(dmfont, &QComboBox::currentTextChanged, [this](QString _font)
@@ -162,7 +162,7 @@ void UI::Prefer::setupPlay()
 	}
 }
 
-void UI::Prefer::setupInterface()
+void Prefer::setupInterface()
 {
 	//Interface
 	{
@@ -240,6 +240,7 @@ void UI::Prefer::setupInterface()
 
 		auto f = new QHBoxLayout;
 		font = new QComboBox(widgetInterface);
+		font->setItemDelegate(new QStyledItemDelegate());
 		font->addItems(QFontDatabase().families());
 		font->setCurrentText(Setting::getValue("/Interface/Font/Family", QFont().family()));
 		connect(font, &QComboBox::currentTextChanged, [=](QString _font)
@@ -253,6 +254,7 @@ void UI::Prefer::setupInterface()
 
 		auto r = new QHBoxLayout;
 		reop = new QComboBox(widgetInterface);
+		reop->setItemDelegate(new QStyledItemDelegate());
 		reop->addItems({ tr("open in new window"), tr("open in current window"), tr("append to playlist") });
 		reop->setCurrentIndex(Setting::getValue("/Interface/Single", 1));
 		connect<void (QComboBox::*)(int)>(reop, &QComboBox::currentIndexChanged, [=](int i)
@@ -271,6 +273,7 @@ void UI::Prefer::setupInterface()
 
 		auto l = new QHBoxLayout;
 		loca = new QComboBox(widgetInterface);
+		loca->setItemDelegate(new QStyledItemDelegate());
 		loca->addItem("English", QString());
 		for (const QFileInfo &info : QDir("./locale/").entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot))
 		{
@@ -294,6 +297,7 @@ void UI::Prefer::setupInterface()
 
 		auto m = new QHBoxLayout;
 		stay = new QComboBox(widgetInterface);
+		stay->setItemDelegate(new QStyledItemDelegate());
 		stay->addItems({ tr("never"), tr("playing"), tr("always") });
 		stay->setCurrentIndex(Setting::getValue("/Interface/Top", 0));
 		connect<void(QComboBox::*)(int)>(stay, &QComboBox::currentIndexChanged, [this](int i)
@@ -315,7 +319,7 @@ void UI::Prefer::setupInterface()
 	}
 }
 
-void UI::Prefer::setupShortcut()
+void Prefer::setupShortcut()
 {
 	//Shortcut
 	{
@@ -357,12 +361,11 @@ void UI::Prefer::setupShortcut()
 	}
 }
 
-void UI::Prefer::saveSettings()
+void Prefer::saveSettings()
 {
-	Danmaku *d = Danmaku::instance();
 	if (reparse != getReparse())
 	{
-		d->parse(0x2);
+		Danmaku::instance()->parse(0x2);
 	}
 	Setting::save();
 }
@@ -392,62 +395,33 @@ QHash<QString, QVariant> Prefer::getReparse()
 	return data;
 }
 
-QString Prefer::getLogo(QString name)
-{
-	static QHash<QString, QString> l;
-	if (l.isEmpty())
-	{
-		QFile file(":/Text/DATA");
-		file.open(QIODevice::ReadOnly | QIODevice::Text);
-		QJsonObject data = QJsonDocument::fromJson(file.readAll()).object()["Logo"].toObject();
-		for (auto iter = data.begin(); iter != data.end(); ++iter)
-		{
-			l[iter.key()] = iter.value().toString();
-		}
-	}
-	return l[name];
-}
-
-namespace
-{
-	class List :public QListView
-	{
-	public:
-		List(QWidget *parent = 0) :
-			QListView(parent)
-		{
-		}
-
-		void currentChanged(const QModelIndex &c,
-			const QModelIndex &p)
-		{
-			QListView::currentChanged(c, p);
-			selectionModel()->setCurrentIndex(QModelIndex(), QItemSelectionModel::NoUpdate);
-		}
-	};
-}
-
 Prefer::Prefer(QWidget *parent) :
 QDialog(parent)
 {
-	setWindowTitle(tr("Config"));
+	setWindowTitle(tr("Settings"));
+	//
+	setStyleSheet("QAbstractItemView::item {min-height:16px;}");
+	//
 	auto outer = new QGridLayout(this);
 	tab = new QTabWidget(this);
+	outer->addWidget(tab);
+	//
+	setupPlay();
+	setupInterface();
+	setupShortcut();
+	//
+	int h = outer->minimumSize().height();
+	int w = 1.15*h;
+	setMinimumSize(w, h);
+	Utils::setCenter(this);
+	//
+	restart = getRestart();
+	reparse = getReparse();
+	//
 	connect(tab, &QTabWidget::currentChanged, [this](int index)
 	{
 		tab->widget(index)->setFocus();
 	});
-	outer->addWidget(tab);
-
-	setupPlay();
-	setupInterface();
-	setupShortcut();
-
-	connect(this, &QDialog::finished, [=](){saveSettings();});
-	int h = outer->minimumSize().height(), w = 1.15*h;
-	setMinimumSize(w, h);
-	Utils::setCenter(this);
-
-	restart = getRestart();
-	reparse = getReparse();
+	//
+	connect(this, &QDialog::finished, [=]() {saveSettings(); });
 }

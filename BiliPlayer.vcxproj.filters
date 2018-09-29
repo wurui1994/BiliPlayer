@@ -73,6 +73,9 @@
     <Filter Include="Resource Files\lang">
       <UniqueIdentifier>{e30dd590-41e2-48f2-abd8-97c03dc568e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{c8bc1374-8cb2-471b-bb06-fd5f18607470}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Widget\ARender.cpp">
@@ -88,9 +91,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Danmaku\Graphic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Common\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Player\MpvWidget.cpp">
@@ -109,9 +109,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Danmaku\Sprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Common\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Widget\Window.cpp">
@@ -138,9 +135,6 @@
     <ClCompile Include="src\Common\Network.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Common\FramelessHelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Widget\RecentWidget.cpp">
       <Filter>Source Files\Layer</Filter>
     </ClCompile>
@@ -149,6 +143,15 @@
     </ClCompile>
     <ClCompile Include="src\Widget\AdvertWidget.cpp">
       <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\FramelessHelper.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\Logger.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\Utils.cpp">
+      <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

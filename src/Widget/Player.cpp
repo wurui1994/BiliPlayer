@@ -277,118 +277,7 @@ void Player::setupConnect()
 
 	connect(ui.mpvFrame, &MpvWidget::trackListChanged, [=](const QList<Mpv::Track> &trackList)
 	{
-		if (ui.mpvFrame->getPlayState() > 0)
-		{
-			QAction *action;
-			bool video = false,
-				albumArt = false;
-
-			menuSubtitle_Track->clear();
-			action_Add_Subtitle_File = genAction("AddSubtitle", tr("AddSubtitle"), QString("Shift+S"), menuSubtitle_Track);
-			menuSubtitle_Track->addAction(action_Add_Subtitle_File);
-			//menuAudio_Tracks->clear();
-			//menuAudio_Tracks->addAction(action_Add_Audio_File);
-			for (auto &track : trackList)
-			{
-				if (track.type == "sub")
-				{
-					QString text = QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang + (track.external ? "*" : "")).replace("&", "&&");
-					addSubtitleAction(text,track.id);
-				}
-#if 0
-				else if (track.type == "audio")
-				{
-					action = ui->menuAudio_Tracks->addAction(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang).replace("&", "&&"));
-					connect(action, &QAction::triggered,
-						[=]
-					{
-						if (mpv->getAid() != track.id) // don't allow selection of the same track
-						{
-							mpv->Aid(track.id);
-							mpv->ShowText(QString("%0 %1: %2 (%3)").arg(tr("Audio"), QString::number(track.id), track.title, track.lang));
-						}
-						else
-							action->setChecked(true); // recheck the track
-					});
-				}
-				else if (track.type == "video") // video track
-				{
-					if (!track.albumart) // isn't album art
-						video = true;
-					else
-						albumArt = true;
-				}
-#endif
-			}
-
-#if 0
-			if (video)
-			{
-				// if we were hiding album art, show it--we've gone to a video
-				if (ui->mpvFrame->styleSheet() != QString()) // remove filler album art
-					ui->mpvFrame->setStyleSheet("");
-				if (ui->action_Hide_Album_Art->isChecked())
-					HideAlbumArt(false);
-				ui->action_Hide_Album_Art->setEnabled(false);
-				ui->menuSubtitle_Track->setEnabled(true);
-				if (ui->menuSubtitle_Track->actions().count() > 1)
-				{
-					ui->menuFont_Si_ze->setEnabled(true);
-					ui->actionShow_Subtitles->setEnabled(true);
-					ui->actionShow_Subtitles->setChecked(mpv->getSubtitleVisibility());
-				}
-				else
-				{
-					ui->menuFont_Si_ze->setEnabled(false);
-					ui->actionShow_Subtitles->setEnabled(false);
-					ui->actionShow_Subtitles->setChecked(false);
-				}
-				ui->menuTake_Screenshot->setEnabled(true);
-				ui->menuFit_Window->setEnabled(true);
-				ui->menuAspect_Ratio->setEnabled(true);
-				ui->action_Frame_Step->setEnabled(true);
-				ui->actionFrame_Back_Step->setEnabled(true);
-				ui->action_Deinterlace->setEnabled(true);
-				ui->action_Motion_Interpolation->setEnabled(true);
-			}
-			else
-			{
-				if (!albumArt)
-				{
-					// put in filler albumArt
-					if (ui->mpvFrame->styleSheet() == QString())
-						ui->mpvFrame->setStyleSheet("background-image:url(:/img/album-art.png);background-repeat:no-repeat;background-position:center;");
-				}
-				ui->action_Hide_Album_Art->setEnabled(true);
-				ui->menuSubtitle_Track->setEnabled(false);
-				ui->menuFont_Si_ze->setEnabled(false);
-				ui->actionShow_Subtitles->setEnabled(false);
-				ui->actionShow_Subtitles->setChecked(false);
-				ui->menuTake_Screenshot->setEnabled(false);
-				ui->menuFit_Window->setEnabled(false);
-				ui->menuAspect_Ratio->setEnabled(false);
-				ui->action_Frame_Step->setEnabled(false);
-				ui->actionFrame_Back_Step->setEnabled(false);
-				ui->action_Deinterlace->setEnabled(false);
-				ui->action_Motion_Interpolation->setEnabled(false);
-
-				if (baka->sysTrayIcon->isVisible() && !hidePopup)
-				{
-					// todo: use {artist} - {title}
-					baka->sysTrayIcon->showMessage("Baka MPlayer", mpv->getFileInfo().media_title, QSystemTrayIcon::NoIcon, 4000);
-				}
-			}
-
-			if (ui->menuAudio_Tracks->actions().count() == 1)
-				ui->menuAudio_Tracks->actions().first()->setEnabled(false);
-
-			if (pathChanged && autoFit)
-			{
-				baka->FitWindow(autoFit, false);
-				pathChanged = false;
-			}
-#endif
-		}
+		onTrackListChanged(trackList);
 	});
 
 	connect(ui.mpvFrame, &MpvWidget::chaptersChanged, [=](const QList<Mpv::Chapter> &chapters)
@@ -482,7 +371,7 @@ void Player::setupConnect()
 		}
 	});
 
-	connect(ui.mpvFrame, &MpvWidget::fileChanging, [=](int t, int l)
+	connect(ui.mpvFrame, &MpvWidget::fileLoading, [=](int t, int l)
 	{
 		if (current != nullptr)
 		{
@@ -502,7 +391,7 @@ void Player::setupConnect()
 		ui.seekBar->setValueNoSignal(ui.seekBar->maximum()*((double)i / fi.length));
 		SetRemainingLabels(i);
 	});
-#if 1
+
 	connect(ui.mpvFrame, &MpvWidget::tryToGetTime, [=]()
 	{
 		if (ui.mpvFrame->getPlayState() != Mpv::Playing)
@@ -522,25 +411,7 @@ void Player::setupConnect()
 			m_lastSelect->setTime(time, m_totalTime);
 		}
 	});
-#else
-	connect(ui.mpvFrame, &MpvWidget::msecsTimeChanged, [=](QString s)
-	{
-		emit msecsTimeChanged(s);
-		qint64 time = QTime::fromString(s, "hh:mm:ss.zzz").msecsSinceStartOfDay();
-#if USE_DANMAKU
 
-		if (m_window)
-		{
-			m_window->setDanmakuTime(time);
-		}
-#endif
-		//
-		if (m_lastSelect)
-		{
-			m_lastSelect->setTime(time,m_totalTime);
-		}
-	});
-#endif
 	//
 	connect(ui.mpvFrame, &MpvWidget::reachEndFile, [=](QString file)
 	{
@@ -1044,6 +915,123 @@ void Player::onAdFileInfoChange(const Mpv::FileInfo & fileInfo)
 		});
 	}
 	//
+}
+
+void Player::onTrackListChanged(const QList<Mpv::Track>& trackList)
+{
+	if (ui.mpvFrame->getPlayState() > 0)
+	{
+		menuSubtitle_Track->clear();
+		action_Add_Subtitle_File = genAction("AddSubtitle", tr("AddSubtitle"), QString("Shift+S"), menuSubtitle_Track);
+		menuSubtitle_Track->addAction(action_Add_Subtitle_File);
+		//menuAudio_Tracks->clear();
+		//menuAudio_Tracks->addAction(action_Add_Audio_File);
+		for (auto &track : trackList)
+		{
+			if (track.type == "sub")
+			{
+				QString text = QString("%0: %1 (%2)")
+					.arg(QString::number(track.id))
+					.arg(track.title)
+					.arg( track.lang + (track.external ? "*" : ""))
+					.replace("&", "&&");
+				addSubtitleAction(text, track.id);
+			}
+		}
+	}
+#if 0
+			else if (track.type == "audio")
+			{
+				action = ui->menuAudio_Tracks->addAction(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang).replace("&", "&&"));
+				connect(action, &QAction::triggered,
+					[=]
+				{
+					if (mpv->getAid() != track.id) // don't allow selection of the same track
+					{
+						mpv->Aid(track.id);
+						mpv->ShowText(QString("%0 %1: %2 (%3)").arg(tr("Audio"), QString::number(track.id), track.title, track.lang));
+					}
+					else
+						action->setChecked(true); // recheck the track
+				});
+			}
+			else if (track.type == "video") // video track
+			{
+				if (!track.albumart) // isn't album art
+					video = true;
+				else
+					albumArt = true;
+			}
+#endif
+
+
+#if 0
+		if (video)
+		{
+			// if we were hiding album art, show it--we've gone to a video
+			if (ui->mpvFrame->styleSheet() != QString()) // remove filler album art
+				ui->mpvFrame->setStyleSheet("");
+			if (ui->action_Hide_Album_Art->isChecked())
+				HideAlbumArt(false);
+			ui->action_Hide_Album_Art->setEnabled(false);
+			ui->menuSubtitle_Track->setEnabled(true);
+			if (ui->menuSubtitle_Track->actions().count() > 1)
+			{
+				ui->menuFont_Si_ze->setEnabled(true);
+				ui->actionShow_Subtitles->setEnabled(true);
+				ui->actionShow_Subtitles->setChecked(mpv->getSubtitleVisibility());
+			}
+			else
+			{
+				ui->menuFont_Si_ze->setEnabled(false);
+				ui->actionShow_Subtitles->setEnabled(false);
+				ui->actionShow_Subtitles->setChecked(false);
+			}
+			ui->menuTake_Screenshot->setEnabled(true);
+			ui->menuFit_Window->setEnabled(true);
+			ui->menuAspect_Ratio->setEnabled(true);
+			ui->action_Frame_Step->setEnabled(true);
+			ui->actionFrame_Back_Step->setEnabled(true);
+			ui->action_Deinterlace->setEnabled(true);
+			ui->action_Motion_Interpolation->setEnabled(true);
+		}
+		else
+		{
+			if (!albumArt)
+			{
+				// put in filler albumArt
+				if (ui->mpvFrame->styleSheet() == QString())
+					ui->mpvFrame->setStyleSheet("background-image:url(:/img/album-art.png);background-repeat:no-repeat;background-position:center;");
+			}
+			ui->action_Hide_Album_Art->setEnabled(true);
+			ui->menuSubtitle_Track->setEnabled(false);
+			ui->menuFont_Si_ze->setEnabled(false);
+			ui->actionShow_Subtitles->setEnabled(false);
+			ui->actionShow_Subtitles->setChecked(false);
+			ui->menuTake_Screenshot->setEnabled(false);
+			ui->menuFit_Window->setEnabled(false);
+			ui->menuAspect_Ratio->setEnabled(false);
+			ui->action_Frame_Step->setEnabled(false);
+			ui->actionFrame_Back_Step->setEnabled(false);
+			ui->action_Deinterlace->setEnabled(false);
+			ui->action_Motion_Interpolation->setEnabled(false);
+
+			if (baka->sysTrayIcon->isVisible() && !hidePopup)
+			{
+				// todo: use {artist} - {title}
+				baka->sysTrayIcon->showMessage("Baka MPlayer", mpv->getFileInfo().media_title, QSystemTrayIcon::NoIcon, 4000);
+			}
+		}
+
+		if (ui->menuAudio_Tracks->actions().count() == 1)
+			ui->menuAudio_Tracks->actions().first()->setEnabled(false);
+
+		if (pathChanged && autoFit)
+		{
+			baka->FitWindow(autoFit, false);
+			pathChanged = false;
+		}
+#endif
 }
 
 void Player::openFile()

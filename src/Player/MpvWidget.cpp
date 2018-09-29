@@ -28,13 +28,8 @@ static void *get_proc_address(void *ctx, const char *name) {
     return (void *)glctx->getProcAddress(QByteArray(name));
 }
 
-#if USE_MPV_OPENGL
 MpvWidget::MpvWidget(QWidget *parent, Qt::WindowFlags f)
     : QOpenGLWidget(parent, f)
-#else
-MpvWidget::MpvWidget(QWidget *parent)
-	: QWidget(parent)
-#endif
 {
 	//
     std::setlocale(LC_NUMERIC, "C");
@@ -56,21 +51,15 @@ MpvWidget::MpvWidget(QWidget *parent)
 	mpv_set_option_string(mpv, "ytdl", "yes"); // youtube-dl support
 	//mpv_set_option_string(mpv, "sub-auto", "no"); // youtube-dl support
 
-#if USE_MPV_OPENGL
 	m_isUseOpenGL_CB = true;
-#else
-	m_isUseOpenGL_CB = false;
-#endif
 	//
 	if (m_isUseOpenGL_CB)
 	{
 		mpv_set_option_string(mpv, "vo", "opengl-cb");
 	}
-
     // Request hw decoding, just for testing.
 	mpv_set_option_string(mpv, "hwdec", "auto");
 
-#if USE_MPV_OPENGL
     mpv_gl = (mpv_opengl_cb_context *)mpv_get_sub_api(mpv, MPV_SUB_API_OPENGL_CB);
     if (!mpv_gl)
     {
@@ -81,7 +70,6 @@ MpvWidget::MpvWidget(QWidget *parent)
 	    mpv_opengl_cb_set_update_callback(mpv_gl, MpvWidget::on_update, (void *)this);
 	    connect(this, SIGNAL(frameSwapped()), SLOT(swapped()));
     }
-#endif
 
     mpv_observe_property(mpv, 0, "duration", MPV_FORMAT_DOUBLE);
     mpv_observe_property(mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
@@ -105,10 +93,8 @@ MpvWidget::MpvWidget(QWidget *parent)
 
 MpvWidget::~MpvWidget()
 {
-#if USE_MPV_OPENGL 
     if (mpv_gl)
     {
-#if 1
     	qDebug() << "release mpv_gl:" << mpv_gl;
     	makeCurrent();
         mpv_opengl_cb_set_update_callback(mpv_gl, NULL, NULL);
@@ -117,9 +103,7 @@ MpvWidget::~MpvWidget()
 	    // alive. This is done implicitly with the mpv::qt::Handle instance
 	    // in this class.
     	//mpv_opengl_cb_uninit_gl(mpv_gl);
-#endif
     }
-#endif
     if (mpv)
     {
 #if 0
@@ -129,7 +113,6 @@ MpvWidget::~MpvWidget()
     } 
 }
 
-#if USE_MPV_OPENGL
 void MpvWidget::initializeGL()
 {
 	if(!mpv_gl)
@@ -176,14 +159,15 @@ void MpvWidget::swapped()
 	}
     mpv_opengl_cb_report_flip(mpv_gl, 0);
 }
-#endif
 
 void MpvWidget::on_mpv_events()
 {
     // Process all events, until the event queue is empty.
-    while (mpv) {
+    while (mpv) 
+	{
         mpv_event *event = mpv_wait_event(mpv, 0);
-        if (event->event_id == MPV_EVENT_NONE) {
+        if (event->event_id == MPV_EVENT_NONE) 
+		{
             break;
         }
         handle_mpv_event(event);
@@ -192,21 +176,29 @@ void MpvWidget::on_mpv_events()
 
 void MpvWidget::handle_mpv_event(mpv_event *event)
 {
-    switch (event->event_id) {
-    case MPV_EVENT_PROPERTY_CHANGE: {
+    switch (event->event_id) 
+	{
+    case MPV_EVENT_PROPERTY_CHANGE: 
+	{
         mpv_event_property *prop = (mpv_event_property *)event->data;
-        if (strcmp(prop->name, "time-pos") == 0) {
-            if (prop->format == MPV_FORMAT_DOUBLE) {
+        if (strcmp(prop->name, "time-pos") == 0) 
+		{
+            if (prop->format == MPV_FORMAT_DOUBLE) 
+			{
                 double time = *(double *)prop->data;
                 Q_EMIT positionChanged(time);
             }
-        } else if (strcmp(prop->name, "duration") == 0) {
-            if (prop->format == MPV_FORMAT_DOUBLE) {
+        } else if (strcmp(prop->name, "duration") == 0) 
+		{
+            if (prop->format == MPV_FORMAT_DOUBLE) 
+			{
                 double time = *(double *)prop->data;
                 Q_EMIT durationChanged(time);
             }
-        } else if (strcmp(prop->name, "ab-loop-b") == 0) {
-            if (prop->format == MPV_FORMAT_DOUBLE) {
+        } else if (strcmp(prop->name, "ab-loop-b") == 0) 
+		{
+            if (prop->format == MPV_FORMAT_DOUBLE) 
+			{
                 //double time = *(double *)prop->data;
                 //Q_EMIT durationChanged(time);
             }
@@ -216,28 +208,9 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
 			if (prop->format == MPV_FORMAT_DOUBLE)
 			{
 				double secs = *(double*)prop->data;
-				//
-				bool negative = (secs < 0);
 				secs = qAbs(secs);
-
-				double t = secs;
-				int hours = (int)t / 3600;
-				t -= hours * 3600;
-				int minutes = (int)t / 60;
-				t -= minutes * 60;
-				int seconds = t;
-				t -= seconds;
-				int milliseconds = t * 1000;
-
-				QString s = QString("%1%2:%3:%4.%5").arg(negative ? "-" : "")
-					.arg(hours, 2, 10, QChar('0')).arg(minutes, 2, 10, QChar('0'))
-					.arg(seconds, 2, 10, QChar('0')).arg(milliseconds, 3, 10, QChar('0'));
-				//ShowText(s, 100);
-				setMsecsTime(s);
 				//
-				setTime((int)secs);
-				lastMsecsTime = secs;
-				lastTime = time;
+				setTime(secs);
 			}
 		}
 		else if (QString(prop->name) == "ao-volume")
@@ -260,7 +233,7 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
 			if (prop->format == MPV_FORMAT_FLAG)
 			{
 				bool isVisible = (bool)*(unsigned*)prop->data;
-				if (isVisible != subtitleVisibility)
+				if (isVisible != m_isSubtitleVisible)
 				{
 					setSubtitleVisibility(isVisible);
 				}
@@ -298,7 +271,7 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
 		break;
 	}
 	case MPV_EVENT_IDLE:
-		fileInfo.length = 0;
+		m_fileInfo.length = 0;
 		setTime(0);
 		setPlayState(Mpv::Idle);
 		break;
@@ -311,9 +284,9 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
 		LoadFileInfo();
 		SetProperties();
 		//
-		if (!subtitleFile.isEmpty())
+		if (!m_subtitleFile.isEmpty())
 		{
-			setSubtitleFile(subtitleFile);
+			setSubtitleFile(m_subtitleFile);
 		}
 	case MPV_EVENT_UNPAUSE:
 		setPlayState(Mpv::Playing);
@@ -324,17 +297,17 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
 		break;
 	case MPV_EVENT_END_FILE:
 		//
-		if (playState == Mpv::Loaded) 
+		if (m_playState == Mpv::Loaded) 
 		{
 			ShowText(tr("File couldn't be opened"));
 			emit fileCannotOpen();
 		}
 		//
-		if (playState == Mpv::Playing)
+		if (m_playState == Mpv::Playing)
 		{
 			//	
 			setPlayState(Mpv::Stopped);
-			emit reachEndFile(file);
+			emit reachEndFile(m_file);
 		}
 		else
 		{
@@ -356,7 +329,6 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
 	}
 }
 
-#if USE_MPV_OPENGL
 // Make Qt invoke mpv_opengl_cb_draw() to draw a new/updated video frame.
 void MpvWidget::maybeUpdate()
 {
@@ -370,82 +342,80 @@ void MpvWidget::on_update(void *ctx)
 
 Mpv::FileInfo MpvWidget::getFileInfo()
 {
-	return fileInfo;
+	return m_fileInfo;
 }
 
 Mpv::PlayState MpvWidget::getPlayState()
 {
-	return playState;
+	return m_playState;
 }
 
 QString MpvWidget::getFile()
 {
-	return file;
+	return m_file;
 }
 
 QString MpvWidget::getPath()
 {
-	return path;
+	return m_path;
 }
 
 QString MpvWidget::getVo()
 {
-	return vo;
+	return m_vo;
 }
 
 QString MpvWidget::getMsgLevel()
 {
-	return msgLevel;
+	return m_msgLevel;
 }
 
 double MpvWidget::getSpeed()
 {
-	return speed;
+	return m_speed;
 }
 
 int MpvWidget::getTime()
 {
-	return time;
+	return m_lastTime;
 }
 
 int MpvWidget::getRemainTime()
 {
-	return fileInfo.length - time;
+	return m_fileInfo.length - m_lastTime;
 }
 int MpvWidget::getVolume()
 {
-	return volume;
+	return m_volume;
 }
 
 int MpvWidget::getVid()
 {
-	return vid;
+	return m_vid;
 }
 
 int MpvWidget::getAid()
 {
-	return aid;
+	return m_aid;
 }
 
 int MpvWidget::getSid()
 {
-	return sid;
+	return m_sid;
 }
 
 bool MpvWidget::getSubtitleVisible()
 {
-	return subtitleVisibility;
+	return m_isSubtitleVisible;
 }
 
 bool MpvWidget::getMute()
 {
-	return mute;
+	return m_isMute;
 }
 
-#endif
 
-
-bool MpvWidget::FileExists(QString f)
+bool MpvWidget::isFileExists(QString f)
 {
 	if (Utils::IsValidUrl(f)) // web url
 		return true;
@@ -482,17 +452,17 @@ bool MpvWidget::PlayFile(QString f)
 		return false;
 	}
 	//
-	if (path.isEmpty()) // web url
+	if (m_path.isEmpty()) // web url
 	{
 		OpenFile(f);
 		setFile(f);
 		return true;
 	}
 	//
-	QFile qf(path + f);
+	QFile qf(m_path + f);
 	if (qf.exists())
 	{
-		OpenFile(path + f);
+		OpenFile(m_path + f);
 		setFile(f);
 		Play();
 	}
@@ -506,7 +476,7 @@ bool MpvWidget::PlayFile(QString f)
 
 void MpvWidget::Play()
 {
-	if (playState > 0 && mpv)
+	if (m_playState > 0 && mpv)
 	{
 		int flag = 0;
 		mpv_set_property_async(mpv, MPV_REPLY_PROPERTY, "pause", MPV_FORMAT_FLAG, &flag);
@@ -515,7 +485,7 @@ void MpvWidget::Play()
 
 void MpvWidget::Pause()
 {
-	if (playState > 0 && mpv)
+	if (m_playState > 0 && mpv)
 	{
 		int flag = 1;
 		mpv_set_property_async(mpv, MPV_REPLY_PROPERTY, "pause", MPV_FORMAT_FLAG, &flag);
@@ -536,9 +506,9 @@ void MpvWidget::StopUnload()
 
 void MpvWidget::PlayPause()
 {
-	if (playState < 0) // not playing, play plays the selected playlist file
+	if (m_playState < 0) // not playing, play plays the selected playlist file
 	{
-		PlayFile(file);
+		PlayFile(m_file);
 	}
 	else
 	{
@@ -556,13 +526,13 @@ void MpvWidget::Restart()
 void MpvWidget::Rewind()
 {
 	// if user presses rewind button twice within 3 seconds, stop video
-	if (time < 3)
+	if (m_lastTime < 3)
 	{
 		Stop();
 	}
 	else
 	{
-		if (playState == Mpv::Playing)
+		if (m_playState == Mpv::Playing)
 			Restart();
 		else
 			Stop();
@@ -571,7 +541,7 @@ void MpvWidget::Rewind()
 
 void MpvWidget::Mute(bool m)
 {
-	if (playState > 0)
+	if (m_playState > 0)
 	{
 		const char *args[] = { "set", "ao-mute", m ? "yes" : "no", NULL };
 		AsyncCommand(args);
@@ -584,7 +554,7 @@ void MpvWidget::Mute(bool m)
 
 void MpvWidget::Seek(double pos, bool relative, bool osd)
 {
-	if (playState > 0)
+	if (m_playState > 0)
 	{
 		if (relative)
 		{
@@ -619,8 +589,8 @@ void MpvWidget::Seek(double pos, bool relative, bool osd)
 
 int MpvWidget::Relative(int pos)
 {
-	int ret = pos - lastTime;
-	lastTime = pos;
+	int ret = pos - m_lastTime;
+	m_lastTime = pos;
 	return ret;
 }
 
@@ -667,7 +637,7 @@ void MpvWidget::Volume(int level, bool osd)
 
 void MpvWidget::Speed(double d)
 {
-	if (playState > 0)
+	if (m_playState > 0)
 	{
 		const QByteArray tmp = QString::number(d).toUtf8();
 		const char *args[] = { "set", "speed", tmp.constData(), NULL };
@@ -718,9 +688,9 @@ void MpvWidget::AddSubtitleTrack(QString f)
 	const char *args[] = { "sub-add", tmp.constData(), NULL };
 	Command(args);
 	// this could be more efficient if we saved tracks in a bst
-	auto old = fileInfo.tracks; // save the current track-list
+	auto old = m_fileInfo.tracks; // save the current track-list
 	LoadTracks(); // load the new track list
-	auto current = fileInfo.tracks;
+	auto current = m_fileInfo.tracks;
 	for (auto track : old)
 	{
 		// remove the old tracks in current
@@ -742,9 +712,9 @@ void MpvWidget::AddAudioTrack(QString f)
 	const QByteArray tmp = f.toUtf8();
 	const char *args[] = { "audio-add", tmp.constData(), NULL };
 	Command(args);
-	auto old = fileInfo.tracks;
+	auto old = m_fileInfo.tracks;
 	LoadTracks();
-	auto current = fileInfo.tracks;
+	auto current = m_fileInfo.tracks;
 	for (auto track : old)
 		current.removeOne(track);
 	Mpv::Track &track = current.first();
@@ -773,9 +743,9 @@ void MpvWidget::Deinterlace(bool deinterlace)
 
 void MpvWidget::Interpolate(bool interpolate)
 {
-	if (vo == QString())
-		vo = mpv_get_property_string(mpv, "current-vo");
-	QStringList vos = vo.split(',');
+	if (m_vo == QString())
+		m_vo = mpv_get_property_string(mpv, "current-vo");
+	QStringList vos = m_vo.split(',');
 	for (auto &o : vos)
 	{
 		int i = o.indexOf(":interpolation");
@@ -785,14 +755,14 @@ void MpvWidget::Interpolate(bool interpolate)
 			o.remove(i, QString(":interpolation").length());
 	}
 	setVo(vos.join(','));
-	SetOption("vo", vo);
+	SetOption("vo", m_vo);
 	ShowText(tr("Motion Interpolation: %0").arg(interpolate ? tr("enabled") : tr("disabled")));
 }
 
 void MpvWidget::Vo(QString o)
 {
 	setVo(o);
-	SetOption("vo", vo);
+	SetOption("vo", m_vo);
 }
 
 void MpvWidget::MsgLevel(QString level)
@@ -813,10 +783,10 @@ void MpvWidget::ShowText(QString text, int duration)
 void MpvWidget::LoadFileInfo()
 {
 	// get media-title
-	fileInfo.media_title = mpv_get_property_string(mpv, "media-title");
+	m_fileInfo.media_title = mpv_get_property_string(mpv, "media-title");
 	// get length
 	QString lenString = mpv_get_property_string(mpv, "duration");
-	fileInfo.length = lenString.toDouble();
+	m_fileInfo.length = lenString.toDouble();
 
 	LoadTracks();
 	LoadChapters();
@@ -824,12 +794,12 @@ void MpvWidget::LoadFileInfo()
 	LoadAudioParams();
 	LoadMetadata();
 
-	emit fileInfoChanged(fileInfo);
+	emit fileInfoChanged(m_fileInfo);
 }
 
 void MpvWidget::LoadTracks()
 {
-	fileInfo.tracks.clear();
+	m_fileInfo.tracks.clear();
 	mpv_node node;
 	mpv_get_property(mpv, "track-list", MPV_FORMAT_NODE, &node);
 	if (node.format == MPV_FORMAT_NODE_ARRAY)
@@ -892,17 +862,17 @@ void MpvWidget::LoadTracks()
 							track.codec = node.u.list->values[i].u.list->values[n].u.string;
 					}
 				}
-				fileInfo.tracks.push_back(track);
+				m_fileInfo.tracks.push_back(track);
 			}
 		}
 	}
 
-	emit trackListChanged(fileInfo.tracks);
+	emit trackListChanged(m_fileInfo.tracks);
 }
 
 void MpvWidget::LoadChapters()
 {
-	fileInfo.chapters.clear();
+	m_fileInfo.chapters.clear();
 	mpv_node node;
 	mpv_get_property(mpv, "chapter-list", MPV_FORMAT_NODE, &node);
 	if (node.format == MPV_FORMAT_NODE_ARRAY)
@@ -925,29 +895,30 @@ void MpvWidget::LoadChapters()
 							ch.time = (int)node.u.list->values[i].u.list->values[n].u.double_;
 					}
 				}
-				fileInfo.chapters.push_back(ch);
+				m_fileInfo.chapters.push_back(ch);
 			}
 		}
 	}
-	emit chaptersChanged(fileInfo.chapters);
+	emit chaptersChanged(m_fileInfo.chapters);
 }
 
 void MpvWidget::LoadVideoParams()
 {
-	fileInfo.video_params.codec = mpv_get_property_string(mpv, "video-codec");
-	mpv_get_property(mpv, "width", MPV_FORMAT_INT64, &fileInfo.video_params.width);
-	mpv_get_property(mpv, "height", MPV_FORMAT_INT64, &fileInfo.video_params.height);
-	mpv_get_property(mpv, "dwidth", MPV_FORMAT_INT64, &fileInfo.video_params.dwidth);
-	mpv_get_property(mpv, "dheight", MPV_FORMAT_INT64, &fileInfo.video_params.dheight);
+	m_fileInfo.video_params.codec = mpv_get_property_string(mpv, "video-codec");
+	//
+	mpv_get_property(mpv, "width", MPV_FORMAT_INT64, &m_fileInfo.video_params.width);
+	mpv_get_property(mpv, "height", MPV_FORMAT_INT64, &m_fileInfo.video_params.height);
+	mpv_get_property(mpv, "dwidth", MPV_FORMAT_INT64, &m_fileInfo.video_params.dwidth);
+	mpv_get_property(mpv, "dheight", MPV_FORMAT_INT64, &m_fileInfo.video_params.dheight);
 	// though this has become useless, removing it causes a segfault--no clue:
-	mpv_get_property(mpv, "video-aspect", MPV_FORMAT_INT64, &fileInfo.video_params.aspect);
+	mpv_get_property(mpv, "video-aspect", MPV_FORMAT_INT64, &m_fileInfo.video_params.aspect);
 
-	emit videoParamsChanged(fileInfo.video_params);
+	emit videoParamsChanged(m_fileInfo.video_params);
 }
 
 void MpvWidget::LoadAudioParams()
 {
-	fileInfo.audio_params.codec = mpv_get_property_string(mpv, "audio-codec");
+	m_fileInfo.audio_params.codec = mpv_get_property_string(mpv, "audio-codec");
 	mpv_node node;
 	mpv_get_property(mpv, "audio-params", MPV_FORMAT_NODE, &node);
 	if (node.format == MPV_FORMAT_NODE_MAP)
@@ -957,22 +928,22 @@ void MpvWidget::LoadAudioParams()
 			if (QString(node.u.list->keys[i]) == "samplerate")
 			{
 				if (node.u.list->values[i].format == MPV_FORMAT_INT64)
-					fileInfo.audio_params.samplerate = node.u.list->values[i].u.int64;
+					m_fileInfo.audio_params.samplerate = node.u.list->values[i].u.int64;
 			}
 			else if (QString(node.u.list->keys[i]) == "channel-count")
 			{
 				if (node.u.list->values[i].format == MPV_FORMAT_INT64)
-					fileInfo.audio_params.channels = node.u.list->values[i].u.int64;
+					m_fileInfo.audio_params.channels = node.u.list->values[i].u.int64;
 			}
 		}
 	}
 
-	emit audioParamsChanged(fileInfo.audio_params);
+	emit audioParamsChanged(m_fileInfo.audio_params);
 }
 
 void MpvWidget::LoadMetadata()
 {
-	fileInfo.metadata.clear();
+	m_fileInfo.metadata.clear();
 	mpv_node node;
 	mpv_get_property(mpv, "metadata", MPV_FORMAT_NODE, &node);
 	if (node.format == MPV_FORMAT_NODE_MAP)
@@ -981,7 +952,7 @@ void MpvWidget::LoadMetadata()
 		{
 			if (node.u.list->values[n].format == MPV_FORMAT_STRING)
 			{
-				fileInfo.metadata[node.u.list->keys[n]] = node.u.list->values[n].u.string;
+				m_fileInfo.metadata[node.u.list->keys[n]] = node.u.list->values[n].u.string;
 			}
 		}
 	}
@@ -995,11 +966,8 @@ void MpvWidget::Command(const QStringList &strlist)
 
 void MpvWidget::SetOption(QString key, QString val)
 {
-	QByteArray tmp1 = key.toUtf8(),
-		tmp2 = val.toUtf8();
-	HandleErrorCode(mpv_set_option_string(mpv, tmp1.constData(), tmp2.constData()));
+	HandleErrorCode(mpv_set_option_string(mpv, key.toUtf8().constData(), val.toUtf8().constData()));
 }
-
 
 void MpvWidget::OpenFile(QString f)
 {
@@ -1013,14 +981,14 @@ void MpvWidget::OpenFile(QString f)
 	const char *args[] = { "loadfile", tmp.constData(), NULL };
 	Command(args);
 
-	emit fileChanging(time, fileInfo.length);
+	emit fileLoading(m_lastTime, m_fileInfo.length);
 }
 
 void MpvWidget::SetProperties()
 {
-	Volume(volume);
-	Speed(speed);
-	Mute(mute);
+	Volume(m_volume);
+	Speed(m_speed);
+	Mute(m_isMute);
 }
 
 void MpvWidget::AsyncCommand(const char *args[])
@@ -1039,7 +1007,65 @@ void MpvWidget::HandleErrorCode(int error_code)
 		return;
 	QString error = mpv_error_string(error_code);
 	if (error != QString())
+	{
 		emit messageSignal(error + "\n");
+	}
+}
+
+void MpvWidget::setFile(QString s)
+{
+	emit fileChanged(m_file = s);
+}
+
+void MpvWidget::setVo(QString s)
+{
+	emit voChanged(m_vo = s);
+}
+
+void MpvWidget::setMsgLevel(QString s)
+{
+	emit msgLevelChanged(m_msgLevel = s);
+}
+
+void MpvWidget::setSpeed(double d)
+{
+	emit speedChanged(m_speed = d);
+}
+
+void MpvWidget::setTime(double i)
+{
+	emit timeChanged(m_lastTime = i);
+	m_lastTime = m_lastTime;
+}
+
+void MpvWidget::setVolume(int i)
+{
+	emit volumeChanged(m_volume = i);
+}
+
+void MpvWidget::setVid(int i)
+{
+	emit vidChanged(m_vid = i);
+}
+
+void MpvWidget::setAid(int i)
+{
+	emit aidChanged(m_aid = i);
+}
+
+void MpvWidget::setSid(int i)
+{
+	emit sidChanged(m_sid = i);
+}
+
+void MpvWidget::setSubtitleVisibility(bool b)
+{
+	emit subtitleVisibilityChanged(m_isSubtitleVisible = b);
+}
+
+void MpvWidget::setMute(bool b)
+{
+	if (m_isMute != b) emit muteChanged(m_isMute = b);
 }
 
 QString MpvWidget::getRealTime()
@@ -1050,18 +1076,18 @@ QString MpvWidget::getRealTime()
 
 void MpvWidget::seekRelativeTime(double time)
 {
-	double t = lastMsecsTime + time;
+	double t = m_lastTime + time;
 	if (t <= 0.0)
 		Seek(0);
-	else if (t > fileInfo.length)
-		Seek(fileInfo.length);
+	else if (t > m_fileInfo.length)
+		Seek(m_fileInfo.length);
 	else
 		Seek(t);
 }
 
 void MpvWidget::setSubtitleFile(QString f)
 {
-	subtitleFile = f;
+	m_subtitleFile = f;
 	AddSubtitleTrack(f);
 }
 
@@ -1093,25 +1119,25 @@ bool MpvWidget::isOpenGLInited()
 void MpvWidget::incSpeed10() 
 {
 	qDebug("MpvWidget::incSpeed10");
-	Speed((double)speed + 0.1);
+	Speed((double)m_speed + 0.1);
 }
 
 void MpvWidget::decSpeed10() 
 {
 	qDebug("MpvWidget::decSpeed10");
-	Speed((double)speed - 0.1);
+	Speed((double)m_speed - 0.1);
 }
 
 
 void MpvWidget::doubleSpeed() {
 	qDebug("MpvWidget::doubleSpeed");
-	Speed((double)speed * 2);
+	Speed((double)m_speed * 2);
 }
 
 void MpvWidget::halveSpeed() 
 {
 	qDebug("MpvWidget::halveSpeed");
-	Speed((double)speed / 2);
+	Speed((double)m_speed / 2);
 }
 
 void MpvWidget::normalSpeed() 
@@ -1124,4 +1150,9 @@ void MpvWidget::setRotate(int angle)
 	const QByteArray tmp = QString::number(angle).toUtf8();
 	const char *args[] = { "set", "video-rotate", tmp.constData(), NULL };
 	AsyncCommand(args);
+}
+
+void MpvWidget::setPlayState(Mpv::PlayState s)
+{ 
+	emit playStateChanged(m_playState = s); 
 }

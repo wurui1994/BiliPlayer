@@ -33,7 +33,7 @@ private:
 	//
 	QPointer<QDialog> msg;
 
-	UI::Prefer prefer;
+	Prefer prefer;
 
 	Danmaku *danmaku;
 	ARender *arender;

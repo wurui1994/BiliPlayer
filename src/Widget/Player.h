@@ -77,8 +77,6 @@ public:
 public slots:
     void Load(QString f = QString());
 	void Pause();
-	void onFileInfoChange(const Mpv::FileInfo &fileInfo);
-	void onAdFileInfoChange(const Mpv::FileInfo &fileInfo);
 	void openFile();
 	void openUrl();
 	void addSubtitle();
@@ -88,6 +86,10 @@ public slots:
 	void noKeepAspect();
 	void hideTitle();
 	void hideControl();
+	//
+	void onFileInfoChange(const Mpv::FileInfo &fileInfo);
+	void onAdFileInfoChange(const Mpv::FileInfo &fileInfo);
+	void onTrackListChanged(const QList<Mpv::Track> &trackList);
 protected:
 	//
 	void contextMenuEvent(QContextMenuEvent *event);
@@ -167,7 +169,6 @@ public:
          gestures,
          resume,
          hideAllControls = false;
-    //QHash<QString, QAction*> commandActionMap;
 
 public slots:
     void setLang(QString s)          { emit langChanged(lang = s); }
@@ -175,7 +176,6 @@ public slots:
     void setAutoFit(int i)           { emit autoFitChanged(autoFit = i); }
     void setHidePopup(bool b)        { emit hidePopupChanged(hidePopup = b); }
     void setRemaining(bool b)        { emit remainingChanged(remaining = b); }
-    //void setDebug(bool b)            { emit debugChanged(debug = b); }
     void setGestures(bool b)         { emit gesturesChanged(gestures = b); }
     void setResume(bool b)           { emit resumeChanged(resume = b); }
     void setHideAllControls(bool b)  { emit hideAllControlsChanged(hideAllControls = b); }
@@ -186,7 +186,6 @@ signals:
     void autoFitChanged(int);
     void hidePopupChanged(bool);
     void remainingChanged(bool);
-    //void debugChanged(bool);
     void gesturesChanged(bool);
     void resumeChanged(bool);
     void hideAllControlsChanged(bool);
@@ -194,7 +193,6 @@ signals:
     void clicked(QPoint pos);
 	void doubleClicked();
 	void escape();
-	void msecsTimeChanged(QString);
 	void totalTime(qint64 t);
 	//
 	void playStateChanged(Mpv::PlayState);

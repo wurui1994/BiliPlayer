@@ -7,8 +7,6 @@
 #include "ARender.h"
 #include "Network.h"
 
-using namespace UI;
-
 Window::Window(QWidget *parent) :
 	QWidget(parent)
 {
