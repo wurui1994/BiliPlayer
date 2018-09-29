@@ -482,11 +482,6 @@ void Player::setupConnect()
 		}
 	});
 
-	connect(ui.mpvFrame, &MpvWidget::pathChanged, [=]()
-	{
-		pathChanged = true;
-	});
-
 	connect(ui.mpvFrame, &MpvWidget::fileChanging, [=](int t, int l)
 	{
 		if (current != nullptr)
@@ -1100,7 +1095,7 @@ void Player::addSubtitleAction(QString text,int trackId)
 		// when you check a subtitle id, we make sure subtitles are showing and set it
 		if (ui.mpvFrame->getSid() == trackId)
 		{
-			if (ui.mpvFrame->getSubtitleVisibility())
+			if (ui.mpvFrame->getSubtitleVisible())
 			{
 				ui.mpvFrame->ShowSubtitles(false);
 				return;
@@ -1110,7 +1105,7 @@ void Player::addSubtitleAction(QString text,int trackId)
 				ui.mpvFrame->ShowSubtitles(true);
 			}
 		}
-		else if (!ui.mpvFrame->getSubtitleVisibility())
+		else if (!ui.mpvFrame->getSubtitleVisible())
 		{
 			ui.mpvFrame->ShowSubtitles(true);
 		}
@@ -1122,7 +1117,7 @@ void Player::addSubtitleAction(QString text,int trackId)
 
 void Player::showSubtitles()
 {
-	bool isVis = ui.mpvFrame->getSubtitleVisibility();
+	bool isVis = ui.mpvFrame->getSubtitleVisible();
 	ui.mpvFrame->ShowSubtitles(!isVis);
 }
 

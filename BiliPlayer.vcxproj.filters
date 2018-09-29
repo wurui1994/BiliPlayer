@@ -206,24 +206,6 @@
     <QtMoc Include="src\Widget\Window.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClInclude Include="mpv\client.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mpv\opengl_cb.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mpv\qthelper.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mpv\render.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mpv\render_gl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mpv\stream_cb.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <QtMoc Include="src\Common\Setting.h">
       <Filter>Header Files</Filter>
     </QtMoc>

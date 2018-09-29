@@ -290,12 +290,6 @@
     </QtMoc>
     <QtMoc Include="src\Widget\Window.h">
     </QtMoc>
-    <ClInclude Include="mpv\client.h" />
-    <ClInclude Include="mpv\opengl_cb.h" />
-    <ClInclude Include="mpv\qthelper.hpp" />
-    <ClInclude Include="mpv\render.h" />
-    <ClInclude Include="mpv\render_gl.h" />
-    <ClInclude Include="mpv\stream_cb.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">

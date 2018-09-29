@@ -60,7 +60,6 @@ public:
     int getAutoFit()           { return autoFit; }
     bool getHidePopup()        { return hidePopup; }
     bool getRemaining()        { return remaining; }
-    bool getScreenshotDialog() { return screenshotDialog; }
     bool getDebug()            { return debug; }
     bool getGestures()         { return gestures; }
     bool getResume()           { return resume; }
@@ -164,7 +163,6 @@ public:
     int autoFit;
     bool hidePopup,
          remaining,
-         screenshotDialog,
          debug,
          gestures,
          resume,
@@ -177,7 +175,6 @@ public slots:
     void setAutoFit(int i)           { emit autoFitChanged(autoFit = i); }
     void setHidePopup(bool b)        { emit hidePopupChanged(hidePopup = b); }
     void setRemaining(bool b)        { emit remainingChanged(remaining = b); }
-    void setScreenshotDialog(bool b) { emit screenshotDialogChanged(screenshotDialog = b); }
     //void setDebug(bool b)            { emit debugChanged(debug = b); }
     void setGestures(bool b)         { emit gesturesChanged(gestures = b); }
     void setResume(bool b)           { emit resumeChanged(resume = b); }
@@ -189,7 +186,6 @@ signals:
     void autoFitChanged(int);
     void hidePopupChanged(bool);
     void remainingChanged(bool);
-    void screenshotDialogChanged(bool);
     //void debugChanged(bool);
     void gesturesChanged(bool);
     void resumeChanged(bool);

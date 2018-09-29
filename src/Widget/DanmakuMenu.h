@@ -7,7 +7,6 @@
 
 class DanmakuMenu : public QMenu
 {
-
 	Q_OBJECT
 public:
 	DanmakuMenu(QWidget *parent = Q_NULLPTR);
@@ -17,7 +16,6 @@ public:
 	void resetSetting();
 Q_SIGNALS:
 	void valueChanged(int value);
-	void selectText(QString text);
 protected:
 	void showEvent(QShowEvent* event);
 	bool eventFilter(QObject* obj, QEvent* event);

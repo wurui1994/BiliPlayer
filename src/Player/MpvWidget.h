@@ -23,7 +23,6 @@
 #include <mpv/opengl_cb.h>
 #endif
 
-
 #if USE_MPV_OPENGL
 class MpvWidget : public QOpenGLWidget
 #else
@@ -79,7 +78,7 @@ private:
 #endif
 
 public:
-	const Mpv::FileInfo &getFileInfo();
+	Mpv::FileInfo getFileInfo();
 	Mpv::PlayState getPlayState();
 	//
 	QString getFile();
@@ -88,10 +87,6 @@ public:
 	QString getVo();
 	QString getMsgLevel();
 	//
-	QString getScreenshotFormat();
-	QString getScreenshotTemplate();
-	QString getScreenshotDir();
-	//
 	double getSpeed();
 	int getTime();
 	int getRemainTime();
@@ -99,13 +94,9 @@ public:
 	int getVid();
 	int getAid();
 	int getSid();
-	bool getSubtitleVisibility();
+	//
 	bool getMute();
-
-	int getOsdWidth();
-	int getOsdHeight();
-
-	QString getMediaInfo();
+	bool getSubtitleVisible();
 
 	// Speed
 	void incSpeed10();
@@ -116,18 +107,14 @@ public:
 
 	//
 	void setRotate(int angle = 0);
-protected:
 
+protected:
 	bool FileExists(QString);
 
 public slots:
 	void LoadFile(QString);
-	QString LoadPlaylist(QString);
 	bool PlayFile(QString);
-
-	void AddOverlay(int id, int x, int y, QString file, int offset, int w, int h);
-	void RemoveOverlay(int id);
-
+	//
 	void Play();
 	void Pause();
 	void Stop();
@@ -136,7 +123,7 @@ public slots:
 	void Restart();
 	void Rewind();
 	void Mute(bool);
-
+	//
 	void Seek(double pos, bool relative = false, bool osd = false);
 	int Relative(int pos);
 	void FrameStep();
@@ -152,12 +139,6 @@ public slots:
 	void Vid(int);
 	void Aid(int);
 	void Sid(int);
-
-	void Screenshot(bool withSubs = false);
-
-	void ScreenshotFormat(QString);
-	void ScreenshotTemplate(QString);
-	void ScreenshotDirectory(QString);
 
 	void AddSubtitleTrack(QString);
 	void AddAudioTrack(QString);
@@ -177,7 +158,6 @@ public slots:
 	void LoadVideoParams();
 	void LoadAudioParams();
 	void LoadMetadata();
-	void LoadOsdSize();
 
 	void Command(const QStringList &strlist);
 	void SetOption(QString key, QString val);
@@ -186,7 +166,6 @@ public slots:
 
 protected slots:
 	void OpenFile(QString);
-	QString PopulatePlaylist();
 
 	void SetProperties();
 
@@ -195,13 +174,8 @@ protected slots:
 	void HandleErrorCode(int);
 
 private slots:
-	void setFileInfo() { emit fileInfoChanged(fileInfo); }
 	void setPlayState(Mpv::PlayState s) { emit playStateChanged(playState = s); }
 	void setFile(QString s) { emit fileChanged(file = s); }
-	void setPath(QString s) { emit pathChanged(path = s); }
-	void setScreenshotFormat(QString s) { emit screenshotFormatChanged(screenshotFormat = s); }
-	void setScreenshotTemplate(QString s) { emit screenshotTemplateChanged(screenshotTemplate = s); }
-	void setScreenshotDir(QString s) { emit screenshotDirChanged(screenshotDir = s); }
 	void setVo(QString s) { emit voChanged(vo = s); }
 	void setMsgLevel(QString s) { emit msgLevelChanged(msgLevel = s); }
 	void setSpeed(double d) { emit speedChanged(speed = d); }
@@ -224,10 +198,6 @@ signals:
 	void playStateChanged(Mpv::PlayState);
 	void fileChanging(int, int);
 	void fileChanged(QString);
-	void pathChanged(QString);
-	void screenshotFormatChanged(QString);
-	void screenshotTemplateChanged(QString);
-	void screenshotDirChanged(QString);
 	void voChanged(QString);
 	void msgLevelChanged(QString);
 	void speedChanged(double);
@@ -256,9 +226,6 @@ private:
 	Mpv::FileInfo fileInfo;
 	QString     file,
 		path,
-		screenshotFormat,
-		screenshotTemplate,
-		screenshotDir,
 		suffix,
 		vo,
 		msgLevel;
@@ -275,8 +242,6 @@ private:
 		playlistVisible = false,
 		subtitleVisibility = true,
 		mute = false;
-	int         osdWidth,
-		osdHeight;
 	//
 	QString subtitleFile;
 	//

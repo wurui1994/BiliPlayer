@@ -54,7 +54,7 @@ public:
 
 	inline void setSource(Comment const& source)
 	{
-		this->m_source = source;
+		m_source = source;
 	}
 
 protected:
