@@ -1,20 +1,19 @@
 #pragma once
 
 #include <QtWidgets/QtWidgets>
-#include "Prefer.h"
 #include "Parse.h"
 
+#include "SettingDialog.h"
 
 class Danmaku;
 class ARender;
-
 
 class Window :public QWidget
 {
 	Q_OBJECT
 public:
 	explicit Window(QWidget *parent = 0);
-    static Window *m_instance;
+	~Window();
     static Window *instance();
 	bool isDanmakuEmpty();
 	void sendDanmaku(QString source, QString text,
@@ -25,19 +24,9 @@ public:
 	//
 	void setupConnect();
 	//
-	void showPreferDialog();
-private:
-	qint64 m_lastTime = 0;
-	qint64 m_lastDanmakuTime = 0;
+	void showSettingDialog();
 
-	//
-	QPointer<QDialog> msg;
-
-	Prefer prefer;
-
-	Danmaku *danmaku;
-	ARender *arender;
-
+protected:
 	virtual void closeEvent(QCloseEvent *e) override;
 	virtual void dragEnterEvent(QDragEnterEvent *e) override;
 	virtual void dropEvent(QDropEvent *e) override;
@@ -46,9 +35,21 @@ signals:
 	void windowFlagsChanged(QFlags<Qt::WindowType>);
 	void openMediaFile(QString file);
 	void modelReset();
+	void settingChanged();
 public slots:
 	void tryLocal(QString path);
 	void tryLocal(QStringList paths);
 private:
+	static Window *m_instance;
+	//
+	qint64 m_lastTime = 0;
+	qint64 m_lastDanmakuTime = 0;
 
+	//
+	QPointer<QDialog> msg;
+
+	Danmaku *danmaku;
+	ARender *arender;
+	//
+	SettingDialog* m_settingDialog;
 };

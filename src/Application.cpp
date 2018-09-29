@@ -9,8 +9,6 @@
 #include "Logger.h"
 #include "Network.h"
 
-QHash<QString, QObject *> Application::objects;
-
 Application::Application(int &argc, char **argv) :
 QApplication(argc, argv)
 {

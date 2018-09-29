@@ -3,6 +3,8 @@
 #include <QDesktopWidget>
 #include <QMouseEvent>
 
+#include "Setting.h"
+
 RecentWidget::RecentWidget(QWidget *parent)
 	: QWidget(parent)
 {
@@ -17,6 +19,8 @@ RecentWidget::RecentWidget(QWidget *parent)
 	ui.listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 	//
 	loadRecents();
+	//
+	m_isAutoPlay = getSettingValue("/Video/AutoPlay", true);
 }
 
 RecentWidget::~RecentWidget()
@@ -163,6 +167,10 @@ void RecentWidget::clearList()
 
 bool RecentWidget::nextVideo()
 {
+	if (!m_isAutoPlay)
+	{
+		return false;
+	}
 	//
 	for (int i = 0; i < ui.listWidget->count(); ++i)
 	{
@@ -191,6 +199,11 @@ void RecentWidget::onNextVideo()
 	}
 }
 
+void RecentWidget::setIsAutoPlay(bool isAutoPlay)
+{
+	m_isAutoPlay = isAutoPlay;
+}
+
 Recent RecentWidget::getRecent(QString path)
 {
 	if (m_lastSelect)m_lastSelect->setIsSelect(false);
@@ -212,6 +225,11 @@ Recent RecentWidget::getRecent(QString path)
 bool RecentWidget::isSameFilePath(QString path1, QString path2)
 {
 	return QFileInfo(path1).absoluteFilePath() == QFileInfo(path2).absoluteFilePath();
+}
+
+bool RecentWidget::isAutoPlay()
+{
+	return m_isAutoPlay;
 }
 
 void RecentWidget::dragEnterEvent(QDragEnterEvent *e)

@@ -141,3 +141,6 @@ public slots:
 	void setVariant(QString key, QVariant val);
 	QVariant getVariant(QString key, QVariant val = QVariant());
 };
+
+#define setSettingValue(key,value) Setting::instance()->setValue(key,value)
+#define getSettingValue(key,defaultValue) Setting::instance()->getValue(key,defaultValue)

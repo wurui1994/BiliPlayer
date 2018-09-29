@@ -102,9 +102,6 @@
     <ClCompile Include="src\Widget\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Widget\Prefer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Widget\SeekBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -153,6 +150,9 @@
     <ClCompile Include="src\Common\Utils.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+    <ClCompile Include="src\Widget\SettingDialog.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\Widget\ARender.h">
@@ -186,9 +186,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <QtMoc Include="src\Widget\Player.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="src\Widget\Prefer.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\Widget\SeekBar.h">
@@ -231,6 +228,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\Common\FramelessHelper.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\Widget\SettingDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -357,6 +357,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="src\Widget\AdvertWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\Widget\SettingDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

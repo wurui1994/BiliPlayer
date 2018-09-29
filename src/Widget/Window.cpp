@@ -15,14 +15,10 @@ Window::Window(QWidget *parent) :
 	//
 	setStyleSheet("QWidget{background:transparent}");
 	//
-
 	danmaku = Danmaku::instance();
 	arender = ARender::instance();
-
-	Application::objects["Danmaku"] = danmaku;
-	Application::objects["ARender"] = arender;
-	Application::objects["Interface"] = arender;
-	Application::objects["Config"] = Setting::instance();
+	//
+	m_settingDialog = new SettingDialog;
 
 	QVBoxLayout* layout = new QVBoxLayout;
 	//
@@ -30,6 +26,11 @@ Window::Window(QWidget *parent) :
 	setLayout(layout);
 	//
 	setupConnect();
+}
+
+Window::~Window()
+{
+	delete m_settingDialog;
 }
 
 bool Window::isDanmakuEmpty()
@@ -163,11 +164,16 @@ void Window::setupConnect()
 	{
 		emit modelReset();
 	});
+	//
+	connect(m_settingDialog, &SettingDialog::settingChanged, [=]()
+	{
+		emit settingChanged();
+	});
 }
 
-void Window::showPreferDialog()
+void Window::showSettingDialog()
 {
-	prefer.exec();
+	m_settingDialog->show();
 }
 
 void Window::tryLocal(QString file)

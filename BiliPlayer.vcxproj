@@ -225,10 +225,10 @@
     <ClCompile Include="src\Danmaku\Parse.cpp" />
     <ClCompile Include="src\Widget\DanmakuMenu.cpp" />
     <ClCompile Include="src\Widget\Player.cpp" />
-    <ClCompile Include="src\Widget\Prefer.cpp" />
     <ClCompile Include="src\Widget\RecentWidget.cpp" />
     <ClCompile Include="src\Widget\RecentWidgetItem.cpp" />
     <ClCompile Include="src\Widget\SeekBar.cpp" />
+    <ClCompile Include="src\Widget\SettingDialog.cpp" />
     <ClCompile Include="src\Widget\SpeedMenu.cpp" />
     <ClCompile Include="src\Danmaku\Sprite.cpp" />
     <ClCompile Include="src\Common\Utils.cpp" />
@@ -277,8 +277,6 @@
     </QtMoc>
     <ClInclude Include="src\Danmaku\Parse.h" />
     <QtMoc Include="src\Widget\Player.h">
-    </QtMoc>
-    <QtMoc Include="src\Widget\Prefer.h">
     </QtMoc>
     <QtMoc Include="src\Widget\SeekBar.h">
     </QtMoc>
@@ -362,6 +360,14 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;.;.\src;.\src\Common;.\src\Danmaku;.\src\Player;.\src\Widget;$(QTDIR)\include;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtCore;.\release;$(QTDIR)\mkspecs\win32-msvc;.\GeneratedFiles</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">_WINDOWS;UNICODE;_UNICODE;WIN32;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;NDEBUG</Define>
     </QtMoc>
+    <QtMoc Include="src\Widget\SettingDialog.h">
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;.;.\src;.\src\Common;.\src\Danmaku;.\src\Player;.\src\Widget;$(QTDIR)\include;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtCore;.\debug;$(QTDIR)\mkspecs\win32-msvc;.\GeneratedFiles;$(QTDIR)\include\QtNetwork</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_WINDOWS;UNICODE;_UNICODE;WIN32;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_NETWORK_LIB</Define>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\.;.\GeneratedFiles;.;.\src;.\src\Common;.\src\Danmaku;.\src\Player;.\src\Widget;$(QTDIR)\include;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtCore;.\release;$(QTDIR)\mkspecs\win32-msvc;.\GeneratedFiles;$(QTDIR)\include\QtNetwork</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">_WINDOWS;UNICODE;_UNICODE;WIN32;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;NDEBUG;QT_NETWORK_LIB</Define>
+    </QtMoc>
     <ClInclude Include="ui_Player.h" />
     <ClInclude Include="ui_SpeedMenu.h" />
     <ClInclude Include="ui_VolumeMenu.h" />
@@ -389,6 +395,10 @@
       <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h</OutputFile>
     </QtUic>
     <QtUic Include="src\Widget\RecentWidgetItem.ui">
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h</OutputFile>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h</OutputFile>
+    </QtUic>
+    <QtUic Include="src\Widget\SettingDialog.ui">
       <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h</OutputFile>
       <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h</OutputFile>
     </QtUic>

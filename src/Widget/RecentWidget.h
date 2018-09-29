@@ -24,8 +24,10 @@ public:
 	void clearList();
 	bool nextVideo();
 	void onNextVideo();
+	void setIsAutoPlay(bool isAutoPlay);
 	Recent getRecent(QString path);
 	bool isSameFilePath(QString path1, QString path2);
+	bool isAutoPlay();
 Q_SIGNALS:
 	void tryOpenFile(QString filePath);
 	void tryOpenRecent(Recent recent);
@@ -40,4 +42,5 @@ protected Q_SLOTS:
 private:
 	Ui::RecentWidget ui;
 	RecentWidgetItem* m_lastSelect = nullptr;
+	bool m_isAutoPlay = true;
 };

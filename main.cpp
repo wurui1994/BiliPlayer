@@ -1,6 +1,5 @@
 #include "Application.h"
 #include "Player.h"
-#include "Prefer.h"
 
 #pragma comment(lib,"mpv")
 

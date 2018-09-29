@@ -12,7 +12,6 @@ class Application :public QApplication
 	Q_OBJECT
 public:
 	Application(int &argc, char **argv);
-	static QHash<QString, QObject *> objects;
 private:
 
 	void loadTranslator(QString transFile)

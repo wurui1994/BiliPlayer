@@ -10,6 +10,8 @@
 #include "Utils.h"
 #include "Network.h"
 
+#include "Setting.h"
+
 #ifdef Q_OS_WIN
 #include <QtPlatformHeaders/QWindowsWindowFunctions>
 #endif
@@ -245,6 +247,14 @@ void Player::setupConnect()
 	connect(m_window, &Window::openMediaFile, [=](QString file)
 	{
 		Load(file);
+	});
+	//
+	connect(m_window, &Window::settingChanged, [=]()
+	{
+		bool isChecked = Setting::getValue("/Video/Hwdec",false);
+		bool isAutoPlay = Setting::getValue("/Video/AutoPlay", true);
+		ui.mpvFrame->setIsHwdec(isChecked);
+		m_recent->setIsAutoPlay(isAutoPlay);
 	});
 #endif
 	//
@@ -572,7 +582,7 @@ void Player::setupShortcut()
 		{ "HideTitle" ,[=]() {hideTitle(); } },
 		{ "HideControl" ,[=]() {hideControl(); } },
 		//
-		{ "Setting" ,[=]() { m_window->showPreferDialog(); } },
+		{ "Setting" ,[=]() { m_window->showSettingDialog(); } },
 		//
 		{ "OpenFolder" ,[=]() { Utils::openAppDataFolder(); } },
 	};
@@ -1310,7 +1320,7 @@ void Player::SetRemainingLabels(int time)
 void Player::on_settingsButton_clicked()
 {
 #if USE_DANMAKU
-	m_window->showPreferDialog();
+	m_window->showSettingDialog();
 #endif
 }
 

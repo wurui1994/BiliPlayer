@@ -14,13 +14,15 @@
 
 #include "MpvWidget.h"
 #include "Utils.h"
+#include "Setting.h"
 
 static void wakeup(void *ctx)
 {
     QMetaObject::invokeMethod((MpvWidget*)ctx, "on_mpv_events", Qt::QueuedConnection);
 }
 
-static void *get_proc_address(void *ctx, const char *name) {
+static void *get_proc_address(void *ctx, const char *name) 
+{
     Q_UNUSED(ctx);
     QOpenGLContext *glctx = QOpenGLContext::currentContext();
     if (!glctx)
@@ -51,14 +53,14 @@ MpvWidget::MpvWidget(QWidget *parent, Qt::WindowFlags f)
 	mpv_set_option_string(mpv, "ytdl", "yes"); // youtube-dl support
 	//mpv_set_option_string(mpv, "sub-auto", "no"); // youtube-dl support
 
+	setIsHwdec(getSettingValue("/Video/Hwdec", true));
+
 	m_isUseOpenGL_CB = true;
 	//
 	if (m_isUseOpenGL_CB)
 	{
 		mpv_set_option_string(mpv, "vo", "opengl-cb");
 	}
-    // Request hw decoding, just for testing.
-	mpv_set_option_string(mpv, "hwdec", "auto");
 
     mpv_gl = (mpv_opengl_cb_context *)mpv_get_sub_api(mpv, MPV_SUB_API_OPENGL_CB);
     if (!mpv_gl)
@@ -1113,6 +1115,12 @@ void MpvWidget::setKeepAspect(bool isKeepAspect)
 bool MpvWidget::isOpenGLInited()
 {
 	return m_isOpenGLInited;
+}
+
+void MpvWidget::setIsHwdec(bool isHwdec)
+{
+	// Request hw decoding, just for testing.
+	mpv_set_option_string(mpv, "hwdec", isHwdec ? "auto" : "no");
 }
 
 // Speed

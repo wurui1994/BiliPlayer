@@ -33,6 +33,8 @@ public:
 	void stopABLoop();
 	bool isOpenGLInited();
 	//
+	void setIsHwdec(bool isHwdec);
+	//
 	QString getRealTime();
 Q_SIGNALS:
     void durationChanged(int value);
