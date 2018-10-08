@@ -32,6 +32,9 @@ public:
 	void parseDanmaku(QString json);
 	QList<Comment> getDanmakuRange(qint64 start, qint64 end);
 	QList<Comment> selectDanmaku(qint64 start, qint64 end);
+	QList<Comment> danmakuByIndex(qint64& index,qint64 time);
+	qint32 indexByTime(qint64 time);
+	void prepareDanmaku(QList<Comment> buffer);
 private:
 	static Danmaku *ins;
 	DanmakuData m_data;
@@ -50,14 +53,13 @@ public slots:
 	void appendToPool(QString source, const Comment &comment);
 	void appendToPool(const Comment &comment);
 	void clearCurrent();
-	void prepareJump();
 	void insertToCurrent(Graphic &graphic, int index = -1);
 	void parse(int flag = 0);
 	void delayAll(qint64 time);
 	void jumpToTime(qint64 time);
 	void saveToFile(QString file) const;
 	qint64 getDuration() const;
-	void process(DanmakuData & danm, const Comment &w);
+	Graphic process(DanmakuData & danm, const Comment &w);
 	QVector<int> calculate(int size, QList<Graphic> &data,Graphic& graphic);
 	void stepOne();
 	void stepTwo();

@@ -7,6 +7,28 @@
 #include "Network.h"
 #include <algorithm>
 
+namespace
+{
+	class CommentComparer
+	{
+	public:
+		inline bool operator ()(const Comment &f, const Comment &s)
+		{
+			return f.time < s.time;
+		}
+
+		//overloads for comparing with time
+		inline bool operator ()(const Comment &c, qint64 time)
+		{
+			return c.time < time;
+		}
+
+		inline bool operator ()(qint64 time, const Comment &c)
+		{
+			return time < c.time;
+		}
+	};
+}
 
 Danmaku *Danmaku::ins = nullptr;
 
@@ -111,6 +133,37 @@ QList<Comment> Danmaku::selectDanmaku(qint64 start, qint64 end)
 	return buffer;
 }
 
+QList<Comment> Danmaku::danmakuByIndex(qint64 & index, qint64 time)
+{
+	QList<Comment> buffer;
+	for (; index < m_data.danm.size(); ++index)
+	{
+		Comment comment = m_data.danm[index];
+		if (comment.time >= time)
+		{
+			break;
+		}
+		buffer << comment;
+	}
+	return buffer;
+}
+
+qint32 Danmaku::indexByTime(qint64 time)
+{
+	auto curr = qLowerBound(m_data.danm.begin(), m_data.danm.end(), time, CommentComparer());
+	return  curr - m_data.danm.begin();
+}
+
+void Danmaku::prepareDanmaku(QList<Comment> buffer)
+{
+	//
+	for (auto const&comment : buffer)
+	{
+		Graphic graphic = process(m_data, comment);
+		m_data.draw.append(graphic);
+	}
+}
+
 Danmaku::Danmaku(QObject *parent)
 	:QObject(parent)
 {
@@ -144,16 +197,12 @@ void Danmaku::drawGraphic(QPainter *painter)
 		}
 	}
 	//
-	m_data.draw.clear();
-	for (auto const& graphic : dirty)
-	{
-		m_data.draw.append(graphic);
-	}
-	//
 	for (Graphic graphic : dirty)
 	{
 		graphic.draw(painter);
 	}
+	//
+	m_data.draw = dirty;
 }
 
 Record &Danmaku::record()
@@ -201,29 +250,6 @@ void Danmaku::appendToPool(const Record &record)
 	stepTwo();
 }
 
-namespace
-{
-	class CommentComparer
-	{
-	public:
-		inline bool operator ()(const Comment &f, const Comment &s)
-		{
-			return f.time < s.time;
-		}
-
-		//overloads for comparing with time
-		inline bool operator ()(const Comment &c, qint64 time)
-		{
-			return c.time < time;
-		}
-
-		inline bool operator ()(qint64 time, const Comment &c)
-		{
-			return time < c.time;
-		}
-	};
-}
-
 void Danmaku::appendToPool(QString source, const Comment &comment)
 {
 	if (m_data.record.source == source)
@@ -254,10 +280,6 @@ void Danmaku::clearCurrent()
 {
 	m_data.draw.clear();
 	ARender::instance()->draw();
-}
-
-void Danmaku::prepareJump()
-{
 }
 
 void Danmaku::insertToCurrent(Graphic &graphic, int index)
@@ -296,22 +318,12 @@ void Danmaku::setTime(qint64 time)
 {
 	m_data.time = time;
 	//int limit = Config::getValue("/Shield/Density", 0);
-	QList<Comment> buffer;
-	for (; m_data.curr < m_data.danm.size(); ++m_data.curr)
-	{
-		Comment comment = m_data.danm[m_data.curr];
-		if (comment.time >= time)
-		{
-			break;
-		}
-		buffer << comment;
-	}
+	qint64 curr = m_data.curr;
+	QList<Comment> buffer = danmakuByIndex(curr, time);
 	//
-	for (auto const&comment : buffer)
-	{
-		process(m_data, comment);
-	}
+	m_data.curr = curr;
 	//
+	prepareDanmaku(buffer);
 }
 
 void Danmaku::delayAll(qint64 time)
@@ -327,9 +339,51 @@ void Danmaku::delayAll(qint64 time)
 
 void Danmaku::jumpToTime(qint64 time)
 {
+#if 0
+	qint64 offsetTime = time - 5000;
+	qint64 curr = indexByTime(offsetTime);
+	QList<Comment> buffer;
+	for (; curr < m_data.danm.size(); ++curr)
+	{
+		Comment comment = m_data.danm[curr];
+		if (comment.time >= time)
+		{
+			break;
+		}
+		buffer << comment;
+	}
+	//
+	m_data.draw.clear();
+	//
+	QList<Graphic> draw;
+
+	for (auto const&comment : buffer)
+	{
+		Graphic graphic = process(m_data, comment);
+		draw.append(graphic);
+	}
+
+	QList<Graphic> dirty;
+	for (auto graphic : draw)
+	{
+		if (graphic.move(m_data.time))
+		{
+			dirty.append(graphic);
+		}
+	}
+	m_data.draw = dirty;
+	//m_data.draw = draw;
+
+	//clearCurrent();
+	m_data.time = time;
+	m_data.curr = indexByTime(time);
+
+	ARender::instance()->draw();
+#else
 	clearCurrent();
 	m_data.time = time;
-	m_data.curr = qLowerBound(m_data.danm.begin(), m_data.danm.end(), time, CommentComparer()) - m_data.danm.begin();
+	m_data.curr = indexByTime(time);
+#endif
 }
 
 void Danmaku::saveToFile(QString file) const
@@ -406,15 +460,16 @@ qint64 Danmaku::getDuration() const
 	return m_data.dura;
 }
 
-void Danmaku::process(DanmakuData &danm, const Comment& comment)
+Graphic Danmaku::process(DanmakuData &danm, const Comment& comment)
 {
+	//
+	Graphic graphic(comment);
 	//
 	if (comment.isEmpty())
 	{
-		return;
+		return graphic;
 	}
 	//
-	Graphic graphic(comment);
 	const QList<QRectF> &locate = graphic.locate();
 	if (locate.size() == 1)
 	{
@@ -443,9 +498,10 @@ void Danmaku::process(DanmakuData &danm, const Comment& comment)
 	}
 	//
 	//graphic.setIndex();
-	danm.draw.append(graphic);
 
-	danm.wait--;
+
+	//danm.wait--;
+	return graphic;
 }
 
 QVector<int> Danmaku::calculate(int size,
