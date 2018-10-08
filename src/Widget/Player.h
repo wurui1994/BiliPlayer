@@ -84,6 +84,8 @@ public slots:
 	void showSubtitles();
 	void audioMute();
 	void noKeepAspect();
+	void deinterlace();
+	void interpolate();
 	void hideTitle();
 	void hideControl();
 	//
@@ -133,6 +135,8 @@ public:
 	//QMenu *menuAudio_Tracks;
 	QAction* action_Add_Subtitle_File;
 	QAction* action_NoAspect;
+	QAction* action_Deinterlace;
+	QAction* action_Interpolate;
 	QAction* action_AudioMute;
 	QAction* action_hideTitle;
 	QAction* action_hideControl;

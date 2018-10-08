@@ -404,10 +404,6 @@ void Player::setupConnect()
 
 	connect(ui.mpvFrame, &MpvWidget::tryToGetTime, [=]()
 	{
-		if (ui.mpvFrame->getPlayState() != Mpv::Playing)
-		{
-			return;
-		}
 		qint64 time = ui.mpvFrame->getRealTime().toDouble() * 1000;
 #if USE_DANMAKU
 		if (m_window)
@@ -415,6 +411,10 @@ void Player::setupConnect()
 			m_window->setDanmakuTime(time);
 		}
 #endif
+		if (ui.mpvFrame->getPlayState() != Mpv::Playing)
+		{
+			return;
+		}
 		//
 		if (m_lastSelect)
 		{
@@ -576,6 +576,8 @@ void Player::setupShortcut()
 		{ "ShowSubtitle" ,[=]() {showSubtitles(); } },
 		// Video
 		{ "NoAspect" ,[=]() {noKeepAspect(); } },
+		{ "Deinterlace" ,[=]() {deinterlace(); } },
+		{ "Interpolate" ,[=]() {interpolate(); } },
 		// Audio
 		{ "AudioMute" ,[=]() {audioMute(); } },
 		//
@@ -638,6 +640,14 @@ void Player::setupShortcut()
 	action_NoAspect->setCheckable(true);
 	action_NoAspect->setChecked(false);
 	//
+	action_Deinterlace = genAction("Deinterlace", tr("Deinterlace"), QString(""), videoMenu);
+	action_Deinterlace->setCheckable(true);
+	action_Deinterlace->setChecked(false);
+	//
+	action_Interpolate = genAction("Interpolate", tr("Interpolate"), QString(""), videoMenu);
+	action_Interpolate->setCheckable(true);
+	action_Interpolate->setChecked(false);
+	//
 	QMenu* audioMenu = m_menu->addMenu(tr("Audio"));
 	audioMenu->setWindowFlag(Qt::FramelessWindowHint, true);
 	audioMenu->setAttribute(Qt::WA_TranslucentBackground);
@@ -667,14 +677,17 @@ void Player::setupShortcut()
 QAction* Player::genAction(QString const & key, QString const & actionName, QKeySequence shortCut, QMenu * menu)
 {
 	QAction* action = new QAction(actionName, menu);
-	action->setShortcut(shortCut);
-	//
-	QShortcut* shortcut = new QShortcut(shortCut, this);
-	connect(shortcut, &QShortcut::activated, [=]()
+	if (!shortCut.isEmpty())
 	{
-		action->trigger();
-	});
-	//
+		action->setShortcut(shortCut);
+		//
+		QShortcut* shortcut = new QShortcut(shortCut, this);
+		connect(shortcut, &QShortcut::activated, [=]()
+		{
+			action->trigger();
+		});
+		//
+	}
 	connect(action, &QAction::triggered, this, [=]()
 	{
 		if (m_keyFuncMap[key])
@@ -733,7 +746,7 @@ void Player::Load(QString file)
 	{
 		return;
 	}
-#if 1
+#if 0
 	if (m_file != file)
 	{
 		m_file = file;
@@ -1129,6 +1142,18 @@ void Player::noKeepAspect()
 {
 	bool isKeep = action_NoAspect->isChecked();
 	ui.mpvFrame->setKeepAspect(!isKeep);
+}
+
+void Player::deinterlace()
+{
+	bool isDeinterlace = action_Deinterlace->isChecked();
+	ui.mpvFrame->Deinterlace(isDeinterlace);
+}
+
+void Player::interpolate()
+{
+	bool isInterpolate = action_Interpolate->isChecked();
+	ui.mpvFrame->Interpolate(isInterpolate);
 }
 
 void Player::hideTitle()

@@ -57,6 +57,60 @@ void Danmaku::parseDanmaku(QString json)
 	appendToPool(record);
 }
 
+QList<Comment> Danmaku::getDanmakuRange(qint64 start, qint64 end)
+{
+	QList<Comment> buffer;
+	if (m_data.danm.isEmpty())
+	{
+		return buffer;
+	}
+	buffer << m_data.danm[m_data.curr];
+	for (qint32 curr = m_data.curr + 1;  curr < m_data.danm.size(); ++curr)
+	{
+		int left = curr - m_data.curr;
+		int right = curr + m_data.curr;
+		//
+		Comment leftComment = m_data.danm[left];
+		if (leftComment.time < start)
+		{
+			break;
+		}
+		else
+		{
+			buffer.push_front(leftComment);
+		}
+		//
+		Comment rightComment = m_data.danm[left];
+		if (rightComment.time >= end)
+		{
+			break;
+		}
+		else
+		{
+			buffer.push_back(rightComment);
+		}
+	}
+	return buffer;
+}
+
+QList<Comment> Danmaku::selectDanmaku(qint64 start, qint64 end)
+{
+	QList<Comment> buffer;
+	if (m_data.danm.isEmpty())
+	{
+		return buffer;
+	}
+	//
+	for (auto const& comment : m_data.danm)
+	{
+		if (comment.time >= start && comment.time < end)
+		{
+			buffer << comment;
+		}
+	}
+	return buffer;
+}
+
 Danmaku::Danmaku(QObject *parent)
 	:QObject(parent)
 {
@@ -196,23 +250,18 @@ void Danmaku::appendToPool(const Comment & comment)
 	appendToPool(source, comment);
 }
 
-void Danmaku::clearCurrent(bool soft)
+void Danmaku::clearCurrent()
 {
-	QList<Graphic> draw;
-	for (auto graphic : m_data.draw)
-	{
-		if (soft && graphic.stay())
-		{
-			draw.append(graphic);
-		}
-	}
-	m_data.draw = draw;
+	m_data.draw.clear();
 	ARender::instance()->draw();
+}
+
+void Danmaku::prepareJump()
+{
 }
 
 void Danmaku::insertToCurrent(Graphic &graphic, int index)
 {
-	graphic.setIndex();
 	int size = m_data.draw.size(), next;
 	if (size == 0 || index == 0)
 	{
@@ -278,7 +327,7 @@ void Danmaku::delayAll(qint64 time)
 
 void Danmaku::jumpToTime(qint64 time)
 {
-	clearCurrent(true);
+	clearCurrent();
 	m_data.time = time;
 	m_data.curr = qLowerBound(m_data.danm.begin(), m_data.danm.end(), time, CommentComparer()) - m_data.danm.begin();
 }
@@ -359,9 +408,8 @@ qint64 Danmaku::getDuration() const
 
 void Danmaku::process(DanmakuData &danm, const Comment& comment)
 {
-	qint64 createTime = QDateTime::currentMSecsSinceEpoch();
 	//
-	if (comment.isEmpty() || createTime < QDateTime::currentMSecsSinceEpoch() - 500)
+	if (comment.isEmpty())
 	{
 		return;
 	}
@@ -394,7 +442,7 @@ void Danmaku::process(DanmakuData &danm, const Comment& comment)
 		graphic.setRect(rect);
 	}
 	//
-	graphic.setIndex();
+	//graphic.setIndex();
 	danm.draw.append(graphic);
 
 	danm.wait--;

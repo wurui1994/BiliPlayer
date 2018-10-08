@@ -6,12 +6,6 @@
 
 using namespace Attribute;
 
-void Graphic::setIndex()
-{
-	static quint64 globalIndex;
-	index = globalIndex++;
-}
-
 void Graphic::draw(QPainter *painter)
 {
 	if (enabled)

@@ -40,13 +40,6 @@ public:
 		this->enabled = enabled;
 	}
 
-	inline quint64 getIndex()
-	{
-		return index;
-	}
-
-	void setIndex();
-
 	inline Comment& source()
 	{
 		return m_source;
@@ -61,7 +54,6 @@ protected:
 	bool enabled = true;
 	QRectF m_rect;
 	QRectF origin_rect;
-	quint64 index;
 	Comment m_source;
 
 protected:

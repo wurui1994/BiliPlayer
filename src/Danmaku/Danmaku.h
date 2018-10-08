@@ -30,6 +30,8 @@ public:
 	DanmakuData const& data();
 	bool isDanmakuEmpty();
 	void parseDanmaku(QString json);
+	QList<Comment> getDanmakuRange(qint64 start, qint64 end);
+	QList<Comment> selectDanmaku(qint64 start, qint64 end);
 private:
 	static Danmaku *ins;
 	DanmakuData m_data;
@@ -47,7 +49,8 @@ public slots:
 	void appendToPool(const Record &record);
 	void appendToPool(QString source, const Comment &comment);
 	void appendToPool(const Comment &comment);
-	void clearCurrent(bool soft = false);
+	void clearCurrent();
+	void prepareJump();
 	void insertToCurrent(Graphic &graphic, int index = -1);
 	void parse(int flag = 0);
 	void delayAll(qint64 time);

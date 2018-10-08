@@ -217,6 +217,7 @@ void Network::sendDanmaku(QString content,int time,int font, QString color)
 
 void Network::getDanmaku(int time)
 {
+#if 0
 	QUrl url("http://" + m_barrageIp + "/v1/get");
 
 	QUrlQuery query;
@@ -232,6 +233,7 @@ void Network::getDanmaku(int time)
 		//qDebug() << result;
 		emit danmakuData(result, time);
 	});
+#endif
 }
 
 QString Network::barrageIP()
