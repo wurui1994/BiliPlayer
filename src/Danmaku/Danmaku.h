@@ -23,44 +23,41 @@ class Danmaku :public QObject
 {
 	Q_OBJECT
 public:
-	virtual ~Danmaku();
-	Record& record();
-	void drawGraphic(QPainter *painter);
 	static Danmaku *instance();
-	DanmakuData const& data();
+
+	void drawGraphic(QPainter *painter);
+
 	bool isDanmakuEmpty();
 	void parseDanmaku(QString json);
-	QList<Comment> getDanmakuRange(qint64 start, qint64 end);
-	QList<Comment> selectDanmaku(qint64 start, qint64 end);
-	QList<Comment> danmakuByIndex(qint64& index,qint64 time);
+
 	qint32 indexByTime(qint64 time);
 	void prepareDanmaku(QList<Comment> buffer);
+	//
+	QList<Comment> getDanmakuRange(qint64 start, qint64 end);
+	QList<Comment> selectDanmaku(qint64 start, qint64 end);
+	QList<Comment> danmakuByIndex(qint64& index, qint64 time);
+	//
+	Graphic process(QList<Graphic> draw, const Comment &w);
+	QList<int> calculate(QList<Graphic> data, Graphic const& graphic);
 private:
-	static Danmaku *ins;
+	static Danmaku *m_instance;
 	DanmakuData m_data;
 
-	explicit Danmaku(QObject *parent = 0);
+	Danmaku(QObject *parent = 0);
 signals:
-	void alphaChanged(int);
 	void modelReset();
 public slots:
-    Comment commentAt(QPointF point) const;
-	void setAlpha(int alpha);
-	void clearPool();
 	void resetTime();
 	void setTime(qint64 time);
-	void appendToPool(const Record &record);
-	void appendToPool(QString source, const Comment &comment);
-	void appendToPool(const Comment &comment);
+
 	void clearCurrent();
-	void insertToCurrent(Graphic &graphic, int index = -1);
 	void parse(int flag = 0);
-	void delayAll(qint64 time);
 	void jumpToTime(qint64 time);
-	void saveToFile(QString file) const;
-	qint64 getDuration() const;
-	Graphic process(DanmakuData & danm, const Comment &w);
-	QVector<int> calculate(int size, QList<Graphic> &data,Graphic& graphic);
+
 	void stepOne();
 	void stepTwo();
+	//
+	void appendToPool(const Record &record);
+	void appendToPool(const Comment &comment);
+	void appendToPool(QString source, const Comment &comment);
 };

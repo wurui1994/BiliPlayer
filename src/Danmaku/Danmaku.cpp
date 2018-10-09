@@ -30,16 +30,11 @@ namespace
 	};
 }
 
-Danmaku *Danmaku::ins = nullptr;
+Danmaku *Danmaku::m_instance = nullptr;
 
 Danmaku *Danmaku::instance()
 {
-	return ins ? ins : new Danmaku(qApp);
-}
-
-DanmakuData const & Danmaku::data()
-{
-	return m_data;
+	return m_instance ? m_instance : new Danmaku(qApp);
 }
 
 bool Danmaku::isDanmakuEmpty()
@@ -159,7 +154,7 @@ void Danmaku::prepareDanmaku(QList<Comment> buffer)
 	//
 	for (auto const&comment : buffer)
 	{
-		Graphic graphic = process(m_data, comment);
+		Graphic graphic = process(m_data.draw, comment);
 		m_data.draw.append(graphic);
 	}
 }
@@ -167,12 +162,11 @@ void Danmaku::prepareDanmaku(QList<Comment> buffer)
 Danmaku::Danmaku(QObject *parent)
 	:QObject(parent)
 {
-	ins = this;
+	m_instance = this;
 	setObjectName("Danmaku");
 	m_data.curr = m_data.time = 0;
 	m_data.dura = -1;
 
-	QMetaObject::invokeMethod(this, "alphaChanged", Qt::QueuedConnection, Q_ARG(int, Setting::getValue("/Danmaku/Alpha", 100)));
 	//
 	connect(&Network::instance(), &Network::danmakuData, [=](QString json, int time)
 	{
@@ -181,10 +175,6 @@ Danmaku::Danmaku(QObject *parent)
 	});
 }
 
-Danmaku::~Danmaku()
-{
-	//qDeleteAll(m_data.draw);
-}
 
 void Danmaku::drawGraphic(QPainter *painter)
 {
@@ -205,42 +195,10 @@ void Danmaku::drawGraphic(QPainter *painter)
 	m_data.draw = dirty;
 }
 
-Record &Danmaku::record()
-{
-	return m_data.record;
-}
-
-Comment Danmaku::commentAt(QPointF point) const
-{
-	Comment comment;
-	for (Graphic graphic : m_data.draw)
-	{
-		if (graphic.currentRect().contains(point))
-		{
-			comment = graphic.source();
-			break;
-		}
-	}
-	return comment;
-}
-
-void Danmaku::setAlpha(int alpha)
-{
-	Setting::setValue("/Danmaku/Alpha", alpha);
-	emit alphaChanged(alpha);
-}
 
 void Danmaku::resetTime()
 {
 	m_data.curr = m_data.time = 0;
-}
-
-void Danmaku::clearPool()
-{
-	clearCurrent();
-	m_data.danm.clear();
-	stepOne();
-	stepTwo();
 }
 
 void Danmaku::appendToPool(const Record &record)
@@ -271,34 +229,14 @@ void Danmaku::appendToPool(QString source, const Comment &comment)
 
 void Danmaku::appendToPool(const Comment & comment)
 {
-	auto pool = record();
-	QString source = pool.source;
+	QString source = m_data.record.source;
 	appendToPool(source, comment);
 }
 
 void Danmaku::clearCurrent()
 {
 	m_data.draw.clear();
-	ARender::instance()->draw();
-}
-
-void Danmaku::insertToCurrent(Graphic &graphic, int index)
-{
-	int size = m_data.draw.size(), next;
-	if (size == 0 || index == 0)
-	{
-		next = 0;
-	}
-	else
-	{
-		int ring = size + 1;
-		next = index > 0 ? (index%ring) : (ring + index % ring);
-		if (next == 0)
-		{
-			next = size;
-		}
-	}
-	m_data.draw.insert(next, graphic);
+	ARender::instance()->update();
 }
 
 void Danmaku::parse(int flag)
@@ -326,23 +264,13 @@ void Danmaku::setTime(qint64 time)
 	prepareDanmaku(buffer);
 }
 
-void Danmaku::delayAll(qint64 time)
-{
-	Record r = m_data.record;
-	r.delay += time;
-	for (Comment &c : r.danmaku)
-	{
-		c.time += time;
-	}
-	jumpToTime(m_data.time);
-}
-
 void Danmaku::jumpToTime(qint64 time)
 {
 #if 0
 	qint64 offsetTime = time - 5000;
 	qint64 curr = indexByTime(offsetTime);
 	QList<Comment> buffer;
+	QList<Graphic> drawList;
 	for (; curr < m_data.danm.size(); ++curr)
 	{
 		Comment comment = m_data.danm[curr];
@@ -351,15 +279,19 @@ void Danmaku::jumpToTime(qint64 time)
 			break;
 		}
 		buffer << comment;
+		drawList << Graphic(comment);
 	}
 	//
-	m_data.draw.clear();
+	//m_data.draw.clear();
 	//
 	QList<Graphic> draw;
+	QList<Graphic> drawAdd;
 
-	for (auto const&comment : buffer)
+	for (auto g : drawList)
 	{
-		Graphic graphic = process(m_data, comment);
+		drawAdd << g;
+		Comment comment = g.source();
+		Graphic graphic = process(drawAdd, comment);
 		draw.append(graphic);
 	}
 
@@ -378,7 +310,7 @@ void Danmaku::jumpToTime(qint64 time)
 	m_data.time = time;
 	m_data.curr = indexByTime(time);
 
-	ARender::instance()->draw();
+	ARender::instance()->update();
 #else
 	clearCurrent();
 	m_data.time = time;
@@ -386,81 +318,7 @@ void Danmaku::jumpToTime(qint64 time)
 #endif
 }
 
-void Danmaku::saveToFile(QString file) const
-{
-	QFile f(file);
-	f.open(QIODevice::WriteOnly | QIODevice::Text);
-	bool skip = Setting::getValue("/Interface/Save/Skip", false);
-	if (file.endsWith("xml", Qt::CaseInsensitive))
-	{
-		QXmlStreamWriter w(&f);
-		w.setAutoFormatting(true);
-		w.writeStartDocument();
-		w.writeStartElement("i");
-		w.writeStartElement("chatserver");
-		w.writeCharacters("chat." + Utils::customUrl(Utils::Bilibili));
-		w.writeEndElement();
-		w.writeStartElement("mission");
-		w.writeCharacters("0");
-		w.writeEndElement();
-		w.writeStartElement("source");
-		w.writeCharacters("k-v");
-		w.writeEndElement();
-		for (const Comment c : m_data.danm)
-		{
-			if (c.blocked&&skip)
-			{
-				continue;
-			}
-			w.writeStartElement("d");
-			QStringList l;
-			l << QString::number(c.time / 1000.0) <<
-				QString::number(c.mode) <<
-				QString::number(c.font) <<
-				QString::number(c.color) <<
-				QString::number(c.date) <<
-				"0" <<
-				c.sender <<
-				"0";
-			w.writeAttribute("p", l.join(','));
-			w.writeCharacters(c.string);
-			w.writeEndElement();
-		}
-		w.writeEndElement();
-		w.writeEndDocument();
-	}
-	else
-	{
-		QJsonArray a;
-		for (const Comment c : m_data.danm)
-		{
-			if (c.blocked && skip)
-			{
-				continue;
-			}
-			QJsonObject o;
-			QStringList l;
-			l << QString::number(c.time / 1000.0) <<
-				QString::number(c.color) <<
-				QString::number(c.mode) <<
-				QString::number(c.font) <<
-				c.sender <<
-				QString::number(c.date);
-			o["c"] = l.join(',');
-			o["m"] = c.string;
-			a.append(o);
-		}
-		f.write(QJsonDocument(a).toJson(QJsonDocument::Compact));
-	}
-	f.close();
-}
-
-qint64 Danmaku::getDuration() const
-{
-	return m_data.dura;
-}
-
-Graphic Danmaku::process(DanmakuData &danm, const Comment& comment)
+Graphic Danmaku::process(QList<Graphic> draw, const Comment& comment)
 {
 	//
 	Graphic graphic(comment);
@@ -470,7 +328,7 @@ Graphic Danmaku::process(DanmakuData &danm, const Comment& comment)
 		return graphic;
 	}
 	//
-	const QList<QRectF> &locate = graphic.locate();
+	QList<QRectF> locate = graphic.locate();
 	if (locate.size() == 1)
 	{
 		//
@@ -481,7 +339,7 @@ Graphic Danmaku::process(DanmakuData &danm, const Comment& comment)
 	else
 	{
 		//
-		QVector<int> result = calculate(locate.size(), danm.draw, graphic);
+		QList<int> result = calculate(draw, graphic);
 		//
 		int thin = result.first();
 		QRectF rect = locate.first();
@@ -497,33 +355,29 @@ Graphic Danmaku::process(DanmakuData &danm, const Comment& comment)
 		graphic.setRect(rect);
 	}
 	//
-	//graphic.setIndex();
-
-
-	//danm.wait--;
 	return graphic;
 }
 
-QVector<int> Danmaku::calculate(int size,
-	QList<Graphic> &data, Graphic& graphic)
+QList<int> Danmaku::calculate(QList<Graphic> data, Graphic const& g)
 {
-	QVector<int> result(size, 0);
-
-	const QList<QRectF> &locate = graphic.locate();
+	Graphic graphic = g;
+	QList<int> result;
 	//
-	for (Graphic const& iter : data)
+	for (auto const& rect: graphic.locate())
 	{
-		if (iter.getMode() != graphic.source().mode)
+		int sum = 0;
+		for (Graphic const& curr : data)
 		{
-			continue;
+			if (curr.getMode() != graphic.source().mode)
+			{
+				continue;
+			}
+			graphic.setRect(rect);
+			sum += graphic.intersects(curr);
 		}
-		//
-		for (int sta = 0; sta < result.size(); ++sta)
-		{
-			graphic.setRect(locate[sta]);
-			result[sta] += graphic.intersects(iter);
-		}
+		result << sum;
 	}
+	
 	return result;
 }
 
