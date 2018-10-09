@@ -13,9 +13,10 @@ class Graphic
 {
 public:
 	 QList<QRectF> locate();
-	 bool move(double time) ;
+	 bool isAlive(double time) ;
 	 void draw(QPainter *painter);
 	 uint intersects(Graphic const&other);
+	 uint intersects(QList<Graphic> const& others);
 	 bool stay(){ return false; }
 	 QRectF &currentRect(){ return m_rect; }
 	 void setRect(QRectF const& r);
@@ -25,35 +26,35 @@ public:
 	double speed; // Model 1 6
 	double life;  // Model 4 5
 
-	inline int getMode() const
+	int getMode() const
 	{
 		return m_source.mode;
 	}
 
-	inline bool isEnabled()
+	 bool isEnabled()
 	{
-		return enabled;
+		return m_enabled;
 	}
 
-	inline void setEnabled(bool enabled)
+	void setEnabled(bool enabled)
 	{
-		this->enabled = enabled;
+		m_enabled = enabled;
 	}
 
-	inline Comment& source()
+	Comment source()
 	{
 		return m_source;
 	}
 
-	inline void setSource(Comment const& source)
+	void setSource(Comment const& source)
 	{
 		m_source = source;
 	}
 
 protected:
-	bool enabled = true;
+	bool m_enabled = true;
 	QRectF m_rect;
-	QRectF origin_rect;
+	QRectF m_origin_rect;
 	Comment m_source;
 
 protected:

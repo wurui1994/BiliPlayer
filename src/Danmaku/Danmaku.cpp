@@ -7,34 +7,28 @@
 #include "Network.h"
 #include <algorithm>
 
-namespace
-{
-	class CommentComparer
-	{
-	public:
-		inline bool operator ()(const Comment &f, const Comment &s)
-		{
-			return f.time < s.time;
-		}
-
-		//overloads for comparing with time
-		inline bool operator ()(const Comment &c, qint64 time)
-		{
-			return c.time < time;
-		}
-
-		inline bool operator ()(qint64 time, const Comment &c)
-		{
-			return time < c.time;
-		}
-	};
-}
-
 Danmaku *Danmaku::m_instance = nullptr;
 
 Danmaku *Danmaku::instance()
 {
-	return m_instance ? m_instance : new Danmaku(qApp);
+	if (!m_instance)
+	{
+		m_instance = new Danmaku(qApp);
+	}
+
+	return m_instance;
+}
+
+Danmaku::Danmaku(QObject *parent)
+	:QObject(parent)
+{
+	m_data.curr = m_data.time = 0;
+	//
+	connect(&Network::instance(), &Network::danmakuData, [=](QString json, int time)
+	{
+		qDebug() << time;
+		parseDanmaku(json);
+	});
 }
 
 bool Danmaku::isDanmakuEmpty()
@@ -64,68 +58,14 @@ void Danmaku::parseDanmaku(QString json)
 			cc.mode = 1;
 			cc.time = cList.at(0).toInt();
 			cc.font = cList.at(1).toInt() ? 25 : 12;
-			cc.color = cList.at(2).toInt(0,16);
+			cc.color = cList.at(2).toInt(0, 16);
 			cc.date = cList.at(3).toInt();
 			cc.sender = cList.at(4);
 		}
 		record.danmaku << cc;
 	}
 	//
-	appendToPool(record);
-}
-
-QList<Comment> Danmaku::getDanmakuRange(qint64 start, qint64 end)
-{
-	QList<Comment> buffer;
-	if (m_data.danm.isEmpty())
-	{
-		return buffer;
-	}
-	buffer << m_data.danm[m_data.curr];
-	for (qint32 curr = m_data.curr + 1;  curr < m_data.danm.size(); ++curr)
-	{
-		int left = curr - m_data.curr;
-		int right = curr + m_data.curr;
-		//
-		Comment leftComment = m_data.danm[left];
-		if (leftComment.time < start)
-		{
-			break;
-		}
-		else
-		{
-			buffer.push_front(leftComment);
-		}
-		//
-		Comment rightComment = m_data.danm[left];
-		if (rightComment.time >= end)
-		{
-			break;
-		}
-		else
-		{
-			buffer.push_back(rightComment);
-		}
-	}
-	return buffer;
-}
-
-QList<Comment> Danmaku::selectDanmaku(qint64 start, qint64 end)
-{
-	QList<Comment> buffer;
-	if (m_data.danm.isEmpty())
-	{
-		return buffer;
-	}
-	//
-	for (auto const& comment : m_data.danm)
-	{
-		if (comment.time >= start && comment.time < end)
-		{
-			buffer << comment;
-		}
-	}
-	return buffer;
+	setRecord(record);
 }
 
 QList<Comment> Danmaku::danmakuByIndex(qint64 & index, qint64 time)
@@ -145,7 +85,11 @@ QList<Comment> Danmaku::danmakuByIndex(qint64 & index, qint64 time)
 
 qint32 Danmaku::indexByTime(qint64 time)
 {
-	auto curr = qLowerBound(m_data.danm.begin(), m_data.danm.end(), time, CommentComparer());
+	auto curr = qLowerBound(m_data.danm.begin(), m_data.danm.end(), time,
+		[](const Comment &c, qint64 time)
+	{
+		return c.time < time;
+	});
 	return  curr - m_data.danm.begin();
 }
 
@@ -154,34 +98,17 @@ void Danmaku::prepareDanmaku(QList<Comment> buffer)
 	//
 	for (auto const&comment : buffer)
 	{
-		Graphic graphic = process(m_data.draw, comment);
+		Graphic graphic = relocate(m_data.draw, comment);
 		m_data.draw.append(graphic);
 	}
 }
-
-Danmaku::Danmaku(QObject *parent)
-	:QObject(parent)
-{
-	m_instance = this;
-	setObjectName("Danmaku");
-	m_data.curr = m_data.time = 0;
-	m_data.dura = -1;
-
-	//
-	connect(&Network::instance(), &Network::danmakuData, [=](QString json, int time)
-	{
-		qDebug() << time;
-		parseDanmaku(json);
-	});
-}
-
 
 void Danmaku::drawGraphic(QPainter *painter)
 {
 	QList<Graphic> dirty;
 	for (auto graphic : m_data.draw)
 	{
-		if (graphic.move(m_data.time))
+		if (graphic.isAlive(m_data.time))
 		{
 			dirty.append(graphic);
 		}
@@ -201,14 +128,13 @@ void Danmaku::resetTime()
 	m_data.curr = m_data.time = 0;
 }
 
-void Danmaku::appendToPool(const Record &record)
+void Danmaku::setRecord(const Record &record)
 {
 	m_data.record = record;
-	stepOne();
-	stepTwo();
+	sortDanmaku();
 }
 
-void Danmaku::appendToPool(QString source, const Comment &comment)
+void Danmaku::append(QString source, const Comment &comment)
 {
 	if (m_data.record.source == source)
 	{
@@ -221,16 +147,13 @@ void Danmaku::appendToPool(QString source, const Comment &comment)
 	m_data.record.danmaku.append(comment);
 	Comment &c = m_data.record.danmaku.last();
 	c.time += m_data.record.delay;
-	auto upperBound = qUpperBound(m_data.danm.begin(), m_data.danm.end(), c, CommentComparer());
+	auto upperBound = qUpperBound(m_data.danm.begin(), m_data.danm.end(), c,
+		[](const Comment &f, const Comment &s)
+	{
+		return f.time < s.time;
+	});
 	m_data.danm.insert(upperBound, c);
 	//m_data.record.limit = m_data.record.limit == 0 ? 0 : qMax(m_data.record.limit, c.date);
-	stepTwo();
-}
-
-void Danmaku::appendToPool(const Comment & comment)
-{
-	QString source = m_data.record.source;
-	appendToPool(source, comment);
 }
 
 void Danmaku::clearCurrent()
@@ -238,19 +161,6 @@ void Danmaku::clearCurrent()
 	m_data.draw.clear();
 	ARender::instance()->update();
 }
-
-void Danmaku::parse(int flag)
-{
-	if ((flag & 0x1) > 0)
-	{
-		stepOne();
-	}
-	if ((flag & 0x2) > 0)
-	{
-		stepTwo();
-	}
-}
-
 
 void Danmaku::setTime(qint64 time)
 {
@@ -294,14 +204,14 @@ void Danmaku::jumpToTime(qint64 time)
 	for (auto g : drawList)
 	{
 		Comment comment = g.source();
-		Graphic graphic = process(draw, comment);
+		Graphic graphic = relocate(draw, comment);
 		draw.append(graphic);
 	}
 
 	QList<Graphic> dirty;
 	for (auto graphic : draw)
 	{
-		if (graphic.move(m_data.time))
+		if (graphic.isAlive(m_data.time))
 		{
 			dirty.append(graphic);
 		}
@@ -321,7 +231,7 @@ void Danmaku::jumpToTime(qint64 time)
 #endif
 }
 
-Graphic Danmaku::process(QList<Graphic> draw, const Comment& comment)
+Graphic Danmaku::relocate(QList<Graphic> draw, const Comment& comment)
 {
 	//
 	Graphic graphic(comment);
@@ -342,186 +252,61 @@ Graphic Danmaku::process(QList<Graphic> draw, const Comment& comment)
 	else
 	{
 		//
-		QList<int> result = calculate(draw, graphic);
-		//
-		int thin = result.first();
-		QRectF rect = locate.first();
-		for (int i = 1;  i < result.size(); ++i)
-		{
-			if (thin > result[i] && thin != 0)
-			{
-				thin = result[i];
-				rect = locate[i];
-			}
-		}
-		//
-		graphic.setRect(rect);
+		graphic.setRect(minRect(draw, graphic));
 	}
 	//
 	return graphic;
 }
 
-QList<int> Danmaku::calculate(QList<Graphic> data, Graphic const& g)
+QRectF Danmaku::minRect(QList<Graphic> data, Graphic const& g)
 {
 	Graphic graphic = g;
 	QList<int> result;
 	//
-	for (auto const& rect: graphic.locate())
+	for (auto const& rect : graphic.locate())
 	{
-		int sum = 0;
-		for (Graphic const& curr : data)
-		{
-			Graphic c = curr;
-			bool isTooFar = qAbs(c.source().time - graphic.source().time) > 5000;
-			if (c.getMode() != graphic.getMode()
-				||  isTooFar)
-			{
-				continue;
-			}
-			graphic.setRect(rect);
-			sum += graphic.intersects(curr);
-		}
-		result << sum;
+		result << intersectSum(data, graphic, rect);
 	}
-	
-	return result;
+	//
+	QList<int> newResult = result;
+	qStableSort(newResult);
+	int index = result.indexOf(newResult.first());
+	QRectF rect = graphic.locate().at(index);
+	//
+	return rect;
 }
 
-void Danmaku::stepOne()
+int Danmaku::intersectSum(QList<Graphic> data, Graphic graphic, QRectF currRect)
 {
-	//beginResetModel();
+	graphic.setRect(currRect);
+
+	QList<Graphic> remainG;
+	for (Graphic curr : data)
+	{
+		bool isTooFar = qAbs(curr.source().time - graphic.source().time) > 5000;
+		if (curr.getMode() != graphic.getMode()
+			|| isTooFar)
+		{
+			continue;
+		}
+		remainG << curr;
+	}
+	return graphic.intersects(remainG);
+}
+
+void Danmaku::sortDanmaku()
+{
 	m_data.danm.clear();
-	Record record = m_data.record;
-	//m_data.danm.reserve(m_data.danm.size() + record.danmaku.size());
-	for (Comment &comment : record.danmaku)
+	//
+	for (Comment &comment : m_data.record.danmaku)
 	{
 		m_data.danm.append(comment);
 	}
-	qStableSort(m_data.danm.begin(), m_data.danm.end(), CommentComparer());
-	m_data.dura = -1;
-	for (Comment c : m_data.danm)
+	qStableSort(m_data.danm.begin(), m_data.danm.end(), 
+		[](const Comment &f, const Comment &s)
 	{
-		if (c.time < 10000000 || c.time < m_data.dura * 2)
-		{
-			m_data.dura = c.time;
-		}
-		else
-		{
-			break;
-		}
-	}
-	jumpToTime(m_data.time);
-	//endResetModel();
+		return f.time < s.time;
+	});
+
 	emit modelReset();
-}
-
-void Danmaku::stepTwo()
-{
-	// Date Limit
-	Record r = m_data.record;
-	for (Comment &c : r.danmaku)
-	{
-		c.blocked = r.limit != 0 && c.date > r.limit;
-	}
-	// Repeat Limit
-	int limit = Setting::getValue("/Shield/Limit/Count", 5);
-	int range = Setting::getValue("/Shield/Limit/Range", 10000);
-	if (limit != 0)
-	{
-		QVector<QString> clean;
-		int size = m_data.danm.size();
-		clean.reserve(size);
-		for (const Comment iter : m_data.danm)
-		{
-			QString raw = iter.string;
-
-			int length = raw.length();
-			const QChar *data = raw.data();
-
-			QString clr;
-
-			int passed = 0;
-			const QChar *head = data;
-
-			for (int i = 0; i < length; ++i)
-			{
-				const QChar &c = data[i];
-				if (c.isLetterOrNumber() || c.isMark() || c == '_')
-				{
-					++passed;
-				}
-				else if (passed > 0)
-				{
-					clr.reserve(length);
-					clr.append(head, passed);
-					passed = 0;
-					head = data + i + 1;
-				}
-			}
-			if (passed == length)
-			{
-				clean.append(raw);
-			}
-			else
-			{
-				if (passed > 0)
-				{
-					clr.append(head, passed);
-				}
-				clean.append(clr);
-			}
-		}
-		QHash<QString, int> count;
-		int sta = 0, end = sta;
-		for (; end < size; ++end)
-		{
-			Comment e = m_data.danm[end];
-			while (m_data.danm[sta].time + range < e.time)
-			{
-				auto i = count.find(clean[sta]);
-				if (i.value() == 1)
-				{
-					count.erase(i);
-				}
-				else if (i.value() > 1)
-				{
-					--(i.value());
-				}
-				++sta;
-			}
-			int &num = count[clean[end]];
-			if (num >= 0 && ++num > limit && e.mode <= 6)
-			{
-				num = -1;
-			}
-		}
-		for (; sta < size; ++sta)
-		{
-			auto i = count.find(clean[sta]);
-			if (i.value() > 0)
-			{
-				count.erase(i);
-			}
-		}
-		for (int i = 0; i < size; ++i)
-		{
-			Comment c = m_data.danm[i];
-			c.blocked = c.blocked || count.contains(clean[i]);
-		}
-	}
-
-	QList<Graphic> draw;
-	for (auto graphic : m_data.draw)
-	{
-		Comment cur = graphic.source();
-		if (cur.blocked)
-		{
-		}
-		else
-		{
-			draw.append(graphic);
-		}
-	}
-	m_data.draw = draw;
-
 }

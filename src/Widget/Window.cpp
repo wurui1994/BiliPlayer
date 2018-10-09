@@ -46,7 +46,7 @@ void Window::sendDanmaku(QString source,QString text, QColor color, int fontSize
 	c.time = m_lastTime;
 	c.color = color.rgb() & 0xFFFFFF;
 	c.string = text;
-	Danmaku::instance()->appendToPool(source,c);
+	Danmaku::instance()->append(source,c);
 	//
 	QString acolor = color.name().replace("#", "");
 	//
@@ -155,7 +155,7 @@ void Window::loadDanmaku(QString filePath)
 			c.time += load.delay;
 		}
 	}
-	Danmaku::instance()->appendToPool(load);
+	Danmaku::instance()->setRecord(load);
 }
 
 void Window::setupConnect()

@@ -12,7 +12,6 @@ class DanmakuData
 public:
 	qint32 curr;
 	qint64 time;
-	qint64 dura;
 	Record record;
 	QList<Comment> danm;
 	QList<Graphic> draw;
@@ -33,12 +32,11 @@ public:
 	qint32 indexByTime(qint64 time);
 	void prepareDanmaku(QList<Comment> buffer);
 	//
-	QList<Comment> getDanmakuRange(qint64 start, qint64 end);
-	QList<Comment> selectDanmaku(qint64 start, qint64 end);
 	QList<Comment> danmakuByIndex(qint64& index, qint64 time);
 	//
-	Graphic process(QList<Graphic> draw, const Comment &w);
-	QList<int> calculate(QList<Graphic> data, Graphic const& graphic);
+	Graphic relocate(QList<Graphic> draw, const Comment &w);
+	QRectF minRect(QList<Graphic> data, Graphic const& graphic);
+	int intersectSum(QList<Graphic> data, Graphic g,QRectF currRect);
 private:
 	static Danmaku *m_instance;
 	DanmakuData m_data;
@@ -51,13 +49,10 @@ public slots:
 	void setTime(qint64 time);
 
 	void clearCurrent();
-	void parse(int flag = 0);
 	void jumpToTime(qint64 time);
 
-	void stepOne();
-	void stepTwo();
+	void sortDanmaku();
 	//
-	void appendToPool(const Record &record);
-	void appendToPool(const Comment &comment);
-	void appendToPool(QString source, const Comment &comment);
+	void setRecord(const Record &record);
+	void append(QString source, const Comment &comment);
 };

@@ -8,7 +8,7 @@ using namespace Attribute;
 
 void Graphic::draw(QPainter *painter)
 {
-	if (enabled)
+	if (m_enabled)
 	{
 		sprite->draw(painter, m_rect);
 	}
@@ -26,9 +26,9 @@ QList<QRectF> Graphic::locate()
 	if (m_source.mode == 1)
 	{	
 		QSize size = ARender::instance()->size();
-		origin_rect.moveLeft(size.width());
-		QRectF init = origin_rect;
-		int end = size.height()*(Setting::getValue("/Danmaku/Protect", false) ? 0.85 : 1) - origin_rect.height();
+		m_origin_rect.moveLeft(size.width());
+		QRectF init = m_origin_rect;
+		int end = size.height()*(Setting::getValue("/Danmaku/Protect", false) ? 0.85 : 1) - m_origin_rect.height();
 		int stp = Setting::getValue("/Danmaku/Grating", 10);
 		for (int height = 0; height <= end; height += stp)
 		{
@@ -40,9 +40,9 @@ QList<QRectF> Graphic::locate()
 	else if (m_source.mode == 4)
 	{
 		QSize size = ARender::instance()->size();
-		origin_rect.moveCenter(QPointF(size.width() / 2.0, 0));
-		origin_rect.moveBottom(size.height()*0.90);
-		QRectF init = origin_rect;
+		m_origin_rect.moveCenter(QPointF(size.width() / 2.0, 0));
+		m_origin_rect.moveBottom(size.height()*0.90);
+		QRectF init = m_origin_rect;
 		int stp = Setting::getValue("/Danmaku/Grating", 10);
 		for (int height = init.top(); height >= 0; height -= stp)
 		{
@@ -56,9 +56,9 @@ QList<QRectF> Graphic::locate()
 		QList<QRectF> results;
 
 		QSize size = ARender::instance()->size();	
-		origin_rect.moveCenter(QPointF(size.width() / 2.0, 0));
-		QRectF init = origin_rect;
-		int end = size.height()*(Setting::getValue("/Danmaku/Protect", false) ? 0.85 : 1) - origin_rect.height();
+		m_origin_rect.moveCenter(QPointF(size.width() / 2.0, 0));
+		QRectF init = m_origin_rect;
+		int end = size.height()*(Setting::getValue("/Danmaku/Protect", false) ? 0.85 : 1) - m_origin_rect.height();
 		int stp = Setting::getValue("/Danmaku/Grating", 10);
 		for (int height = 0; height <= end; height += stp)
 		{
@@ -72,9 +72,9 @@ QList<QRectF> Graphic::locate()
 		QList<QRectF> results;
 
 		QSize size = ARender::instance()->size();
-		origin_rect.moveRight(0);
-		QRectF init = origin_rect;	
-		int end = size.height()*(Setting::getValue("/Danmaku/Protect", false) ? 0.85 : 1) - origin_rect.height();
+		m_origin_rect.moveRight(0);
+		QRectF init = m_origin_rect;	
+		int end = size.height()*(Setting::getValue("/Danmaku/Protect", false) ? 0.85 : 1) - m_origin_rect.height();
 		int stp = Setting::getValue("/Danmaku/Grating", 10);
 		for (int height = 0; height <= end; height += stp)
 		{
@@ -89,13 +89,13 @@ QList<QRectF> Graphic::locate()
 	}
 }
 
-bool Graphic::move(double time)
+bool Graphic::isAlive(double time)
 {
 	time = (time - m_source.time) / 1000;
-	QRectF rect = origin_rect;
+	QRectF rect = m_origin_rect;
 	if (m_source.mode == 1)
 	{
-		if (enabled)
+		if (m_enabled)
 		{
 			rect.moveLeft(rect.left() - speed*time);
 		}
@@ -105,7 +105,7 @@ bool Graphic::move(double time)
 	else if (m_source.mode == 4)
 	{
 		int real_life = life;
-		if (enabled)
+		if (m_enabled)
 		{
 			real_life -= time;
 		}
@@ -114,7 +114,7 @@ bool Graphic::move(double time)
 	else if (m_source.mode == 5)
 	{
 		int real_life = life;
-		if (enabled)
+		if (m_enabled)
 		{
 			real_life -= time;
 		}
@@ -123,7 +123,7 @@ bool Graphic::move(double time)
 	else if (m_source.mode == 6)
 	{
 		QSize size = ARender::instance()->size();
-		if (enabled)
+		if (m_enabled)
 		{
 			rect.moveLeft(rect.left() + speed * time);
 		}
@@ -142,10 +142,20 @@ uint Graphic::intersects(Graphic const& other)
 	return overlap.size().width() * overlap.size().height();
 }
 
+uint Graphic::intersects(QList<Graphic> const & others)
+{
+	uint sum = 0;
+	for (auto const& ele : others)
+	{
+		sum += intersects(ele);
+	}
+	return sum;
+}
+
 void Graphic::setRect(QRectF const & r)
 {
 	m_rect = r;
-	origin_rect = m_rect;
+	m_origin_rect = m_rect;
 }
 
 Graphic::Graphic(const Comment & comment)
@@ -157,5 +167,5 @@ Graphic::Graphic(const Comment & comment)
 	sprite = new Sprite(comment);
 	m_rect.setSize(sprite->getSize());
 	//
-	origin_rect = m_rect;
+	m_origin_rect = m_rect;
 }
