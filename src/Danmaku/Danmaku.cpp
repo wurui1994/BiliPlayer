@@ -266,8 +266,13 @@ void Danmaku::setTime(qint64 time)
 
 void Danmaku::jumpToTime(qint64 time)
 {
-#if 0
-	qint64 offsetTime = time - 5000;
+#if 1
+	qint64 offsetTime = time - 10000;
+	if (offsetTime > 5000)
+	{
+		offsetTime = offsetTime / 5000 * 5000;
+	}
+	//
 	qint64 curr = indexByTime(offsetTime);
 	QList<Comment> buffer;
 	QList<Graphic> drawList;
@@ -285,13 +290,11 @@ void Danmaku::jumpToTime(qint64 time)
 	//m_data.draw.clear();
 	//
 	QList<Graphic> draw;
-	QList<Graphic> drawAdd;
 
 	for (auto g : drawList)
 	{
-		drawAdd << g;
 		Comment comment = g.source();
-		Graphic graphic = process(drawAdd, comment);
+		Graphic graphic = process(draw, comment);
 		draw.append(graphic);
 	}
 
@@ -368,7 +371,10 @@ QList<int> Danmaku::calculate(QList<Graphic> data, Graphic const& g)
 		int sum = 0;
 		for (Graphic const& curr : data)
 		{
-			if (curr.getMode() != graphic.source().mode)
+			Graphic c = curr;
+			bool isTooFar = qAbs(c.source().time - graphic.source().time) > 5000;
+			if (c.getMode() != graphic.getMode()
+				||  isTooFar)
 			{
 				continue;
 			}

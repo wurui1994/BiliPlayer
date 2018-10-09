@@ -402,7 +402,11 @@ void Player::setupConnect()
 		SetRemainingLabels(i);
 	});
 
+#if 1
+	connect(ui.mpvFrame, &MpvWidget::timeChanged, [=](int i)
+#else
 	connect(ui.mpvFrame, &MpvWidget::tryToGetTime, [=]()
+#endif
 	{
 		qint64 time = ui.mpvFrame->getRealTime().toDouble() * 1000;
 #if USE_DANMAKU

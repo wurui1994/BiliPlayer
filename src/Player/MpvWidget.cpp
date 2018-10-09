@@ -150,7 +150,9 @@ void MpvWidget::paintGL()
     mpv_opengl_cb_draw(mpv_gl, defaultFramebufferObject(), m_dpr*width(), -m_dpr*height());
     //
     //update();
+#if 0
 	emit tryToGetTime();
+#endif
 }
 
 void MpvWidget::swapped()
