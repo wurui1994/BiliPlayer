@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Sprite.h"
 #include "Common.h"
 
 class ARender:public QWidget

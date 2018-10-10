@@ -145,15 +145,16 @@ void Danmaku::append(QString source, const Comment &comment)
 		m_data.record.source = source;
 	}
 	m_data.record.danmaku.append(comment);
+	//
 	Comment &c = m_data.record.danmaku.last();
 	c.time += m_data.record.delay;
+	//
 	auto upperBound = qUpperBound(m_data.danm.begin(), m_data.danm.end(), c,
 		[](const Comment &f, const Comment &s)
 	{
 		return f.time < s.time;
 	});
 	m_data.danm.insert(upperBound, c);
-	//m_data.record.limit = m_data.record.limit == 0 ? 0 : qMax(m_data.record.limit, c.date);
 }
 
 void Danmaku::clearCurrent()
@@ -184,41 +185,25 @@ void Danmaku::jumpToTime(qint64 time)
 	}
 	//
 	qint64 curr = indexByTime(offsetTime);
-	QList<Comment> buffer;
-	QList<Graphic> drawList;
-	for (; curr < m_data.danm.size(); ++curr)
-	{
-		Comment comment = m_data.danm[curr];
-		if (comment.time >= time)
-		{
-			break;
-		}
-		buffer << comment;
-		drawList << Graphic(comment);
-	}
-	//
-	//m_data.draw.clear();
-	//
-	QList<Graphic> draw;
+	QList<Comment> buffer = danmakuByIndex(curr, time);;
+	
+	m_data.draw.clear();
 
-	for (auto g : drawList)
+	for (auto comment : buffer)
 	{
-		Comment comment = g.source();
-		Graphic graphic = relocate(draw, comment);
-		draw.append(graphic);
+		Graphic graphic = relocate(m_data.draw, comment);
+		m_data.draw.append(graphic);
 	}
 
-	QList<Graphic> dirty;
-	for (auto graphic : draw)
+	QList<Graphic> alive;
+	for (auto graphic : m_data.draw)
 	{
 		if (graphic.isAlive(m_data.time))
 		{
-			dirty.append(graphic);
+			alive.append(graphic);
 		}
 	}
-	m_data.draw = dirty;
-	//m_data.draw = draw;
-
+	m_data.draw = alive;
 	//clearCurrent();
 	m_data.time = time;
 	m_data.curr = indexByTime(time);
@@ -233,7 +218,6 @@ void Danmaku::jumpToTime(qint64 time)
 
 Graphic Danmaku::relocate(QList<Graphic> draw, const Comment& comment)
 {
-	//
 	Graphic graphic(comment);
 	//
 	if (comment.isEmpty())
@@ -241,19 +225,7 @@ Graphic Danmaku::relocate(QList<Graphic> draw, const Comment& comment)
 		return graphic;
 	}
 	//
-	QList<QRectF> locate = graphic.locate();
-	if (locate.size() == 1)
-	{
-		//
-		QRectF rect = locate.first();
-		//
-		graphic.setRect(rect);
-	}
-	else
-	{
-		//
-		graphic.setRect(minRect(draw, graphic));
-	}
+	graphic.setRect(minRect(draw, graphic));
 	//
 	return graphic;
 }
@@ -280,18 +252,18 @@ int Danmaku::intersectSum(QList<Graphic> data, Graphic graphic, QRectF currRect)
 {
 	graphic.setRect(currRect);
 
-	QList<Graphic> remainG;
+	QList<Graphic> remainGraphics;
 	for (Graphic curr : data)
 	{
+		bool isDiffMode = curr.getMode() != graphic.getMode();
 		bool isTooFar = qAbs(curr.source().time - graphic.source().time) > 5000;
-		if (curr.getMode() != graphic.getMode()
-			|| isTooFar)
+		if (isDiffMode || isTooFar)
 		{
 			continue;
 		}
-		remainG << curr;
+		remainGraphics << curr;
 	}
-	return graphic.intersects(remainG);
+	return graphic.intersects(remainGraphics);
 }
 
 void Danmaku::sortDanmaku()

@@ -230,7 +230,6 @@
     <ClCompile Include="src\Widget\SeekBar.cpp" />
     <ClCompile Include="src\Widget\SettingDialog.cpp" />
     <ClCompile Include="src\Widget\SpeedMenu.cpp" />
-    <ClCompile Include="src\Danmaku\Sprite.cpp" />
     <ClCompile Include="src\Common\Utils.cpp" />
     <ClCompile Include="src\Widget\VolumeMenu.cpp" />
     <ClCompile Include="src\Widget\Window.cpp" />
@@ -282,7 +281,6 @@
     </QtMoc>
     <QtMoc Include="src\Widget\SpeedMenu.h">
     </QtMoc>
-    <ClInclude Include="src\Danmaku\Sprite.h" />
     <ClInclude Include="src\Common\Utils.h" />
     <QtMoc Include="src\Widget\VolumeMenu.h">
     </QtMoc>

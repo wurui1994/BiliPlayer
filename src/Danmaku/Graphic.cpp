@@ -10,7 +10,14 @@ void Graphic::draw(QPainter *painter)
 {
 	if (m_enabled)
 	{
-		sprite->draw(painter, m_rect);
+		if (m_image.isNull())
+		{
+			qDebug() << "source is null";
+		}
+		else
+		{
+			painter->drawImage(m_rect, m_image);
+		}
 	}
 }
 
@@ -23,9 +30,9 @@ double Graphic::evaluate(QString expression)
 QList<QRectF> Graphic::locate()
 {
 	QList<QRectF> results;
+	QSize size = ARender::instance()->size();
 	if (m_source.mode == 1)
 	{	
-		QSize size = ARender::instance()->size();
 		m_origin_rect.moveLeft(size.width());
 		QRectF init = m_origin_rect;
 		int end = size.height()*(Setting::getValue("/Danmaku/Protect", false) ? 0.85 : 1) - m_origin_rect.height();
@@ -39,7 +46,6 @@ QList<QRectF> Graphic::locate()
 	}
 	else if (m_source.mode == 4)
 	{
-		QSize size = ARender::instance()->size();
 		m_origin_rect.moveCenter(QPointF(size.width() / 2.0, 0));
 		m_origin_rect.moveBottom(size.height()*0.90);
 		QRectF init = m_origin_rect;
@@ -53,9 +59,6 @@ QList<QRectF> Graphic::locate()
 	}
 	else if (m_source.mode == 5)
 	{
-		QList<QRectF> results;
-
-		QSize size = ARender::instance()->size();	
 		m_origin_rect.moveCenter(QPointF(size.width() / 2.0, 0));
 		QRectF init = m_origin_rect;
 		int end = size.height()*(Setting::getValue("/Danmaku/Protect", false) ? 0.85 : 1) - m_origin_rect.height();
@@ -69,9 +72,6 @@ QList<QRectF> Graphic::locate()
 	}
 	else if (m_source.mode == 6)
 	{
-		QList<QRectF> results;
-
-		QSize size = ARender::instance()->size();
 		m_origin_rect.moveRight(0);
 		QRectF init = m_origin_rect;	
 		int end = size.height()*(Setting::getValue("/Danmaku/Protect", false) ? 0.85 : 1) - m_origin_rect.height();
@@ -164,8 +164,14 @@ Graphic::Graphic(const Comment & comment)
 	life = evaluate(Setting::getValue<QString>("/Danmaku/Life", "5"));
 
 	m_source = comment;
-	sprite = new Sprite(comment);
-	m_rect.setSize(sprite->getSize());
+	//
+	QSize size = ARender::instance()->size();
+	int fontSize = comment.font*Attribute::getScale(comment.mode, comment.date, size);
+	QFont font = Attribute::getFont(fontSize);
+	QSize need = Attribute::getSize(comment.string, font);
+	m_image = QImage(Attribute::getCache(comment.string, comment.color, font, need, comment.isLocal()));
+	//
+	m_rect.setSize(m_image.size());
 	//
 	m_origin_rect = m_rect;
 }

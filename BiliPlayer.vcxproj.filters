@@ -105,9 +105,6 @@
     <ClCompile Include="src\Widget\SeekBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Danmaku\Sprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Widget\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -194,9 +191,6 @@
     <QtMoc Include="src\Widget\SpeedMenu.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClInclude Include="src\Danmaku\Sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Common\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>

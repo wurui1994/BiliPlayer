@@ -6,20 +6,19 @@
 #include "Common.h"
 #include "Attribute.h"
 #include "Setting.h"
-#include "Sprite.h"
 #include <exception>
 
 class Graphic
 {
 public:
-	 QList<QRectF> locate();
 	 bool isAlive(double time) ;
 	 void draw(QPainter *painter);
-	 uint intersects(Graphic const&other);
-	 uint intersects(QList<Graphic> const& others);
-	 bool stay(){ return false; }
-	 QRectF &currentRect(){ return m_rect; }
 	 void setRect(QRectF const& r);
+	 //
+	 QList<QRectF> locate();
+	 //
+	 uint intersects(Graphic const& other);
+	 uint intersects(QList<Graphic> const& others);
 public:
 	Graphic(const Comment &comment);
 public:
@@ -58,6 +57,6 @@ protected:
 	Comment m_source;
 
 protected:
-	Sprite *sprite;
+	QImage m_image;
 	double evaluate(QString expression);
 };
