@@ -21,18 +21,11 @@ mac {
 }
 
 # Input
-HEADERS += mpv/client.h \
-           mpv/opengl_cb.h \
-           mpv/qthelper.hpp \
-           mpv/render.h \
-           mpv/render_gl.h \
-           mpv/stream_cb.h \
-           src/Application.h \
+HEADERS += src/Application.h \
            src/Common/Common.h \
            src/Common/FramelessHelper.h \
            src/Common/Logger.h \
            src/Common/Network.h \
-           src/Common/OSXHideTitleBar.h \
            src/Common/Setting.h \
            src/Common/Utils.h \
            src/Danmaku/Attribute.h \
@@ -52,23 +45,8 @@ HEADERS += mpv/client.h \
            src/Widget/SettingDialog.h \
            src/Widget/SpeedMenu.h \
            src/Widget/VolumeMenu.h \
-           src/Widget/Window.h \
-           /src/Application.h \
-           /src/Common/Utils.h \
-           /src/Common/Setting.h \
-           /src/Widget/Player.h \
-           /src/Player/MpvTypes.h \
-           /src/Player/MpvWidget.h \
-           /mpv/client.h \
-           /mpv/opengl_cb.h \
-           /src/Danmaku/Parse.h \
-           /src/Common/FramelessHelper.h \
-           /src/Common/Common.h \
-           /src/Danmaku/Danmaku.h \
-           /src/Widget/ARender.h \
-           /src/Common/Logger.h \
-           /src/Common/Network.h \
-           /src/Common/OSXHideTitleBar.h
+           src/Widget/Window.h 
+
 FORMS += src/Widget/AdvertInfoWidget.ui \
          src/Widget/AdvertWidget.ui \
          src/Widget/DanmakuMenu.ui \

@@ -728,7 +728,7 @@ namespace Utils
 
 	QString FormatTime(int _time)
 	{
-		QTime time = QTime::fromMSecsSinceStartOfDay(_time * 1000);
+		QTime time = QTime::fromMSecsSinceStartOfDay(_time);
 		return time.toString("hh:mm:ss");   // seconds
 	}
 

@@ -8,11 +8,31 @@
 
 #include "Utils.h"
 
-SeekBar::SeekBar(QWidget *parent):
-    QSlider(parent),
-    tickReady(false),
-    totalTime(0)
+// ref: https://stackoverflow.com/questions/11132597/qslider-mouse-direct-jump
+class MyStyle : public QProxyStyle
 {
+public:
+	using QProxyStyle::QProxyStyle;
+
+	int styleHint(QStyle::StyleHint hint, const QStyleOption* option = 0, const QWidget* widget = 0, QStyleHintReturn* returnData = 0) const
+	{
+		if (hint == QStyle::SH_Slider_AbsoluteSetButtons)
+			return (Qt::LeftButton | Qt::MidButton | Qt::RightButton);
+		return QProxyStyle::styleHint(hint, option, widget, returnData);
+	}
+};
+
+SeekBar::SeekBar(QWidget *parent) :
+	QSlider(parent),
+	tickReady(false),
+	totalTime(0),
+	m_isPressed(false)
+{
+	setStyle(new MyStyle(this->style()));
+	//
+	m_label = new QLabel(this);
+	m_label->setWindowFlag(Qt::Tool, true);
+	m_label->setWindowFlag(Qt::FramelessWindowHint, true);
 }
 
 void SeekBar::setTracking(int _totalTime)
@@ -52,23 +72,20 @@ int SeekBar::positionValue(int pos)
 
 void SeekBar::mouseMoveEvent(QMouseEvent* event)
 {
-	if (event->buttons() & Qt::LeftButton)
+#if 1
+	if (totalTime != 0)
 	{
-		int value = positionValue(event->pos().x());
-		emit tryToSeek(value);
-		event->accept();
-	}
-	else
-	{
-		if (totalTime != 0)
+		m_label->move(QPoint(event->globalPos().x() - 18, 
+			mapToGlobal(rect().topLeft()).y() - 15));
+		int time = positionValue(event->pos().x());
+		QString timeString = Utils::FormatTime(time);
+		m_label->setText(timeString);
+		if (!m_label->isVisible())
 		{
-			int time = positionValue(event->pos().x());
-			QString timeString = Utils::FormatTime(time);
-
-			QToolTip::showText(QPoint(event->globalPos().x() - 25, mapToGlobal(rect().topLeft()).y() - 40),
-				timeString, this, rect());
+			m_label->show();
 		}
 	}
+#endif
     QSlider::mouseMoveEvent(event);
 }
 
@@ -87,25 +104,22 @@ void SeekBar::paintEvent(QPaintEvent *event)
         }
     }
 }
+
+void SeekBar::leaveEvent(QEvent * event)
+{
+	Q_UNUSED(event);
+	m_label->hide();
+}
+
+void SeekBar::enterEvent(QEvent * event)
+{
+	Q_UNUSED(event);
+	//m_label->show();
+}
+
 void SeekBar::setValueNoSignal(int value)
 {
 	this->blockSignals(true);
 	this->setValue(value);
 	this->blockSignals(false);
-}
-
-void SeekBar::mousePressEvent(QMouseEvent *event)
-{
-	if (event->button() == Qt::LeftButton)
-	{
-		int value = positionValue(event->pos().x());
-		emit tryToSeek(value);
-		event->accept();
-	}
-	QSlider::mousePressEvent(event);
-}
-
-void SeekBar::mouseReleaseEvent(QMouseEvent * event)
-{
-	QSlider::mouseReleaseEvent(event);
 }

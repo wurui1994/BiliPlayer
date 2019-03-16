@@ -393,13 +393,13 @@ void Player::setupConnect()
 	});
 
 
-	connect(ui.mpvFrame, &MpvWidget::timeChanged, [=](int i)
+	connect(ui.mpvFrame, &MpvWidget::timeChanged, [=](double t)
 	{
 		const Mpv::FileInfo &fi = ui.mpvFrame->getFileInfo();
 		// set the seekBar's location with NoSignal function so that it doesn't trigger a seek
 		// the formula is a simple ratio seekBar's max * time/totalTime
-		ui.seekBar->setValueNoSignal(ui.seekBar->maximum()*((double)i / fi.length));
-		SetRemainingLabels(i);
+		ui.seekBar->setValueNoSignal(ui.seekBar->maximum()*(t / fi.length));
+		SetRemainingLabels(t);
 	});
 
 #if 1
@@ -504,9 +504,9 @@ void Player::setupConnect()
 	// ui
 
 	// Playback: Seekbar clicked
-	connect(ui.seekBar, &SeekBar::tryToSeek, [=](double t)
+	connect(ui.seekBar, &SeekBar::valueChanged, [=](double t)
 	{
-		ui.mpvFrame->Seek(ui.mpvFrame->Relative(t), true);
+		ui.mpvFrame->Seek(ui.mpvFrame->Relative(t/1000.0), true);
 	});
 
 	// Playback: Rewind button
@@ -863,7 +863,7 @@ void Player::onFileInfoChange(const Mpv::FileInfo & fileInfo)
 		if (ui.mpvFrame->getSpeed() != 1)
 			ui.mpvFrame->Speed(1);
 
-	ui.seekBar->setTracking(fileInfo.length);
+	ui.seekBar->setTracking(1000*fileInfo.length);
 
 	SetRemainingLabels(fileInfo.length);
 
@@ -1330,18 +1330,18 @@ void Player::SetPlayButtonIcon(bool play)
 	ui.playButton->setChecked(play);
 }
 
-void Player::SetRemainingLabels(int time)
+void Player::SetRemainingLabels(double time)
 {
     // todo: move setVisible functions outside of this function which gets called every second and somewhere at the start of a video
     const Mpv::FileInfo &fi = ui.mpvFrame->getFileInfo();
     if(fi.length == 0)
     {
-        ui.durationLabel->setText(Utils::FormatTime(time));
+        ui.durationLabel->setText(Utils::FormatTime(1000*time));
     }
     else
     {
-        ui.durationLabel->setText(Utils::FormatTime(time));
-        QString text = "" + Utils::FormatTime(fi.length);
+        ui.durationLabel->setText(Utils::FormatTime(1000*time));
+        QString text = "" + Utils::FormatTime(1000*fi.length);
         ui.totalLabel->setText(text);
     }
 }

@@ -114,7 +114,7 @@ private slots:
     void HideAllControls(bool h, bool s = true);    // hideAllControls--s option is used by fullscreen
     void FullScreen(bool fs);                       // makes window fullscreen
     void SetPlayButtonIcon(bool play);
-    void SetRemainingLabels(int time);
+    void SetRemainingLabels(double time);
 public slots:
 	void on_settingsButton_clicked();
 	void on_sendButton_clicked();
