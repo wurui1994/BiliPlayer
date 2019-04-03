@@ -1,10 +1,10 @@
-#include <QDir>
-#include <QFile>
-#include <QDebug>
-#include <QFileInfo>
-#include <QFileInfoList>
-#include <QDateTime>
-#include <QCoreApplication>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QDebug>
+#include <QtCore/QFileInfo>
+#include <QtCore/QFileInfoList>
+#include <QtCore/QDateTime>
+#include <QtCore/QCoreApplication>
 
 #include <QtGui/QOpenGLContext>
 #include <QtCore/QMetaObject>

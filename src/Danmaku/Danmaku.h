@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QtGui>
-#include <QtCore>
+#include <QtGui/QtGui>
+#include <QtCore/QtCore>
 
 #include "Utils.h"
 #include "Graphic.h"

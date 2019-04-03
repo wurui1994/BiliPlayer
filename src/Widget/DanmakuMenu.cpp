@@ -1,7 +1,7 @@
 #include "DanmakuMenu.h"
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QMouseEvent>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QMouseEvent>
 
 #include "Utils.h"
 

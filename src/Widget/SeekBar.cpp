@@ -1,10 +1,10 @@
 #include "seekbar.h"
 
-#include <QTime>
-#include <QToolTip>
-#include <QPainter>
-#include <QRect>
-#include <QStyle>
+#include <QtCore/QTime>
+#include <QtWidgets/QToolTip>
+#include <QtGui/QPainter>
+#include <QtCore/QRect>
+#include <QtWidgets/QStyle>
 
 #include "Utils.h"
 

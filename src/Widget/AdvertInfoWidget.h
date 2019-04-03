@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QWidget>
-#include <QPointer>
-#include <QMenu>
+#include <QtWidgets/QWidget>
+#include <QtCore/QPointer>
+#include <QtWidgets/QMenu>
 #include "ui_AdvertInfoWidget.h"
 
 #include "Utils.h"

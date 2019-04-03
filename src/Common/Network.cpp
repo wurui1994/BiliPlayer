@@ -1,6 +1,6 @@
 #include "Network.h"
 #include "Utils.h"
-#include <QMetaObject>
+#include <QtCore/QMetaObject>
 
 Network::Network()
 {

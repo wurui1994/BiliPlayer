@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QWidget>
-#include <QString>
-#include <QTextStream>
-#include <QMessageBox>
+#include <QtWidgets/QWidget>
+#include <QtCore/QString>
+#include <QtCore/QTextStream>
+#include <QtWidgets/QMessageBox>
 
 #include <QtWidgets/QtWidgets>
 

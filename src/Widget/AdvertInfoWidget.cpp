@@ -1,7 +1,7 @@
 #include "AdvertInfoWidget.h"
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QMouseEvent>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QMouseEvent>
 
 AdvertInfoWidget::AdvertInfoWidget(QWidget *parent)
 	: QWidget(parent)

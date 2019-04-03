@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QObject>
-#include <QString>
-#include <QStringList>
-#include <QWidget>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtWidgets/QWidget>
 
 #include <mpv/client.h>
 

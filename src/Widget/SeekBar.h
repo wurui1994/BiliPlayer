@@ -1,11 +1,11 @@
 #ifndef SEEKBAR_H
 #define SEEKBAR_H
 
-#include <QMouseEvent>
-#include <QPaintEvent>
-#include <QList>
-#include <QSlider>
-#include <QLabel>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPaintEvent>
+#include <QtCore/QList>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QLabel>
 
 class SeekBar : public QSlider
 {

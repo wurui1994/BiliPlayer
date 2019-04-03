@@ -1,11 +1,11 @@
 #include "Player.h"
 
-#include <QtMath>
-#include <QLibraryInfo>
-#include <QMimeData>
-#include <QDesktopWidget>
-#include <QMenuBar>
-#include <QStackedLayout>
+#include <QtCore/QtMath>
+#include <QtCore/QLibraryInfo>
+#include <QtCore/QMimeData>
+#include <QtWidgets/QDesktopWidget>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QStackedLayout>
 
 #include "Utils.h"
 #include "Network.h"

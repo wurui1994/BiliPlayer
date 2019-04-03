@@ -710,13 +710,13 @@ void MessageWidget::show()
 	QWidget::show();
 }
 
-#include <QTime>
-#include <QStringListIterator>
-#include <QDir>
-#include <QApplication>
-#include <QRegExp>
-#include <QProcess>
-#include <QDir>
+#include <QtCore/QTime>
+#include <QtCore/QStringListIterator>
+#include <QtCore/QDir>
+#include <QtWidgets/QApplication>
+#include <QtCore/QRegExp>
+#include <QtCore/QProcess>
+#include <QtCore/QDir>
 
 namespace Utils
 {

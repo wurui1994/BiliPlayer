@@ -1,7 +1,7 @@
 #include "SettingDialog.h"
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QMouseEvent>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QMouseEvent>
 
 #include "Setting.h"
 

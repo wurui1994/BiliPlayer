@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QDialog>
-#include <QPointer>
-#include <QMenu>
+#include <QtWidgets/QDialog>
+#include <QtCore/QPointer>
+#include <QtWidgets/QMenu>
 #include "ui_SettingDialog.h"
 
 #include "Utils.h"

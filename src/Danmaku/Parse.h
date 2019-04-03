@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QtCore>
+#include <QtCore/QtCore>
 #include "Utils.h"
 
 namespace Parse

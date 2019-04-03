@@ -1,18 +1,18 @@
 #ifndef PLAYERBAKA_H
 #define PLAYERBAKA_H
 
-#include <QMainWindow>
-#include <QStringList>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QWheelEvent>
-#include <QKeyEvent>
-#include <QEvent>
-#include <QTimer>
-#include <QTranslator>
-#include <QHash>
-#include <QAction>
-#include <QRect>
+#include <QtWidgets/QMainWindow>
+#include <QtCore/QStringList>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QWheelEvent>
+#include <QtGui/QKeyEvent>
+#include <QtCore/QEvent>
+#include <QtCore/QTimer>
+#include <QtCore/QTranslator>
+#include <QtCore/QHash>
+#include <QtWidgets/QAction>
+#include <QtCore/QRect>
 
 #include "MpvTypes.h"
 #include "MpvWidget.h"

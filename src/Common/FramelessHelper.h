@@ -3,13 +3,13 @@
 
 // ref: https://github.com/sangxiaokai/FrameLessWidget
 
-#include <QObject>
-#include <QRect>
-#include <QRubberBand>
-#include <QMouseEvent>
-#include <QHoverEvent>
-#include <QApplication>
-#include <QStyleOptionRubberBand>
+#include <QtCore/QObject>
+#include <QtCore/QRect>
+#include <QtWidgets/QRubberBand>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QHoverEvent>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QStyleOptionRubberBand>
 
 class QWidget;
 class FramelessHelperPrivate;

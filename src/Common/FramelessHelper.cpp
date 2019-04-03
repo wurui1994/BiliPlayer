@@ -1,8 +1,8 @@
 
 
 #include "FramelessHelper.h"
-#include <QPalette>
-#include <QDebug>
+#include <QtGui/QPalette>
+#include <QtCore/QDebug>
 
 int CursorPosCalculator::m_nBorderWidth = 5;
 int CursorPosCalculator::m_nTitleHeight = 30;

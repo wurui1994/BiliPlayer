@@ -1,6 +1,6 @@
 #include "Logger.h"
 #include "Utils.h"
-#include <QMetaObject>
+#include <QtCore/QMetaObject>
 // 
 static void recvMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
